@@ -1,22 +1,49 @@
 using Core.Application;
+using Core.Application.Implementation;
+using Core.Domain;
 using Core.Entity;
+using Moq;
 using System;
+using System.Collections.Generic;
 using Xunit;
+using System.Linq;
 
 namespace XUnitTesting.User
 {
     public class UserServiceCreateTest
     {
+        private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
+        private Dictionary<int, Core.Entity.User> userDictionary = new Dictionary<int, Core.Entity.User>();
+        private int nextId = 1;
+
         readonly IUserService _userService;
-        readonly string _password = "1234";
+        readonly string _password = "Ab1Ab1Ab";
         readonly Core.Entity.User _user = new Core.Entity.User()
         {
             Username = "jan"
         };
 
+        public UserServiceCreateTest()
+        {
+            mockUserRepository.Setup(x => x.Create(It.IsAny<Core.Entity.User>())).Returns<Core.Entity.User>((u) => 
+            {
+                u.Id = nextId++;
+                userDictionary.Add(u.Id, u);
+                return userDictionary[u.Id];
+            });
+            mockUserRepository.Setup(x => x.UniqueUsername(It.IsAny<string>())).Returns<string>((username) =>
+            {
+                return userDictionary.Values.Any(user => user.Username.ToLower() == username.ToLower());
+            });
+
+            _userService = new UserService(mockUserRepository.Object);
+        }
+
         [Fact]
         public void CreateUserValid()
         {
+            userDictionary.Clear();
+
             var result = _userService.Create(_user, _password);
 
             Assert.Equal(_user.Username, result.Username);
@@ -31,6 +58,8 @@ namespace XUnitTesting.User
         [InlineData("lllllllllllllllllllllllllllllllllllllll41", false)] // above maximum length
         public void CreateUserUsernameRules(string username, bool isValid)
         {
+            userDictionary.Clear();
+
             Core.Entity.User test = new Core.Entity.User()
             {
                 Username = username
@@ -113,6 +142,8 @@ namespace XUnitTesting.User
         [InlineData("Ablllllllllllllllllllllllllllllllllllll41", false)] // above maximum length
         public void CreateUserPasswordRules(string password, bool isValid)
         {
+            
+
             Core.Entity.User result = null;
             if (isValid)
             {
