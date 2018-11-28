@@ -9,7 +9,7 @@ namespace Core.Application
         Booth GetById(int id);
         Booth GetAll();
         Booth Delete(int id);
-        Booth Add(Booth newBooth);
+        Booth Create(Booth newBooth);
         Booth Update(Booth updatedBooth);
 
         //Extra
