@@ -12,6 +12,5 @@ namespace Core.Application
         User GetByID(int id);
         User Update(User user);
         User Delete(int id);
-        User Login(User login);
     }
 }
