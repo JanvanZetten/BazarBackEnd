@@ -38,12 +38,17 @@ namespace Core.Application.Implementation
 
         public IEnumerable<User> GetAll()
         {
-            throw new NotImplementedException();
+            return _userRepository.GetAll();
         }
 
         public User GetByID(int id)
         {
-            throw new NotImplementedException();
+            User user = _userRepository.GetById(id);
+
+            if (user == null)
+                throw new ArgumentOutOfRangeException("Could not find the specified user.");
+
+            return user;
         }
 
         public User Update(User user)

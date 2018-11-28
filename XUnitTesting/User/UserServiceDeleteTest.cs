@@ -42,6 +42,9 @@ namespace XUnitTesting.User
             _userService = new UserService(mockUserRepository.Object);
         }
 
+        /// <summary>
+        /// Tests to make sure that the specified user is deleted if it exists.
+        /// </summary>
         [Fact]
         public void DeleteValidInput()
         {
@@ -56,6 +59,9 @@ namespace XUnitTesting.User
             Assert.Equal(user1.Id, deletedUser.Id);
         }
 
+        /// <summary>
+        /// Tests to make sure that no users were deleted if an invalid ID is given, and that an exception is thrown.
+        /// </summary>
         [Fact]
         public void DeleteInvalidInput()
         {
@@ -67,6 +73,7 @@ namespace XUnitTesting.User
             {
                 _userService.Delete(3);
             });
+            Assert.Equal(2, userDictionary.Count);
         }
     }
 }
