@@ -3,13 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="Domain\" />
-    <Folder Include="Application\" />
-    <Folder Include="Application\Implementation\" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Remove="Domain\Class1.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core.Entity\Core.Entity.csproj" />
   </ItemGroup>
 </Project>
