@@ -151,5 +151,20 @@ namespace XUnitTesting.User
 
             Assert.Null(result);
         }
+        
+        [Fact]
+        public void UpdateInvalidIdInput()
+        {
+            Core.Entity.User test = new Core.Entity.User()
+            {
+                Id = 3,
+                Username = "alex"
+            };
+
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            {
+                _userService.Update(test);
+            });
+        }
     }
 }
