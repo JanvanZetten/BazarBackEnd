@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 namespace infrastructure
 {
@@ -9,13 +10,13 @@ namespace infrastructure
             
         }
 
-        //public DbSet<> {get; set;}
-        //public DbSet<> {get; set;}
+        public DbSet<Booth> Booth {get; set;}
+        public DbSet<User> User {get; set;}
         //public DbSet<> {get; set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.Entity<Booth>().HasOne(b => b.Booker).WithOne().HasForeignKey<User>(u => u.Id);
         }
     }
 }
