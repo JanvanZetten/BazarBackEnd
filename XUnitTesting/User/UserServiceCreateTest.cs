@@ -5,7 +5,7 @@ using Xunit;
 
 namespace XUnitTesting.User
 {
-    public class UserServiceTest
+    public class UserServiceCreateTest
     {
         readonly IUserService _userService;
 
@@ -30,6 +30,9 @@ namespace XUnitTesting.User
         [InlineData("ja", false)]
         [InlineData("jan", true)]
         [InlineData("jani", true)]
+        [InlineData("lllllllllllllllllllllllllllllllllllll39", true)]
+        [InlineData("llllllllllllllllllllllllllllllllllllll40", true)]
+        [InlineData("lllllllllllllllllllllllllllllllllllllll41", false)]
         public void CreateUserUsernameMinLength(string username, bool isValid)
         {
             Core.Entity.User test = new Core.Entity.User()
@@ -111,6 +114,33 @@ namespace XUnitTesting.User
             });
 
             Assert.Null(result);
+        }
+
+        [Fact]
+        public void CreateUserInvalidDuplicateUsername()
+        {
+            Core.Entity.User test1 = new Core.Entity.User()
+            {
+                Username = "jan",
+                PasswordHash = new byte[1],
+                PasswordSalt = new byte[1]
+            };
+            Core.Entity.User test2 = new Core.Entity.User()
+            {
+                Username = "Jan",
+                PasswordHash = new byte[1],
+                PasswordSalt = new byte[1]
+            };
+
+            _userService.Create(test1);
+            Core.Entity.User result = null;
+            Assert.Throws<ArgumentException>(() =>
+            {
+                result = _userService.Create(test2);
+            });
+
+            Assert.Null(result);
+
         }
     }
 }
