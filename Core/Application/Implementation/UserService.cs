@@ -30,7 +30,10 @@ namespace Core.Application.Implementation
 
         public User Delete(int id)
         {
-            throw new NotImplementedException();
+            User user = _userRepository.Delete(id);
+            if (user == null)
+                throw new ArgumentOutOfRangeException("User not found. No user has been deleted");
+            return user;
         }
 
         public IEnumerable<User> GetAll()
