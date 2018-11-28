@@ -1,10 +1,21 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 namespace infrastructure
 {
-    public class BazarContext
+    public class BazarContext : DbContext
     {
-        public BazarContext()
+        public BazarContext(DbContextOptions<BazarContext> options) : base(options)
         {
+            
+        }
+
+        //public DbSet<> {get; set;}
+        //public DbSet<> {get; set;}
+        //public DbSet<> {get; set;}
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
         }
     }
 }
