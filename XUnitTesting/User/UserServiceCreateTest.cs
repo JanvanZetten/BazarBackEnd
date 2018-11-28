@@ -25,7 +25,7 @@ namespace XUnitTesting.User
 
         public UserServiceCreateTest()
         {
-            mockUserRepository.Setup(x => x.Create(It.IsAny<Core.Entity.User>())).Returns<Core.Entity.User>((u) => 
+            mockUserRepository.Setup(x => x.Register(It.IsAny<Core.Entity.User>(), It.IsAny<string>())).Returns<Core.Entity.User, string>((u, p) => 
             {
                 u.Id = nextId++;
                 userDictionary.Add(u.Id, u);
@@ -33,7 +33,7 @@ namespace XUnitTesting.User
             });
             mockUserRepository.Setup(x => x.UniqueUsername(It.IsAny<string>())).Returns<string>((username) =>
             {
-                return userDictionary.Values.Any(user => user.Username.ToLower() == username.ToLower());
+                return !userDictionary.Values.Any(user => user.Username.ToLower() == username.ToLower());
             });
 
             _userService = new UserService(mockUserRepository.Object);
@@ -58,8 +58,6 @@ namespace XUnitTesting.User
         [InlineData("lllllllllllllllllllllllllllllllllllllll41", false)] // above maximum length
         public void CreateUserUsernameRules(string username, bool isValid)
         {
-            userDictionary.Clear();
-
             Core.Entity.User test = new Core.Entity.User()
             {
                 Username = username
@@ -142,8 +140,6 @@ namespace XUnitTesting.User
         [InlineData("Ablllllllllllllllllllllllllllllllllllll41", false)] // above maximum length
         public void CreateUserPasswordRules(string password, bool isValid)
         {
-            
-
             Core.Entity.User result = null;
             if (isValid)
             {
