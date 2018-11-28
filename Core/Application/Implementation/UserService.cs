@@ -8,16 +8,23 @@ namespace Core.Application.Implementation
 {
     public class UserService : IUserService
     {
-        readonly IRepository<User> _userRepository;
+        readonly IUserRepository _userRepository;
 
-        public UserService(IRepository<User> UserRepository) 
+        public UserService(IUserRepository UserRepository) 
         {
             _userRepository = UserRepository;
         }
             
-        public User Create(User user)
+        public User Create(User user, string password)
         {
-            
+            if(_userRepository.UniqueUsername(user.Username))
+            {
+
+            }
+            else
+            {
+                throw new ArgumentException("Username is already taken.");
+            }
         }
 
         public User Delete(int id)
