@@ -6,7 +6,7 @@ namespace Core.Domain
 {
     public interface IRepository<T>
     {
-        T Add(T entity);
+        T Create(T entity);
         IEnumerable<T> GetAll();
         T GetById(int id);
         T Update(T entity);
