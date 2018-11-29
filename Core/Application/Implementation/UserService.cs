@@ -9,10 +9,12 @@ namespace Core.Application.Implementation
     public class UserService : IUserService
     {
         readonly IUserRepository _userRepository;
+        readonly IAuthenticationService _authService;
 
-        public UserService(IUserRepository UserRepository) 
+        public UserService(IUserRepository UserRepository, IAuthenticationService authService) 
         {
             _userRepository = UserRepository;
+            _authService = authService;
         }
             
         public User Create(User user, string password)
@@ -25,7 +27,13 @@ namespace Core.Application.Implementation
             if (!_userRepository.UniqueUsername(user.Username))
                 throw new ArgumentException("Username is already taken.");
 
-            return _userRepository.Register(user, password);
+            byte[] passwordHash, passwordSalt;
+            _authService.CreatePasswordHash(password, out passwordHash, out passwordSalt);
+
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+
+            return _userRepository.Create(user);
         }
 
         public User Delete(int id)
