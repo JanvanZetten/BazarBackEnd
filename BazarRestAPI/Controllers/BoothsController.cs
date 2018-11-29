@@ -53,7 +53,7 @@ namespace BazarRestAPI.Controllers
         {
             try
             {
-                return _service.Create(booth);
+                return Ok(_service.Create(booth));
             }
             catch(Exception ex)
             {
@@ -69,7 +69,7 @@ namespace BazarRestAPI.Controllers
             try
             {
                 booth.Id = id;
-                return _service.Update(booth);
+                return Ok(_service.Update(booth));
             }
             catch(Exception ex)
             {
@@ -83,7 +83,7 @@ namespace BazarRestAPI.Controllers
         {
             try
             {
-                return _service.Delete(id);
+                return Ok(_service.Delete(id));
             }
             catch (Exception ex)
             {
