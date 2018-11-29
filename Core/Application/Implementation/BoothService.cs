@@ -10,11 +10,13 @@ namespace Core.Application.Implementation
     {
         readonly IRepository<User> _userRepository;
         readonly IRepository<Booth> _boothRepository;
+        readonly IAuthenticationService _authenticationService;
 
-        public BoothService(IRepository<User> UserRepository, IRepository<Booth> BoothRepository)
+        public BoothService(IRepository<User> userRepository, IRepository<Booth> boothRepository, IAuthenticationService authenticationService)
         {
-            _userRepository = UserRepository;
-            _boothRepository = BoothRepository;
+            _userRepository = userRepository;
+            _boothRepository = boothRepository;
+            _authenticationService = authenticationService;
         }
 
         public Booth Book(string token)

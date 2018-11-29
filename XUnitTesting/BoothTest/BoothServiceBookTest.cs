@@ -15,6 +15,7 @@ namespace XUnitTesting.BoothTest
 
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
         private Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
+        private Mock<IAuthenticationService> mockAuthenticationRepository = new Mock<IAuthenticationService>();
 
         private Dictionary<int, User> userDictionary = new Dictionary<int, User>();
         private Dictionary<int, Booth> boothDictionary = new Dictionary<int, Booth>();
@@ -93,7 +94,7 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            _boothService = new BoothService(mockBoothRepository.Object);
+            _boothService = new BoothService(mockUserRepository.Object, mockBoothRepository.Object);
         }
 
         /// <summary>
