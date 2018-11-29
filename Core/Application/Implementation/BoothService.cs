@@ -28,6 +28,7 @@ namespace Core.Application.Implementation
             if (user == null)
                 throw new ArgumentOutOfRangeException("Could not find the specified user.");
 
+            var booths = _boothRepository.GetAll();
             var booth = _boothRepository.GetAll().FirstOrDefault(b => b.Booker == null);
             if (booth == null)
                 throw new InvalidOperationException("No booths available.");

@@ -87,6 +87,11 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
+            mockBoothRepository.Setup(x => x.GetAll()).Returns(() =>
+            {
+                return boothDictionary.Values;
+            });
+
             mockBoothRepository.Setup(x => x.Update(It.IsAny<Booth>())).Returns<Booth>((b) =>
             {
                 if (b == null)
