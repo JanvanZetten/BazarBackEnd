@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Core.Application
 {
-    public interface IAuthenticationHelper
+    public interface IAuthenticationService
     {
         void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt);
         bool VerifyPaswordHash(string password, byte[] storedHash, byte[] storedSalt);

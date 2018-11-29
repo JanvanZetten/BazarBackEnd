@@ -33,6 +33,7 @@ namespace BazarRestAPI
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRepository<User>, UserRepository>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

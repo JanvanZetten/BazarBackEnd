@@ -25,7 +25,7 @@ namespace infrastructure
         }
 
         /// <summary>
-        /// Creates an already prepared user in the table. Password needs to have been set and encrypted.
+        /// Creates a user in the table. Password has already been encrypted.
         /// </summary>
         public User Create(User user)
         {
@@ -64,20 +64,6 @@ namespace infrastructure
         }
 
         /// <summary>
-        /// Prepares a user for creation and encrypts the password. Adds user to the table through the Create method.
-        /// </summary>
-        public User Register(User user, string password)
-        {
-            byte[] passwordHash, passwordSalt;
-            CreatePasswordHash(password, out passwordHash, out passwordSalt);
-
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
-
-            return Create(user);
-        }
-
-        /// <summary>
         /// Checks the table if a username already exists. Returns true if the username doesn't already exist in the table.
         /// </summary>
         public bool UniqueUsername(string username)
@@ -100,17 +86,6 @@ namespace infrastructure
             _ctx.SaveChanges();
             return item;
         }
-
-        /// <summary>
-        /// Generates a hash and salt to the given password to allow for encryption.
-        /// </summary>
-        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-            }
-        }
+        
     }
 }

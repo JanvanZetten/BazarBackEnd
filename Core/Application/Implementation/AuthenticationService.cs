@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using Core.Entity;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Core.Application.Implementation
 {
-    public class AuthenticationHelper : IAuthenticationHelper
+    public class AuthenticationService : IAuthenticationService
     {
         private byte[] secretBytes;
 
-        public AuthenticationHelper(byte[] secret)
+        public AuthenticationService(byte[] secret)
         {
             secretBytes = secret;
         }
@@ -25,7 +28,23 @@ namespace Core.Application.Implementation
 
         public string GenerateToken(User user)
         {
-            throw new NotImplementedException();
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Username)
+            };
+
+            /*
+            if (user.IsAdmin)
+                claims.Add(new Claim(ClaimTypes.Role, "Administrator"));
+            */
+
+            var token = new JwtSecurityToken(
+                new JwtHeader(new SigningCredentials(
+                    new SymmetricSecurityKey(secretBytes),
+                    SecurityAlgorithms.HmacSha256)),
+                new JwtPayload(null, null, claims.ToArray(), DateTime.Now, DateTime.Now.AddMinutes(10)));
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         public bool VerifyPaswordHash(string password, byte[] storedHash, byte[] storedSalt)
