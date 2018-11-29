@@ -17,19 +17,30 @@ namespace infrastructure
             _ctx = ctx;
         }
         // Counts the amount of booths in database.
+        /// <summary>
+        /// Counts the amount of booth
+        /// </summary>
+        /// <returns>booths count</returns>
         public int Count()
         {
             return _ctx.Booth.Count();
         }
-        // Creates Booth
+        /// <summary>
+        /// Creates a booth
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns>Created booth</returns>
         public Booth Create(Booth entity)
         {
-            // Making variable for when we have to hash password etc. 
             var savedUser =_ctx.Booth.Add(entity).Entity;
             _ctx.SaveChanges();
             return savedUser;
         }
-        // Deletes a booth with the specific ID
+        /// <summary>
+        /// Deletes booth
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Deleted booth</returns>
         public Booth Delete(int id)
         {
             var booth = GetById(id);
@@ -38,17 +49,28 @@ namespace infrastructure
             return booth;
             
         }
-        // Getting all booths
+        /// <summary>
+        /// Method to get all booths
+        /// </summary>
+        /// <returns>All booths</returns>
         public IEnumerable<Booth> GetAll()
         {
             return _ctx.Booth;
         }
-        // Getting booth by ID
+        /// <summary>
+        /// Get booth with specific ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Specific booth</returns>
         public Booth GetById(int id)
         {
             return _ctx.Booth.FirstOrDefault(b => b.Id == id);
         }
-        // Updating the booth, using attached, for updating object references.
+        /// <summary>
+        /// Updating booth, using attached to also update references.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns>Updated booth</returns>
         public Booth Update(Booth entity)
         {
             _ctx.Attach(entity).State = EntityState.Modified;
