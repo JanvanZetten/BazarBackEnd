@@ -27,7 +27,8 @@ namespace XUnitTesting.BoothTest
         private Booth booth1;
         private Booth booth2;
 
-        private string token = "Hello";
+        private string token1 = "Hello";
+        private string token2 = "Adieu";
 
         public BoothServiceBookTest()
         {
@@ -44,8 +45,7 @@ namespace XUnitTesting.BoothTest
 
             booth1 = new Booth()
             {
-                Id = 1,
-                Booker = user1
+                Id = 1
             };
             booth2 = new Booth()
             {
@@ -70,6 +70,11 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
+            mockUserRepository.Setup(x => x.GetAll()).Returns(() =>
+            {
+                return userDictionary.Values;
+            });
+
             mockBoothRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns<int>((id) =>
             {
                 if (boothDictionary.ContainsKey(id))
@@ -81,6 +86,7 @@ namespace XUnitTesting.BoothTest
                     return null;
                 }
             });
+
             mockBoothRepository.Setup(x => x.Update(It.IsAny<Booth>())).Returns<Booth>((b) =>
             {
                 if (b == null)
@@ -96,10 +102,13 @@ namespace XUnitTesting.BoothTest
                     return null;
                 }
             });
+
             mockAuthenticationService.Setup(x => x.VerifyUserFromToken(It.IsAny<string>())).Returns<string>((s) =>
             {
-                if (token == s)
-                    return "jan";
+                if (token1 == s)
+                    return user2.Username;
+                else if (token2 == s)
+                    return "asbamse";
                 throw new ArgumentException("Invalid token");
             });
 
@@ -112,15 +121,47 @@ namespace XUnitTesting.BoothTest
         [Fact]
         public void BookValidInput()
         {
-            Booth booth = _boothService.Book("Hello");
+            Booth booth = _boothService.Book(token1);
 
-            Assert.True(boothDictionary.Values.Any(b => b.Booker.Username == user1.Username));
+            Assert.True(boothDictionary.Values.Any(b => b.Booker.Username == user2.Username));
         }
 
         [Fact]
-        public void BookInvalidInput()
+        public void BookInvalidUser()
         {
+            Booth booth = _boothService.Book(token1);
 
+            Assert.False(boothDictionary.Values.Any(b => b.Booker.Username == user1.Username));
+        }
+
+        [Fact]
+        public void BookInvalidToken()
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                _boothService.Book("Mojn");
+            });
+        }
+
+        [Fact]
+        public void BookWithUserNotFound()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            {
+                _boothService.Book(token2);
+            });
+        }
+
+        [Fact]
+        public void BookWithNoBoothsAvailable()
+        {
+            Booth booth1 = _boothService.Book(token1);
+            Booth booth2 = _boothService.Book(token1);
+
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                _boothService.Book(token1);
+            });
         }
     }
 }

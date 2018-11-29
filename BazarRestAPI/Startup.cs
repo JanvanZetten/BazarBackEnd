@@ -40,7 +40,6 @@ namespace BazarRestAPI
             Byte[] secretBytes = new byte[40];
             Random rand = new Random();
             rand.NextBytes(secretBytes);
-            services.AddSingleton<IAuthenticationService>(new AuthenticationService(secretBytes));
 
             TokenValidationParameters validationParameters =
                     new TokenValidationParameters
@@ -55,13 +54,14 @@ namespace BazarRestAPI
                         ClockSkew = TimeSpan.FromMinutes(5) //5 minute tolerance for the expiration date
                     };
 
+            services.AddSingleton<IAuthenticationService>(new AuthenticationService(secretBytes, validationParameters));
+
             // Add JWT based authentication
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = validationParameters;
             });
-
-            services.AddSingleton<TokenValidationParameters>(validationParameters);
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

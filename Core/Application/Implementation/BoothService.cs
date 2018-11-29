@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Core.Domain;
 using Core.Entity;
@@ -10,18 +11,29 @@ namespace Core.Application.Implementation
     {
         readonly IRepository<User> _userRepository;
         readonly IRepository<Booth> _boothRepository;
-        readonly IAuthenticationService _authenticationService;
+        readonly IAuthenticationService _authService;
 
         public BoothService(IRepository<User> userRepository, IRepository<Booth> boothRepository, IAuthenticationService authenticationService)
         {
             _userRepository = userRepository;
             _boothRepository = boothRepository;
-            _authenticationService = authenticationService;
+            _authService = authenticationService;
         }
 
         public Booth Book(string token)
         {
-            throw new NotImplementedException();
+            var username = _authService.VerifyUserFromToken(token);
+            var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == username);
+
+            if (user == null)
+                throw new ArgumentOutOfRangeException("Could not find the specified user.");
+
+            var booth = _boothRepository.GetAll().FirstOrDefault(b => b.Booker == null);
+            if (booth == null)
+                throw new InvalidOperationException("No booths available.");
+
+            booth.Booker = user;
+            return Update(booth);
         }
 
         public int CountAvalibleBooths()
