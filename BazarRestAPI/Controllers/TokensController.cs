@@ -15,26 +15,47 @@ namespace BazarRestAPI.Controllers
     public class TokensController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IAuthenticationService _authService;
 
-        public TokensController(IUserService userService)
+        public TokensController(IUserService userService, IAuthenticationService authService)
         {
             _userService = userService;
+            _authService = authService;
         }
         // POST api/values
         [HttpPost]
-        public void Login([FromBody]  UserDTO userDto)
+        public IActionResult Login([FromBody]  UserDTO userDTO)
         {
-            
+            var user = _userService.GetAll().FirstOrDefault(u => u.Username == userDTO.Username);
+
+            if (user == null)
+                return Unauthorized();
+
+            if (!_authService.VerifyPaswordHash(userDTO.Password, user.PasswordHash, user.PasswordSalt))
+                return Unauthorized();
+
+            return Ok(new
+            {
+                username = user.Username,
+                token = _authService.GenerateToken(user)
+            });
         }
+
         //[Authorize]
         [Route("createUser")]
         [HttpPost]
-        public ActionResult<User> CreateUser([FromBody]  User user, UserDTO userDto)
+        public ActionResult<string> CreateUser([FromBody] UserDTO userDTO)
         {
             try
             {
-                user.Username = userDto.Username;
-                return Ok(_userService.Create(user, userDto.Password));
+                var user = new User()
+                {
+                    Username = userDTO.Username
+                };
+
+                var userCreated = _userService.Create(user, userDTO.Password);
+
+                return Ok(_authService.GenerateToken(userCreated));
             }
             catch(Exception ex)
             {
