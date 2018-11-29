@@ -33,7 +33,12 @@ namespace BazarRestAPI
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRepository<User>, UserRepository>();
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+            // Creates a random array of bytes for use of passwords.
+            Byte[] secretBytes = new byte[40];
+            Random rand = new Random();
+            rand.NextBytes(secretBytes);
+            services.AddSingleton<IAuthenticationService>(new AuthenticationService(secretBytes));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
