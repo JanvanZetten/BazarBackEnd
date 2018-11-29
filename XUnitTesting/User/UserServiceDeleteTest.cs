@@ -13,6 +13,7 @@ namespace XUnitTesting.User
     public class UserServiceDeleteTest
     {
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
+        private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
         private Dictionary<int, Core.Entity.User> userDictionary = new Dictionary<int, Core.Entity.User>();
 
         readonly IUserService _userService;
@@ -39,7 +40,7 @@ namespace XUnitTesting.User
                 return user;
             });
 
-            _userService = new UserService(mockUserRepository.Object);
+            _userService = new UserService(mockUserRepository.Object, mockAuthenticationService.Object);
         }
 
         /// <summary>

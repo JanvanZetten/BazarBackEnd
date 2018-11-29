@@ -13,6 +13,7 @@ namespace XUnitTesting.User
     public class UserServiceUpdateTest
     {
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
+        private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
         private Dictionary<int, Core.Entity.User> userDictionary = new Dictionary<int, Core.Entity.User>();
 
         readonly IUserService _userService;
@@ -68,7 +69,7 @@ namespace XUnitTesting.User
                 return !userDictionary.Values.Any(user => user.Username.ToLower() == username.ToLower());
             });
 
-            _userService = new UserService(mockUserRepository.Object);
+            _userService = new UserService(mockUserRepository.Object, mockAuthenticationService.Object);
         }
 
         /// <summary>
