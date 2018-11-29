@@ -23,6 +23,9 @@ namespace XUnitTesting.User
             Username = "jan"
         };
 
+        /// <summary>
+        /// Setup needed mock enviroment.
+        /// </summary>
         public UserServiceCreateTest()
         {
             mockUserRepository.Setup(x => x.Register(It.IsAny<Core.Entity.User>(), It.IsAny<string>())).Returns<Core.Entity.User, string>((u, p) => 
@@ -39,6 +42,9 @@ namespace XUnitTesting.User
             _userService = new UserService(mockUserRepository.Object);
         }
 
+        /// <summary>
+        /// Create user with valid information.
+        /// </summary>
         [Fact]
         public void CreateUserValid()
         {
@@ -49,6 +55,11 @@ namespace XUnitTesting.User
             Assert.Equal(_user.Username, result.Username);
         }
 
+        /// <summary>
+        /// Testing limits of username requirements.
+        /// </summary>
+        /// <param name="username">The test username.</param>
+        /// <param name="isValid">Is the username valid.</param>
         [Theory]
         [InlineData("ja", false)] // below minimum length
         [InlineData("jan", true)] // equals minimum length
@@ -81,6 +92,9 @@ namespace XUnitTesting.User
             }
         }
 
+        /// <summary>
+        /// Test for username ArgumentNullException.
+        /// </summary>
         [Fact]
         public void CreateUserInvalidUsernameNull()
         {
@@ -95,6 +109,9 @@ namespace XUnitTesting.User
             Assert.Null(result);
         }
 
+        /// <summary>
+        /// Test that username duplicate is not allowed.
+        /// </summary>
         [Fact]
         public void CreateUserInvalidDuplicateUsername()
         {
@@ -113,6 +130,9 @@ namespace XUnitTesting.User
             Assert.Null(result);
         }
 
+        /// <summary>
+        /// Test for username ArgumentNullException.
+        /// </summary>
         [Fact]
         public void CreateUserInvalidPasswordNull()
         {
@@ -125,6 +145,11 @@ namespace XUnitTesting.User
             Assert.Null(result);
         }
 
+        /// <summary>
+        /// Testing limits of password requirements.
+        /// </summary>
+        /// <param name="username">The test password.</param>
+        /// <param name="isValid">Is the password valid.</param>
         [Theory]
         [InlineData("Ab1Ab1A", false)] // below minimum length
         [InlineData("Ab1Ab1Ab", true)] // equals minimum length

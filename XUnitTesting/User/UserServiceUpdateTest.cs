@@ -27,6 +27,9 @@ namespace XUnitTesting.User
             Username = "hussein"
         };
 
+        /// <summary>
+        /// Setup needed mock enviroment.
+        /// </summary>
         public UserServiceUpdateTest()
         {
             userDictionary.Add(1, _user);
@@ -68,6 +71,9 @@ namespace XUnitTesting.User
             _userService = new UserService(mockUserRepository.Object);
         }
 
+        /// <summary>
+        /// Update user with valid information. Test if you can use your old username.
+        /// </summary>
         [Fact]
         public void UpdateUserValid()
         {
@@ -84,6 +90,11 @@ namespace XUnitTesting.User
             Assert.Equal(test.Username, result.Username);
         }
 
+        /// <summary>
+        /// Testing limits of username requirements.
+        /// </summary>
+        /// <param name="username">The test username.</param>
+        /// <param name="isValid">Is the username valid.</param>
         [Theory]
         [InlineData("ja", false)] // below minimum length
         [InlineData("jan", true)] // equals minimum length
@@ -117,6 +128,9 @@ namespace XUnitTesting.User
             }
         }
 
+        /// <summary>
+        /// Test for username ArgumentNullException.
+        /// </summary>
         [Fact]
         public void UpdateUserInvalidUsernameNull()
         {
@@ -134,6 +148,9 @@ namespace XUnitTesting.User
             Assert.Null(result);
         }
 
+        /// <summary>
+        /// Test that username duplicate is not allowed.
+        /// </summary>
         [Fact]
         public void UpdateUserInvalidDuplicateUsername()
         {
@@ -152,6 +169,9 @@ namespace XUnitTesting.User
             Assert.Null(result);
         }
         
+        /// <summary>
+        /// Test id not available
+        /// </summary>
         [Fact]
         public void UpdateInvalidIdInput()
         {
