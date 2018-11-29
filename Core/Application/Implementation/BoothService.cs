@@ -7,7 +7,7 @@ namespace Core.Application.Implementation
 {
     public class BoothService : IBoothService
     {
-        public Booth Book(int id)
+        public Booth Book(string Username, string token)
         {
             throw new NotImplementedException();
         }
