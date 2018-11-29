@@ -18,9 +18,9 @@ namespace BazarRestAPI.Controllers
         {
             _service = service;
         }
-        // GET: api/Booths
+        // GET: api/Booths - Get All Booths
         [HttpGet]
-        public ActionResult<IEnumerable<Booth>> GetBooths()
+        public ActionResult<IEnumerable<Booth>> Get()
         {
            try
             {
@@ -33,29 +33,63 @@ namespace BazarRestAPI.Controllers
 
         }
 
-        // GET: api/Booths/5
+        // GET: api/Booths/5 - Get booth with id
         [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        public ActionResult<Booth> Get(int id)
         {
-            return "value";
+            try
+            {
+                return Ok(_service.GetById(id));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // POST: api/Booths
+        // POST: api/Booths - Create booth
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult<Booth> Post([FromBody] Booth booth)
         {
+            try
+            {
+                return _service.Create(booth);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
 
-        // PUT: api/Booths/5
+        // PUT: api/Booths/5 - Update booth
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public ActionResult<Booth> Put(int id, [FromBody] Booth booth)
         {
+            try
+            {
+                booth.Id = id;
+                return _service.Update(booth);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // DELETE: api/ApiWithActions/5
+        // DELETE: api/ApiWithActions/5 - Delete Booth
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult<Booth> Delete(int id)
         {
+            try
+            {
+                return _service.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
     }
 }

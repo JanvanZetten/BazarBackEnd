@@ -33,15 +33,8 @@ namespace infrastructure
         public Booth Delete(int id)
         {
             var booth = GetById(id);
-            if(booth != null)
-            {
-                _ctx.Booth.Remove(booth);
-                _ctx.SaveChanges();
-            }
-            else
-            {
-                throw new NullReferenceException("Booth was not found, use a valid Booth ID");
-            }
+            _ctx.Booth.Remove(booth);
+            _ctx.SaveChanges();
             return booth;
             
         }
