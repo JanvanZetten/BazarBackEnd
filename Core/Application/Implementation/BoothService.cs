@@ -1,13 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Core.Domain;
 using Core.Entity;
 
 namespace Core.Application.Implementation
 {
     public class BoothService : IBoothService
     {
-        public Booth Book(string Username, string token)
+        readonly IRepository<User> _userRepository;
+        readonly IRepository<Booth> _boothRepository;
+
+        public BoothService(IRepository<User> UserRepository, IRepository<Booth> BoothRepository)
+        {
+            _userRepository = UserRepository;
+            _boothRepository = BoothRepository;
+        }
+
+        public Booth Book(string token)
         {
             throw new NotImplementedException();
         }

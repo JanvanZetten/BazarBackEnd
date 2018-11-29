@@ -1,6 +1,7 @@
 ﻿using Core.Application;
 using Core.Application.Implementation;
 using Core.Domain;
+using Core.Entity;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -8,26 +9,26 @@ using System.Linq;
 using System.Text;
 using Xunit;
 
-namespace XUnitTesting.User
+namespace XUnitTesting.UserTest
 {
     public class UserServiceGetTest
     {
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
-        private Dictionary<int, Core.Entity.User> userDictionary = new Dictionary<int, Core.Entity.User>();
+        private Dictionary<int, User> userDictionary = new Dictionary<int, User>();
 
         readonly IUserService _userService;
 
-        readonly Core.Entity.User user1 = new Core.Entity.User()
+        readonly User user1 = new User()
         {
             Id = 1,
             Username = "jan"
         };
-        readonly Core.Entity.User user2 = new Core.Entity.User()
+        readonly User user2 = new User()
         {
             Id = 2,
             Username = "alex"
         };
-        readonly Core.Entity.User user3 = new Core.Entity.User()
+        readonly User user3 = new User()
         {
             Id = 3,
             Username = "hussein"
@@ -61,7 +62,7 @@ namespace XUnitTesting.User
         [Fact]
         public void GetByIdValidUser()
         {
-            Core.Entity.User user = _userService.GetByID(2);
+            User user = _userService.GetByID(2);
             Assert.Equal(user.Id, user2.Id);
 
             user = _userService.GetByID(3);

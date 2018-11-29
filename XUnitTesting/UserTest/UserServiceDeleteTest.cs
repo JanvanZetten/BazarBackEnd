@@ -1,6 +1,7 @@
 ﻿using Core.Application;
 using Core.Application.Implementation;
 using Core.Domain;
+using Core.Entity;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -8,21 +9,21 @@ using System.Linq;
 using System.Text;
 using Xunit;
 
-namespace XUnitTesting.User
+namespace XUnitTesting.UserTest
 {
     public class UserServiceDeleteTest
     {
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
-        private Dictionary<int, Core.Entity.User> userDictionary = new Dictionary<int, Core.Entity.User>();
+        private Dictionary<int, User> userDictionary = new Dictionary<int, User>();
 
         readonly IUserService _userService;
 
-        Core.Entity.User user1 = new Core.Entity.User
+        User user1 = new User
         {
             Username = "Bobby",
             Id = 1
         };
-        Core.Entity.User user2 = new Core.Entity.User
+        User user2 = new User
         {
             Username = "Grego",
             Id = 2
@@ -52,7 +53,7 @@ namespace XUnitTesting.User
             userDictionary.Add(user1.Id, user1);
             userDictionary.Add(user2.Id, user2);
 
-            Core.Entity.User deletedUser = _userService.Delete(user1.Id);
+            User deletedUser = _userService.Delete(user1.Id);
 
             Assert.True(!userDictionary.Values.Any(u => u.Id == user1.Id));
             Assert.Equal(user1.Username, deletedUser.Username);
