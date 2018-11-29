@@ -60,7 +60,7 @@ namespace Core.Application.Implementation
 
         public Booth GetUsersBooking(int userId)
         {
-            throw new NotImplementedException();
+            return _BoothRepo.GetAll().Where(b => b.Booker.Id == userId).FirstOrDefault();
         }
 
         public Booth Update(Booth updatedBooth)
