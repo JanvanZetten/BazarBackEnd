@@ -21,4 +21,7 @@
   <ItemGroup>
     <Folder Include="Booth\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Booth\BookTest.cs" />
+  </ItemGroup>
 </Project>
