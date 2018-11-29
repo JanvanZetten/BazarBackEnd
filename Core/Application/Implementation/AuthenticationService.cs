@@ -76,5 +76,10 @@ namespace Core.Application.Implementation
             }
             return true;
         }
+
+        public string VerifyUserFromToken(string token)
+        {
+            
+        }
     }
 }

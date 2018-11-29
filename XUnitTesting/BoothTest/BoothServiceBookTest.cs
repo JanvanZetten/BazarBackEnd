@@ -5,6 +5,7 @@ using Core.Entity;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace XUnitTesting.BoothTest
@@ -15,7 +16,7 @@ namespace XUnitTesting.BoothTest
 
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
         private Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
-        private Mock<IAuthenticationService> mockAuthenticationRepository = new Mock<IAuthenticationService>();
+        private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
 
         private Dictionary<int, User> userDictionary = new Dictionary<int, User>();
         private Dictionary<int, Booth> boothDictionary = new Dictionary<int, Booth>();
@@ -25,6 +26,8 @@ namespace XUnitTesting.BoothTest
 
         private Booth booth1;
         private Booth booth2;
+
+        private string token = "Hello";
 
         public BoothServiceBookTest()
         {
@@ -93,8 +96,14 @@ namespace XUnitTesting.BoothTest
                     return null;
                 }
             });
+            mockAuthenticationService.Setup(x => x.VerifyUserFromToken(It.IsAny<string>())).Returns<string>((s) =>
+            {
+                if (token == s)
+                    return "jan";
+                throw new ArgumentException("Invalid token");
+            });
 
-            _boothService = new BoothService(mockUserRepository.Object, mockBoothRepository.Object);
+            _boothService = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object);
         }
 
         /// <summary>
@@ -102,6 +111,14 @@ namespace XUnitTesting.BoothTest
         /// </summary>
         [Fact]
         public void BookValidInput()
+        {
+            Booth booth = _boothService.Book("Hello");
+
+            Assert.True(boothDictionary.Values.Any(b => b.Booker.Username == user1.Username));
+        }
+
+        [Fact]
+        public void BookInvalidInput()
         {
 
         }
