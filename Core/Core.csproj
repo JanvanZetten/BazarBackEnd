@@ -7,6 +7,9 @@
     <Compile Remove="Domain\Class1.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.3.0" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Core.Entity\Core.Entity.csproj" />
   </ItemGroup>
   <ItemGroup>

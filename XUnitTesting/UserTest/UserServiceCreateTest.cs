@@ -14,6 +14,7 @@ namespace XUnitTesting.UserTest
     {
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
         private Dictionary<int, User> userDictionary = new Dictionary<int, User>();
+        private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
         private int nextId = 1;
 
         readonly IUserService _userService;
@@ -28,7 +29,7 @@ namespace XUnitTesting.UserTest
         /// </summary>
         public UserServiceCreateTest()
         {
-            mockUserRepository.Setup(x => x.Register(It.IsAny<User>(), It.IsAny<string>())).Returns<User, string>((u, p) => 
+            mockUserRepository.Setup(x => x.Create(It.IsAny<Core.Entity.User>())).Returns<Core.Entity.User>((u) => 
             {
                 u.Id = nextId++;
                 userDictionary.Add(u.Id, u);
@@ -39,7 +40,7 @@ namespace XUnitTesting.UserTest
                 return !userDictionary.Values.Any(user => user.Username.ToLower() == username.ToLower());
             });
 
-            _userService = new UserService(mockUserRepository.Object);
+            _userService = new UserService(mockUserRepository.Object, mockAuthenticationService.Object);
         }
 
         /// <summary>
