@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Core.Entity;
@@ -11,10 +12,12 @@ namespace Core.Application.Implementation
     public class AuthenticationService : IAuthenticationService
     {
         private byte[] secretBytes;
+        private TokenValidationParameters tokenVal;
 
-        public AuthenticationService(byte[] secret)
+        public AuthenticationService(byte[] secret, TokenValidationParameters tvp)
         {
             secretBytes = secret;
+            tokenVal = tvp;
         }
 
         /// <summary>
@@ -77,9 +80,18 @@ namespace Core.Application.Implementation
             return true;
         }
 
+        /// <summary>
+        /// Verifies token and returns username if valid.
+        /// </summary>
         public string VerifyUserFromToken(string token)
         {
-            
+            SecurityToken validatedToken;
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+            var claimsPrincipal = handler.ValidateToken(token, tokenVal, out validatedToken);
+            var result = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            if (result == null)
+                throw new ArgumentException("The token is not valid!");
+            return result;
         }
     }
 }
