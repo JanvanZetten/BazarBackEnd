@@ -65,7 +65,8 @@ namespace Core.Application.Implementation
 
         public Booth Update(Booth updatedBooth)
         {
-            throw new NotImplementedException();
+            GetById(updatedBooth.Id);
+            return _BoothRepo.Update(updatedBooth);
         }
 
         public int WaitingListPosition(int userId)
