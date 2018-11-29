@@ -30,22 +30,44 @@ namespace Core.Application.Implementation
 
         public User Delete(int id)
         {
-            throw new NotImplementedException();
+            User user = _userRepository.Delete(id);
+            if (user == null)
+                throw new ArgumentOutOfRangeException("User not found. No user has been deleted");
+            return user;
         }
 
         public IEnumerable<User> GetAll()
         {
-            throw new NotImplementedException();
+            return _userRepository.GetAll();
         }
 
         public User GetByID(int id)
         {
-            throw new NotImplementedException();
+            User user = _userRepository.GetById(id);
+
+            if (user == null)
+                throw new ArgumentOutOfRangeException("Could not find the specified user.");
+
+            return user;
         }
 
         public User Update(User user)
         {
-            throw new NotImplementedException();
+            if (user == null)
+                throw new ArgumentNullException("The user is null.");
+            if (InputCheck.ValidLength("username", user.Username, 3, 40)) { }
+
+            User userOrg = _userRepository.GetById(user.Id);
+            if(userOrg == null)
+                throw new ArgumentOutOfRangeException("User not found. No user has been deleted");
+
+            if (userOrg.Username.ToLower() != user.Username.ToLower())
+            {
+                if (!_userRepository.UniqueUsername(user.Username))
+                    throw new ArgumentException("Username is already taken.");
+            }
+
+            return _userRepository.Update(user);
         }
     }
 }
