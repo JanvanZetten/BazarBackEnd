@@ -21,28 +21,27 @@ namespace XUnitTesting.Booth
 
             int id = 1;
 
-            mockBoothRepository.Setup(m => m.Create(It.IsAny<Core.Entity.Booth>())).Returns(() => new Core.Entity.Booth{Id = id});
+            mockBoothRepository.Setup(m => m.Create(It.IsAny<Core.Entity.Booth>())).
+                Returns(() => new Core.Entity.Booth{Id = id});
 
 
-            var result = new BoothService(mockBoothRepository.Object).Create(new Core.Entity.Booth);
+            var result = new BoothService(mockBoothRepository.Object).Create(new Core.Entity.Booth());
 
             Assert.Equal(id, result.Id);
 
         }
 
         [Fact]
-        public void CreateBoothWithIdTest()
+        public void CreateBoothWithIdChangeTest()
         {
+            var didRun= false;
+            mockBoothRepository.Setup(m => m.Create(It.Is<Core.Entity.Booth>(k => k.Id == 0))).
+                Callback(() => didRun = true);
 
-            int id = 1;
+            new BoothService(mockBoothRepository.Object).Create(new Core.Entity.Booth() { Id = 1 });
 
-            mockBoothRepository.Setup(m => m.Create(It.IsAny<Core.Entity.Booth>())).Returns(() => new Core.Entity.Booth { Id = id });
-
-
-            var result = new BoothService(mockBoothRepository.Object).Create(new Core.Entity.Booth(){Id = 2});
-
-            Assert.Equal(id, result.Id);
-
+            Assert.True(didRun);
+           
         }
     }
 }

@@ -17,10 +17,6 @@
     <ProjectReference Include="..\Core.Entity\Core.Entity.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Booth\" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Remove="Booth\BookTest.cs" />
   </ItemGroup>

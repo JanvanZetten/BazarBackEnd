@@ -28,12 +28,14 @@ namespace Core.Application.Implementation
 
         public Booth Create(Booth newBooth)
         {
-            throw new NotImplementedException();
+            newBooth.Id = 0;
+           return _BoothRepo.Create(newBooth);
         }
 
         public Booth Delete(int id)
         {
-            throw new NotImplementedException();
+            GetById(id);
+            return _BoothRepo.Delete(id);
         }
 
         public List<Booth> GetAll()
@@ -43,7 +45,17 @@ namespace Core.Application.Implementation
 
         public Booth GetById(int id)
         {
-            throw new NotImplementedException();
+            if (id <= 0)
+            {
+                throw new ArgumentOutOfRangeException("ID must be higher than 0");
+            }
+            var booth = _BoothRepo.GetById(id);
+            if(booth == null)
+            {
+                throw new ArgumentOutOfRangeException("Booth with selected ID was not found.");
+            }
+            return booth;
+
         }
 
         public Booth GetUsersBooking(int userId)
