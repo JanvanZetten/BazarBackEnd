@@ -40,7 +40,7 @@ namespace Core.Application.Implementation
 
         public List<Booth> GetAll()
         {
-            throw new NotImplementedException();
+            return _BoothRepo.GetAll().ToList();
         }
 
         public Booth GetById(int id)
