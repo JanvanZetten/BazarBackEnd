@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 namespace infrastructure
 {
@@ -13,9 +14,11 @@ namespace infrastructure
         //public DbSet<> {get; set;}
         //public DbSet<> {get; set;}
 
+        public DbSet<User> Users { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
         }
     }
 }
