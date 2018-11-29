@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Core.Entity;
 
 namespace Core.Application
@@ -7,7 +8,7 @@ namespace Core.Application
     {
         //CRUD
         Booth GetById(int id);
-        Booth GetAll();
+        IEnumerable<Booth> GetAll();
         Booth Delete(int id);
         Booth Create(Booth newBooth);
         Booth Update(Booth updatedBooth);
