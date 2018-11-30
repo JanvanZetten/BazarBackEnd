@@ -8,21 +8,21 @@ using System.Collections.Generic;
 using Xunit;
 using System.Linq;
 
-namespace XUnitTesting.User
+namespace XUnitTesting.UserTest
 {
     public class UserServiceUpdateTest
     {
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
+        private Dictionary<int, User> userDictionary = new Dictionary<int, User>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
-        private Dictionary<int, Core.Entity.User> userDictionary = new Dictionary<int, Core.Entity.User>();
 
         readonly IUserService _userService;
-        readonly Core.Entity.User _user = new Core.Entity.User()
+        readonly User _user = new User()
         {
             Id = 1,
             Username = "jan"
         };
-        readonly Core.Entity.User _user2 = new Core.Entity.User()
+        readonly User _user2 = new User()
         {
             Id = 2,
             Username = "hussein"
@@ -48,7 +48,7 @@ namespace XUnitTesting.User
                 }
             });
 
-            mockUserRepository.Setup(x => x.Update(It.IsAny<Core.Entity.User>())).Returns<Core.Entity.User>((u) => 
+            mockUserRepository.Setup(x => x.Update(It.IsAny<User>())).Returns<User>((u) => 
             {
                 if (u == null)
                     return null;
@@ -78,7 +78,7 @@ namespace XUnitTesting.User
         [Fact]
         public void UpdateUserValid()
         {
-            var test = new Core.Entity.User()
+            var test = new User()
             {
                 Id = 1,
                 Username = "alex"
@@ -105,13 +105,13 @@ namespace XUnitTesting.User
         [InlineData("lllllllllllllllllllllllllllllllllllllll41", false)] // above maximum length
         public void UpdateUserUsernameRules(string username, bool isValid)
         {
-            Core.Entity.User test = new Core.Entity.User()
+            User test = new User()
             {
                 Id = 1,
                 Username = username
             };
             
-            Core.Entity.User result = null;
+            User result = null;
             if (isValid)
             {
                 result = _userService.Update(test);
@@ -135,12 +135,12 @@ namespace XUnitTesting.User
         [Fact]
         public void UpdateUserInvalidUsernameNull()
         {
-            Core.Entity.User test = new Core.Entity.User()
+            User test = new User()
             {
                 Id = 1
             };
 
-            Core.Entity.User result = null;
+            User result = null;
             Assert.Throws<ArgumentNullException>(() =>
             {
                 result = _userService.Update(test);
@@ -155,13 +155,13 @@ namespace XUnitTesting.User
         [Fact]
         public void UpdateUserInvalidDuplicateUsername()
         {
-            Core.Entity.User test = new Core.Entity.User()
+            User test = new User()
             {
                 Id = 1,
                 Username = "hussein"
             };
             
-            Core.Entity.User result = null;
+            User result = null;
             Assert.Throws<ArgumentException>(() =>
             {
                 result = _userService.Update(test);
@@ -176,7 +176,7 @@ namespace XUnitTesting.User
         [Fact]
         public void UpdateInvalidIdInput()
         {
-            Core.Entity.User test = new Core.Entity.User()
+            User test = new User()
             {
                 Id = 3,
                 Username = "alex"

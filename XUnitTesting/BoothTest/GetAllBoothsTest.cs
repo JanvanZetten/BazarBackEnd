@@ -1,38 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
+using Core.Application;
 using Core.Application.Implementation;
 using Core.Domain;
+using Core.Entity;
 using Moq;
 using Xunit;
 
-namespace XUnitTesting.Booth
+namespace XUnitTesting.BoothTest
 {
     public class GetAllBoothsTest
     {
-        private Mock<IRepository<Core.Entity.Booth>> mockBoothRepository = new Mock<IRepository<Core.Entity.Booth>>();
+        private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
+        private Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
+        private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
 
         [Fact]
-        public void GetAllBooths(){
-
-            var BoothList = new List<Core.Entity.Booth>
+        public void GetAllBooths()
+        {
+            var BoothList = new List<Booth>
             {
-                new Core.Entity.Booth(){
+                new Booth(){
                     Id = 1,
                     Booker = new Core.Entity.User()
                 },
-                new Core.Entity.Booth(){
+                new Booth(){
                     Id = 2,
                     Booker = new Core.Entity.User()
                 },
-                new Core.Entity.Booth(){
+                new Booth(){
                     Id = 3,
                     Booker = null
                 },
-                new Core.Entity.Booth(){
+                new Booth(){
                     Id = 4,
                     Booker = null
                 },
-                new Core.Entity.Booth(){
+                new Booth(){
                     Id = 5,
                     Booker = new Core.Entity.User()
                 }
@@ -40,7 +44,7 @@ namespace XUnitTesting.Booth
 
             mockBoothRepository.Setup(x => x.GetAll()).Returns(() => BoothList);
 
-            var result = new BoothService(mockBoothRepository.Object).GetAll();
+            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object).GetAll();
 
             Assert.Equal(BoothList, result);
         }

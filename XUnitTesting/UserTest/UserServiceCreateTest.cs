@@ -8,18 +8,18 @@ using System.Collections.Generic;
 using Xunit;
 using System.Linq;
 
-namespace XUnitTesting.User
+namespace XUnitTesting.UserTest
 {
     public class UserServiceCreateTest
     {
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
+        private Dictionary<int, User> userDictionary = new Dictionary<int, User>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
-        private Dictionary<int, Core.Entity.User> userDictionary = new Dictionary<int, Core.Entity.User>();
         private int nextId = 1;
 
         readonly IUserService _userService;
         readonly string _password = "Ab1Ab1Ab";
-        readonly Core.Entity.User _user = new Core.Entity.User()
+        readonly User _user = new User()
         {
             Username = "jan"
         };
@@ -70,12 +70,12 @@ namespace XUnitTesting.User
         [InlineData("lllllllllllllllllllllllllllllllllllllll41", false)] // above maximum length
         public void CreateUserUsernameRules(string username, bool isValid)
         {
-            Core.Entity.User test = new Core.Entity.User()
+            User test = new User()
             {
                 Username = username
             };
             
-            Core.Entity.User result = null;
+            User result = null;
             if (isValid)
             {
                 result = _userService.Create(test, _password);
@@ -99,9 +99,9 @@ namespace XUnitTesting.User
         [Fact]
         public void CreateUserInvalidUsernameNull()
         {
-            Core.Entity.User test = new Core.Entity.User();
+            User test = new User();
 
-            Core.Entity.User result = null;
+            User result = null;
             Assert.Throws<ArgumentNullException>(() =>
             {
                 result = _userService.Create(test, _password);
@@ -116,13 +116,13 @@ namespace XUnitTesting.User
         [Fact]
         public void CreateUserInvalidDuplicateUsername()
         {
-            Core.Entity.User test = new Core.Entity.User()
+            User test = new User()
             {
                 Username = "Jan"
             };
 
             _userService.Create(_user, _password);
-            Core.Entity.User result = null;
+            User result = null;
             Assert.Throws<ArgumentException>(() =>
             {
                 result = _userService.Create(test, _password);
@@ -137,7 +137,7 @@ namespace XUnitTesting.User
         [Fact]
         public void CreateUserInvalidPasswordNull()
         {
-            Core.Entity.User result = null;
+            User result = null;
             Assert.Throws<ArgumentNullException>(() =>
             {
                 result = _userService.Create(_user, null);
@@ -166,7 +166,7 @@ namespace XUnitTesting.User
         [InlineData("Ablllllllllllllllllllllllllllllllllllll41", false)] // above maximum length
         public void CreateUserPasswordRules(string password, bool isValid)
         {
-            Core.Entity.User result = null;
+            User result = null;
             if (isValid)
             {
                 result = _userService.Create(_user, password);

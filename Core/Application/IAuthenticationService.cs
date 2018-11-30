@@ -10,5 +10,6 @@ namespace Core.Application
         void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt);
         bool VerifyPaswordHash(string password, byte[] storedHash, byte[] storedSalt);
         string GenerateToken(User user);
+        string VerifyUserFromToken(string token);
     }
 }

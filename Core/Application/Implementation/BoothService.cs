@@ -9,17 +9,37 @@ namespace Core.Application.Implementation
 {
     public class BoothService : IBoothService
     {
+        readonly IRepository<User> _userRepository;
+        readonly IRepository<Booth> _boothRepository;
+        readonly IAuthenticationService _authService;
 
-        private readonly IRepository<Booth> _boothRepo;
-
-        public BoothService(IRepository<Booth> repository)
+        public BoothService(IRepository<User> userRepository, IRepository<Booth> boothRepository, IAuthenticationService authenticationService)
         {
-            _boothRepo = repository;
+            _userRepository = userRepository;
+            _boothRepository = boothRepository;
+            _authService = authenticationService;
         }
 
-        public Booth Book(string Username, string token)
+        /// <summary>
+        /// Books a booth for the user found in the token. 
+        /// If the token is invalid; the user is not in the repository; or no booth is available an exception is thrown.
+        /// </summary>
+        /// <param name="token">JWT Token.</param>
+        /// <returns>Booth which was booked.</returns>
+        public Booth Book(string token)
         {
-            throw new NotImplementedException();
+            var username = _authService.VerifyUserFromToken(token);
+            var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == username);
+
+            if (user == null)
+                throw new ArgumentOutOfRangeException("Could not find the specified user.");
+            
+            var booth = _boothRepository.GetAll().FirstOrDefault(b => b.Booker == null);
+            if (booth == null)
+                throw new InvalidOperationException("No booths available.");
+
+            booth.Booker = user;
+            return Update(booth);
         }
 
         /// <summary>
@@ -28,7 +48,7 @@ namespace Core.Application.Implementation
         /// <returns>The avalible booths.</returns>
         public int CountAvalibleBooths()
         {
-            return _boothRepo.GetAll().Where(x => x.Booker == null).Count();
+            return _boothRepository.GetAll().Where(x => x.Booker == null).Count();
         }
 
         /// <summary>
@@ -43,7 +63,7 @@ namespace Core.Application.Implementation
             {
                 GetById(newBooth.Booker.Id);
             }
-            return _boothRepo.Create(newBooth);
+            return _boothRepository.Create(newBooth);
         }
 
         /// <summary>
@@ -54,7 +74,7 @@ namespace Core.Application.Implementation
         public Booth Delete(int id)
         {
             GetById(id);
-            return _boothRepo.Delete(id);
+            return _boothRepository.Delete(id);
         }
 
         /// <summary>
@@ -63,7 +83,7 @@ namespace Core.Application.Implementation
         /// <returns>The booths</returns>
         public List<Booth> GetAll()
         {
-            return _boothRepo.GetAll().ToList();
+            return _boothRepository.GetAll().ToList();
         }
 
         /// <summary>
@@ -77,7 +97,7 @@ namespace Core.Application.Implementation
             {
                 throw new ArgumentOutOfRangeException(nameof(id), "ID must be higher than 0");
             }
-            var booth = _boothRepo.GetById(id);
+            var booth = _boothRepository.GetById(id);
             if (booth == null)
             {
                 throw new ArgumentOutOfRangeException(nameof(id), "Booth with selected ID was not found.");
@@ -94,7 +114,7 @@ namespace Core.Application.Implementation
         /// <param name="userId">User identifier.</param>
         public Booth GetUsersBooking(int userId)
         {
-            return _boothRepo.GetAll().FirstOrDefault(b => b.Booker.Id == userId);
+            return _boothRepository.GetAll().FirstOrDefault(b => b.Booker.Id == userId);
         }
 
         /// <summary>
@@ -105,7 +125,7 @@ namespace Core.Application.Implementation
         public Booth Update(Booth updatedBooth)
         {
             GetById(updatedBooth.Id);
-            return _boothRepo.Update(updatedBooth);
+            return _boothRepository.Update(updatedBooth);
         }
 
         public int WaitingListPosition(int userId)

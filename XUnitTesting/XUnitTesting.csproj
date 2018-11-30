@@ -17,8 +17,4 @@
     <ProjectReference Include="..\Core.Entity\Core.Entity.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Booth\BookTest.cs" />
-    <Compile Remove="Booth\WaitingListPositionTest.cs" />
-  </ItemGroup>
 </Project>
