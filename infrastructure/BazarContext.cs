@@ -12,7 +12,7 @@ namespace infrastructure
 
         public DbSet<Booth> Booth {get; set;}
         public DbSet<User> User {get; set;}
-        //public DbSet<> {get; set;}
+        public DbSet<WaitingListItem> WaitingListItem { get; set; }
 
         public DbSet<User> Users { get; set; }
 
@@ -20,6 +20,8 @@ namespace infrastructure
         {
             modelBuilder.Entity<Booth>().HasOne(b => b.Booker).WithOne().HasForeignKey<User>(u => u.Id);
             modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
+
+            modelBuilder.Entity<WaitingListItem>().HasOne(w => w.User).WithOne().HasForeignKey<User>(u => u.Id);
         }
     }
 }
