@@ -75,12 +75,13 @@ namespace Core.Application.Implementation
         {
             if (id <= 0)
             {
-                throw new ArgumentOutOfRangeException("ID must be higher than 0");
+                throw new ArgumentOutOfRangeException(nameof(id), "ID must be higher than 0");
             }
             var booth = _boothRepo.GetById(id);
             if (booth == null)
             {
-                throw new ArgumentOutOfRangeException("Booth with selected ID was not found.");
+                throw new ArgumentOutOfRangeException(nameof(id), "Booth with selected ID was not found.");
+
             }
             return booth;
 
