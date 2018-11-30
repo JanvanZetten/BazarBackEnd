@@ -60,7 +60,21 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            
+        }
+
+        // POST: api/Booths/book - Book booth
+        [HttpPost]
+        [Route("book")]
+        public ActionResult<Booth> BookBoth([FromBody]String token)
+        {
+            try
+            {
+                return Ok(_service.Book(token));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // PUT: api/Booths/5 - Update booth
