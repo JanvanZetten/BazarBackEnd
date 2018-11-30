@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Application;
 using Core.Application.Implementation;
 using Core.Entity;
 using Microsoft.AspNetCore.Http;
@@ -13,8 +14,8 @@ namespace BazarRestAPI.Controllers
     [ApiController]
     public class BoothsController : ControllerBase
     {
-        private readonly BoothService _service;
-        public BoothsController(BoothService service)
+        private readonly IBoothService _service;
+        public BoothsController(IBoothService service)
         {
             _service = service;
         }
