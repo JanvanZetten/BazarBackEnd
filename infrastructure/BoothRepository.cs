@@ -64,9 +64,7 @@ namespace infrastructure
         /// <returns>Specific booth</returns>
         public Booth GetById(int id)
         {
-            var booth = _ctx.Booth.FirstOrDefault(b => b.Id == id);
-            _ctx.Entry(booth).State = EntityState.Detached;
-            return booth;
+            return _ctx.Booth.FirstOrDefault(b => b.Id == id);
         }
         /// <summary>
         /// Updating booth, using attached to also update references.
