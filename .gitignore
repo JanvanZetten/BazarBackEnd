@@ -6,6 +6,7 @@
 [Bb]in/
 packages/
 TestResults/
+*.db
 
 # globs
 Makefile.in
@@ -28,6 +29,7 @@ tarballs/
 test-results/
 Thumbs.db
 .vs/
+*.orig
 
 # Mac bundle stuff
 *.dmg
@@ -39,3 +41,4 @@ Thumbs.db
 
 # dotCover
 *.dotCover
+BazarRestAPI/BazarLocalDB.db

@@ -1,19 +1,29 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BazarRestAPI", "BazarRestAPI\BazarRestAPI.csproj", "{8D68F49E-E35D-4077-A8D4-63AB3D900005}"
+VisualStudioVersion = 15.0.28010.2048
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BazarRestAPI", "BazarRestAPI\BazarRestAPI.csproj", "{8D68F49E-E35D-4077-A8D4-63AB3D900005}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{133288EE-1A2C-4F40-828D-BBB8AB0A49D6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{D0A7AFA5-51F2-4CA2-A121-50D7323986AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{930A8664-8201-4C6F-8417-7A1DED704456}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{930A8664-8201-4C6F-8417-7A1DED704456}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{EC0A9DCA-994F-4D41-9929-6347AFAEA844}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "infrastructure\infrastructure.csproj", "{1A9C0AE5-73AB-4426-90E1-DCEBA6CC15B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "infrastructure", "infrastructure\infrastructure.csproj", "{1A9C0AE5-73AB-4426-90E1-DCEBA6CC15B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Entity", "Core.Entity\Core.Entity.csproj", "{A2D20C71-FB08-48A3-8BEF-6D5D7F25EF9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Entity", "Core.Entity\Core.Entity.csproj", "{A2D20C71-FB08-48A3-8BEF-6D5D7F25EF9B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D5FE4C40-5AB4-4EBA-855F-519E461AB7D4}"
+	ProjectSection(SolutionItems) = preProject
+		.travis.yml = .travis.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTesting", "UnitTesting", "{234A2117-1BD0-48A9-8A68-822235AB9D0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTesting", "XUnitTesting\XUnitTesting.csproj", "{B2520DD9-9C02-4183-BCAA-D3E01708FC7E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,11 +47,22 @@ Global
 		{A2D20C71-FB08-48A3-8BEF-6D5D7F25EF9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2D20C71-FB08-48A3-8BEF-6D5D7F25EF9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2D20C71-FB08-48A3-8BEF-6D5D7F25EF9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2520DD9-9C02-4183-BCAA-D3E01708FC7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2520DD9-9C02-4183-BCAA-D3E01708FC7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2520DD9-9C02-4183-BCAA-D3E01708FC7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2520DD9-9C02-4183-BCAA-D3E01708FC7E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8D68F49E-E35D-4077-A8D4-63AB3D900005} = {133288EE-1A2C-4F40-828D-BBB8AB0A49D6}
 		{930A8664-8201-4C6F-8417-7A1DED704456} = {D0A7AFA5-51F2-4CA2-A121-50D7323986AC}
 		{1A9C0AE5-73AB-4426-90E1-DCEBA6CC15B7} = {EC0A9DCA-994F-4D41-9929-6347AFAEA844}
 		{A2D20C71-FB08-48A3-8BEF-6D5D7F25EF9B} = {D0A7AFA5-51F2-4CA2-A121-50D7323986AC}
+		{B2520DD9-9C02-4183-BCAA-D3E01708FC7E} = {234A2117-1BD0-48A9-8A68-822235AB9D0D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {00D34DCE-E92C-432F-B078-8F375FF3120E}
 	EndGlobalSection
 EndGlobal
