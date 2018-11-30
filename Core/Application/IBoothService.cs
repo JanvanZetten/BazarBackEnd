@@ -8,7 +8,7 @@ namespace Core.Application
     {
         //CRUD
         Booth GetById(int id);
-        IEnumerable<Booth> GetAll();
+        List<Booth> GetAll();
         Booth Delete(int id);
         Booth Create(Booth newBooth);
         Booth Update(Booth updatedBooth);

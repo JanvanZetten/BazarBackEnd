@@ -136,7 +136,7 @@ namespace XUnitTesting.BoothTest
         {
             Booth booth = _boothService.Book(token1);
 
-            Assert.False(boothDictionary.Values.Any(b => b.Booker.Username == user1.Username));
+            Assert.False(boothDictionary.Values.Any(b => b.Booker?.Username == user1.Username));
         }
 
         [Fact]
