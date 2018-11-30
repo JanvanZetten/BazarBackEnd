@@ -28,11 +28,14 @@ namespace BazarRestAPI.Controllers
         {
             var user = _userService.GetAll().FirstOrDefault(u => u.Username == userDTO.Username);
 
+            var wrong = BadRequest("Wrong username or password.");
+            wrong.StatusCode = 401;
+
             if (user == null)
-                return Unauthorized();
+                return wrong;
 
             if (!_authService.VerifyPaswordHash(userDTO.Password, user.PasswordHash, user.PasswordSalt))
-                return Unauthorized();
+                return wrong;
 
             return Ok(new
             {
