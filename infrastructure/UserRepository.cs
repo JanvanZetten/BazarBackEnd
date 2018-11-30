@@ -68,7 +68,7 @@ namespace infrastructure
         /// </summary>
         public bool UniqueUsername(string username)
         {
-            return _ctx.Users.Any(u => u.Username == username);
+            return !_ctx.Users.Any(u => u.Username == username);
         }
 
         /// <summary>
