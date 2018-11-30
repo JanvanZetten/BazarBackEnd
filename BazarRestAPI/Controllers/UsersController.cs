@@ -28,7 +28,7 @@ namespace BazarRestAPI.Controllers
         }
 
         // GET: api/Users/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public ActionResult<User> Get(int id)
         {
             try

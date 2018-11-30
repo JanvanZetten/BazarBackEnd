@@ -34,7 +34,7 @@ namespace BazarRestAPI.Controllers
         }
 
         // GET: api/Booths/5 - Get booth with id
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public ActionResult<Booth> Get(int id)
         {
             try

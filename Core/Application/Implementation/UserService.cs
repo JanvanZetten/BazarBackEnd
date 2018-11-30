@@ -24,7 +24,7 @@ namespace Core.Application.Implementation
             if (InputCheck.ValidLength("username", user.Username, 3, 40)
                 && InputCheck.ValidLength("password", password, 8, 40)
                 && InputCheck.ValidPassword(password)){}
-            if (!_userRepository.UniqueUsername(user.Username))
+            if (_userRepository.UniqueUsername(user.Username))
                 throw new ArgumentException("Username is already taken.");
 
             byte[] passwordHash, passwordSalt;
