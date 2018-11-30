@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -22,19 +23,33 @@ namespace BazarRestAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public IConfiguration _conf { get; }
+        public IHostingEnvironment _env { get; }
 
-        public IConfiguration Configuration { get; }
+        public Startup(IHostingEnvironment env)
+        {
+            _env = env;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
+            _conf = builder.Build();
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRepository<User>, UserRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRepository<Booth>, BoothRepository>();
+            services.AddScoped<IBoothService, BoothService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+
 
             // Creates a random array of bytes for use of passwords.
             Byte[] secretBytes = new byte[40];
@@ -60,7 +75,20 @@ namespace BazarRestAPI
             {
                 options.TokenValidationParameters = validationParameters;
             });
-            
+
+            if (_env.IsDevelopment())
+            {
+                // In-memory database:
+                //services.AddDbContext<PetConsolContext>(opt => opt.UseInMemoryDatabase("PetsList"));
+                services.AddDbContext<BazarContext>(opt => opt.UseSqlite("Data Source = BazarLocalDB.db").EnableSensitiveDataLogging());
+            }
+            else
+            {
+                // SQL Server on Azure:
+                services.AddDbContext<BazarContext>(opt =>
+                         opt.UseSqlServer(_conf.GetConnectionString("defaultConnection")));
+            }
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,6 +97,11 @@ namespace BazarRestAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                using (var scope = app.ApplicationServices.CreateScope())
+                {
+                    var ctx = scope.ServiceProvider.GetService<BazarContext>();
+                    ctx.Database.EnsureCreated();
+                }
             }
             else
             {
@@ -76,6 +109,12 @@ namespace BazarRestAPI
             }
 
             app.UseHttpsRedirection();
+
+            // Use authentication
+            app.UseAuthentication();
+
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
             app.UseMvc();
         }
     }
