@@ -45,15 +45,14 @@ namespace BazarRestAPI
                     new TokenValidationParameters
                     {
                         ValidateAudience = false,
-                        //ValidAudience = "TodoApiClient",
                         ValidateIssuer = false,
-                        //ValidIssuer = "TodoApi",
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(secretBytes),
                         ValidateLifetime = true, //validate the expiration and not before values in the token
                         ClockSkew = TimeSpan.FromMinutes(5) //5 minute tolerance for the expiration date
                     };
 
+            // Add secret bytes for encryption and validationParameters to validate tokens.
             services.AddSingleton<IAuthenticationService>(new AuthenticationService(secretBytes, validationParameters));
 
             // Add JWT based authentication

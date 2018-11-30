@@ -20,6 +20,12 @@ namespace Core.Application.Implementation
             _authService = authenticationService;
         }
 
+        /// <summary>
+        /// Books a booth for the user found in the token. 
+        /// If the token is invalid; the user is not in the repository; or no booth is available an exception is thrown.
+        /// </summary>
+        /// <param name="token">JWT Token.</param>
+        /// <returns>Booth which was booked.</returns>
         public Booth Book(string token)
         {
             var username = _authService.VerifyUserFromToken(token);
@@ -27,8 +33,7 @@ namespace Core.Application.Implementation
 
             if (user == null)
                 throw new ArgumentOutOfRangeException("Could not find the specified user.");
-
-            var booths = _boothRepository.GetAll();
+            
             var booth = _boothRepository.GetAll().FirstOrDefault(b => b.Booker == null);
             if (booth == null)
                 throw new InvalidOperationException("No booths available.");
