@@ -13,6 +13,7 @@ namespace XUnitTesting.BoothTest
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
         private Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+        private static Mock<IRepository<WaitingListItem>> mockWaitingListRepository = new Mock<IRepository<WaitingListItem>>();
 
         [Fact]
         public void GetBoothByIdValidTest()
@@ -20,7 +21,7 @@ namespace XUnitTesting.BoothTest
             var booth = new Booth(){Id = 1};
             mockBoothRepository.Setup(m => m.GetById(It.IsAny<int>())).Returns(() => booth);
 
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).GetById(1);
+            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).GetById(1);
 
             Assert.Equal(booth, result);
         }
@@ -28,9 +29,9 @@ namespace XUnitTesting.BoothTest
         [Fact]
         public void GetBoothByIdTestIdToLowExpectException()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).GetById(0));
-            Assert.Throws<ArgumentOutOfRangeException>(() => new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).GetById(-1));
-            Assert.Throws<ArgumentOutOfRangeException>(() => new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).GetById(-10));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).GetById(0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).GetById(-1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).GetById(-10));
         }
 
         [Fact]
@@ -38,8 +39,8 @@ namespace XUnitTesting.BoothTest
         {
             mockBoothRepository.Setup(m => m.GetById(It.IsAny<int>())).Returns(() => null);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).GetById(1));
-            Assert.Throws<ArgumentOutOfRangeException>(() => new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).GetById(10));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).GetById(1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).GetById(10));
         }
     }
 }

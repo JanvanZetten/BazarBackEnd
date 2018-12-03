@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Core.Application.Implementation.CustomExceptions;
 using Core.Domain;
 using Core.Entity;
 
@@ -14,13 +15,13 @@ namespace Core.Application.Implementation
         readonly IAuthenticationService _authService;
         readonly IRepository<WaitingListItem> _waitingListRepository;
 
-        public BoothService(IRepository<User> userRepository, IRepository<Booth> boothRepository, 
-            IAuthenticationService authenticationService, IRepository<WaitingListItem> waitingListRepository)
+        public BoothService(IRepository<User> userRepository, IRepository<Booth> boothRepository,
+         IAuthenticationService authenticationService, IRepository<WaitingListItem> waitinglistRepository)
         {
             _userRepository = userRepository;
             _boothRepository = boothRepository;
             _authService = authenticationService;
-            _waitingListRepository = waitingListRepository;
+            _waitingListRepository = waitinglistRepository;
         }
 
         /// <summary>
@@ -39,7 +40,20 @@ namespace Core.Application.Implementation
             
             var booth = _boothRepository.GetAll().FirstOrDefault(b => b.Booker == null);
             if (booth == null)
-                throw new InvalidOperationException("No booths available.");
+            {
+                if (_waitingListRepository.GetAll().Any(w => w.Booker.Id == user.Id))
+                    throw new NotSupportedException("Du er allerede på ventelisten.");
+                else
+                {
+                    _waitingListRepository.Create(new WaitingListItem()
+                    {
+                        Date = DateTime.Now,
+                        Booker = user
+                    });
+
+                    throw new OnWaitingListException("Der var ikke flere tilgængelige stande men du er sat på venteliste");
+                }
+            }
 
             booth.Booker = user;
             return Update(booth);
