@@ -50,7 +50,7 @@ namespace BazarRestAPI.Controllers
         }
 
         //[Authorize]
-        [Route("availableCount")]
+        [Route("availableCount")] 
         [HttpGet]
         public ActionResult<int> GetAvailableCount()
         {
