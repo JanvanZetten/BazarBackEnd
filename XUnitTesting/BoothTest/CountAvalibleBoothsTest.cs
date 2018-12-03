@@ -42,7 +42,7 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).CountAvalibleBooths();
+            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).CountAvailableBooths();
 
             Assert.Equal(3, result);
         }
@@ -62,7 +62,7 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).CountAvalibleBooths();
+            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).CountAvailableBooths();
 
             Assert.Equal(0, result);
         }
@@ -94,7 +94,7 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).CountAvalibleBooths();
+            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).CountAvailableBooths();
 
             Assert.Equal(1, result);
         }
@@ -126,7 +126,7 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).CountAvalibleBooths();
+            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).CountAvailableBooths();
 
             Assert.Equal(0, result);
         }
