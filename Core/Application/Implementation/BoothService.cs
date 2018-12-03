@@ -126,6 +126,35 @@ namespace Core.Application.Implementation
             GetById(id);
             return _boothRepository.Delete(id);
         }
+        /// <summary>
+        /// Cancels the position the waitinglist user is in
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public WaitingListItem CancelWaitingPosition(int waitingId, string token)
+        {
+            var username = _authService.VerifyUserFromToken(token);
+            var waitingListItem = _waitingListRepository.GetById(waitingId);
+            if (waitingListItem == null)
+            {
+                throw new ArgumentOutOfRangeException("Did not find booth");
+            }
+            if (waitingListItem.Booker == null)
+            {
+                throw new ArgumentException("Cannot cancel a reservation, where a booth has no booker");
+            }
+            if (username == null)
+            {
+                throw new ArgumentException("Not a valid user");
+            }
+            if (waitingListItem.Booker.Username != username)
+            {
+                throw new ArgumentException("Not a valid user");
+            }
+
+            return _waitingListRepository.Delete(waitingListItem.Id);
+
+        }
 
         /// <summary>
         /// Gets all booths.
