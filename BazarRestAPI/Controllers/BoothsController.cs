@@ -53,11 +53,11 @@ namespace BazarRestAPI.Controllers
         // GET: api/Booths/reservation/5
         [Route("reservation")]
         [HttpGet("{id}")]
-        public ActionResult<Booth> GetUserReservation(int id)
+        public ActionResult<Booth> GetUserReservation(string token)
         {
             try
             {
-                return Ok(_service.GetUsersBooking(id));
+                return Ok(_service.GetUsersBooking(token));
             }
             catch (Exception ex)
             {

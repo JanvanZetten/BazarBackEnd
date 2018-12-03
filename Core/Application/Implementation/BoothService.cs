@@ -190,10 +190,16 @@ namespace Core.Application.Implementation
         /// Gets the users booking.
         /// </summary>
         /// <returns>The users booking.</returns>
-        /// <param name="userId">User identifier.</param>
-        public Booth GetUsersBooking(int userId)
+        /// <param name="token">User identifier.</param>
+        public Booth GetUsersBooking(string token)
         {
-            return _boothRepository.GetAll().FirstOrDefault(b => b.Booker.Id == userId);
+            var username = _authService.VerifyUserFromToken(token);
+            var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == username);
+
+            if (user == null)
+                throw new ArgumentOutOfRangeException("Could not find the specified user.");
+            
+            return _boothRepository.GetAll().FirstOrDefault(b => b.Booker.Id == user.Id);
         }
 
         /// <summary>
