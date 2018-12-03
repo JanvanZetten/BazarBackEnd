@@ -1,5 +1,6 @@
 ﻿using Core.Application;
 using Core.Application.Implementation;
+using Core.Application.Implementation.CustomExceptions;
 using Core.Domain;
 using Core.Entity;
 using Moq;
@@ -164,7 +165,7 @@ namespace XUnitTesting.BoothTest
             Booth booth1 = _boothService.Book(token1);
             Booth booth2 = _boothService.Book(token1);
 
-            Assert.Throws<InvalidOperationException>(() =>
+            Assert.Throws<OnWaitingListException>(() =>
             {
                 _boothService.Book(token1);
             });

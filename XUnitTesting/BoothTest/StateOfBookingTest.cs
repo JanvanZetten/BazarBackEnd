@@ -18,7 +18,7 @@ namespace XUnitTesting.BoothTest
         private static Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
         private static Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
 
-        IBoothService boothServ = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object);
+        IBoothService _boothServ;
 
         User user = new User()
         {
@@ -50,6 +50,8 @@ namespace XUnitTesting.BoothTest
             });
 
             mockWaitingListRepository.Setup(x => x.Create(It.IsAny<WaitingListItem>())).Returns(() => new WaitingListItem());
+
+            _boothServ = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object);
         }
 
         [Fact]
@@ -62,7 +64,7 @@ namespace XUnitTesting.BoothTest
 
             booth.Booker = null;
 
-            boothServ.Book("test");
+            _boothServ.Book("test");
 
             Assert.Equal(booth.Booker.Username, user.Username);
         }
@@ -83,7 +85,7 @@ namespace XUnitTesting.BoothTest
             };
 
             Assert.Throws<OnWaitingListException>(() 
-                => boothServ.Book("test"));
+                => _boothServ.Book("test"));
 
             mockWaitingListRepository.Verify(x => x.Create(It.IsAny<WaitingListItem>()), Times.Once());
         }
@@ -97,15 +99,15 @@ namespace XUnitTesting.BoothTest
                 {
                     Booker = user
                 }
-            } );
-
+            });
+            
             booth = new Booth()
             {
                 Id = 1,
                 Booker = user
             };
 
-            Assert.Throws<NotSupportedException>(() => boothServ.Book("test"));
+            Assert.Throws<NotSupportedException>(() => _boothServ.Book("test"));
 
         }
     }

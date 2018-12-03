@@ -49,6 +49,7 @@ namespace BazarRestAPI
             services.AddScoped<IRepository<Booth>, BoothRepository>();
             services.AddScoped<IBoothService, BoothService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IRepository<WaitingListItem>, WaitingListItemRepository>();
 
 
             // Creates a random array of bytes for use of passwords.

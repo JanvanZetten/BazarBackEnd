@@ -21,6 +21,7 @@ namespace Core.Application.Implementation
             _userRepository = userRepository;
             _boothRepository = boothRepository;
             _authService = authenticationService;
+            _waitingListRepository = waitinglistRepository;
         }
 
         /// <summary>
@@ -40,15 +41,18 @@ namespace Core.Application.Implementation
             var booth = _boothRepository.GetAll().FirstOrDefault(b => b.Booker == null);
             if (booth == null)
             {
-                _waitingListRepository.Create(new WaitingListItem()
+                if (_waitingListRepository.GetAll().Any(w => w.Booker.Id == user.Id))
+                    throw new NotSupportedException("Du er allerede på ventelisten.");
+                else
                 {
-                    Date = DateTime.Now,
-                    Booker = user
-                });
+                    _waitingListRepository.Create(new WaitingListItem()
+                    {
+                        Date = DateTime.Now,
+                        Booker = user
+                    });
 
-
-
-                throw new OnWaitingListException("Der var ikke flere tilgængelige stande men du er sat på venteliste");
+                    throw new OnWaitingListException("Der var ikke flere tilgængelige stande men du er sat på venteliste");
+                }
             }
 
             booth.Booker = user;
