@@ -14,6 +14,7 @@ namespace XUnitTesting.BoothTest
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
         private Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+        private static Mock<IRepository<WaitingListItem>> mockWaitingListRepository = new Mock<IRepository<WaitingListItem>>();
 
         [Fact]
         public void DeleteBooth()
@@ -21,7 +22,7 @@ namespace XUnitTesting.BoothTest
             var booth = new Booth() { Id = 1 };
             mockBoothRepository.Setup(m => m.Delete(It.IsAny<int>())).Returns(() => booth);
             mockBoothRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns(() => booth);
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object).Delete(booth.Id);
+            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).Delete(booth.Id);
 
             Assert.Equal(booth.Id, result.Id);
         }
@@ -32,7 +33,7 @@ namespace XUnitTesting.BoothTest
             var booth = new Booth() { Id = 0 };
 
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-            new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object).Delete(booth.Id));
+            new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).Delete(booth.Id));
         }
 
         [Fact]
@@ -42,7 +43,7 @@ namespace XUnitTesting.BoothTest
             mockBoothRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns(() => null);
 
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-            new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object).Delete(booth.Id));
+            new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).Delete(booth.Id));
         }
     }
 }

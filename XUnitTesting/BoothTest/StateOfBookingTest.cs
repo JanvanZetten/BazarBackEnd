@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Core.Application;
 using Core.Application.Implementation;
+using Core.Application.Implementation.CustomExceptions;
 using Core.Domain;
 using Core.Entity;
 using Moq;
@@ -12,12 +13,12 @@ namespace XUnitTesting.BoothTest
 {
     public class StateOfBookingTest
     {
-        private Mock<IRepository<WaitingListItem>> mockWaitingListRepository = new Mock<IRepository<WaitingListItem>>();
+        private static Mock<IRepository<WaitingListItem>> mockWaitingListRepository = new Mock<IRepository<WaitingListItem>>();
         private static Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
         private static Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
         private static Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
 
-        BoothService boothServ = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object);
+        IBoothService boothServ = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object);
 
         User user = new User()
         {
@@ -29,7 +30,7 @@ namespace XUnitTesting.BoothTest
 
         public StateOfBookingTest()
         {
-            BoothService boothServ = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object);
+
 
             mockBoothRepository.Setup(x => x.GetAll()).Returns(() => new List<Booth>
             {
@@ -85,6 +86,27 @@ namespace XUnitTesting.BoothTest
                 => boothServ.Book("test"));
 
             mockWaitingListRepository.Verify(x => x.Create(It.IsAny<WaitingListItem>()), Times.Once());
+        }
+
+        [Fact]
+        public void TheUserIsAlreadyOnWaitingListExpectException()
+        {
+            mockWaitingListRepository.Setup(m => m.GetAll()).Returns(() => new List<WaitingListItem>() {
+
+                new WaitingListItem()
+                {
+                    Booker = user
+                }
+            } );
+
+            booth = new Booth()
+            {
+                Id = 1,
+                Booker = user
+            };
+
+            Assert.Throws<NotSupportedException>(() => boothServ.Book("test"));
+
         }
     }
 }

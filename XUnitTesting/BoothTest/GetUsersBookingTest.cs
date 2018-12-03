@@ -14,6 +14,7 @@ namespace XUnitTesting.BoothTest
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
         private Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+        private static Mock<IRepository<WaitingListItem>> mockWaitingListRepository = new Mock<IRepository<WaitingListItem>>();
 
         [Fact]
         public void GetUsersBookingSingleBookingTest()
@@ -30,7 +31,7 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object).GetUsersBooking(user.Id);
+            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).GetUsersBooking(user.Id);
 
             Assert.Equal(booth, result);
         }
@@ -52,7 +53,7 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object).GetUsersBooking(user.Id);
+            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).GetUsersBooking(user.Id);
 
             Assert.Null(result);
         }

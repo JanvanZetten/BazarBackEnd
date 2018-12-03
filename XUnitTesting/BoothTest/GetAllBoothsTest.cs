@@ -14,6 +14,7 @@ namespace XUnitTesting.BoothTest
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
         private Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+        private static Mock<IRepository<WaitingListItem>> mockWaitingListRepository = new Mock<IRepository<WaitingListItem>>();
 
         [Fact]
         public void GetAllBooths()
@@ -44,7 +45,8 @@ namespace XUnitTesting.BoothTest
 
             mockBoothRepository.Setup(x => x.GetAll()).Returns(() => BoothList);
 
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object).GetAll();
+            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, 
+            mockAuthenticationService.Object, mockWaitingListRepository.Object).GetAll();
 
             Assert.Equal(BoothList, result);
         }
