@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BazarRestAPI.DTO;
 using Core.Application;
 using Core.Application.Implementation;
 using Core.Entity;
@@ -23,11 +24,11 @@ namespace BazarRestAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Booth>> Get()
         {
-           try
+            try
             {
                 return Ok(_service.GetAll());
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -42,7 +43,7 @@ namespace BazarRestAPI.Controllers
             {
                 return Ok(_service.GetById(id));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -72,7 +73,7 @@ namespace BazarRestAPI.Controllers
             {
                 return Ok(_service.Create(booth));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -92,6 +93,21 @@ namespace BazarRestAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost]
+        [Route("cancelReservation")]
+        public ActionResult<Booth> CancelReservation([FromBody] TokenBoothDTO dto)
+        {
+            try
+            {
+                return Ok(_service.CancelReservation(dto.id, dto.token));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         // PUT: api/Booths/5 - Update booth
         [HttpPut("{id}")]
