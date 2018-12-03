@@ -18,7 +18,7 @@ namespace XUnitTesting.BoothTest
         [Fact]
         public void GetUsersBookingSingleBookingTest()
         {
-            var user = new Core.Entity.User() { Id = 1 };
+            var user = new User() { Id = 1 };
             var booth = new Booth() { Id = 1, Booker = user };
 
             mockBoothRepository.Setup(x => x.GetAll()).Returns(() => new List<Booth>
@@ -26,7 +26,7 @@ namespace XUnitTesting.BoothTest
                 booth,
                 new Booth(){
                     Id = 2,
-                    Booker = new Core.Entity.User(){Id = 2}
+                    Booker = new User(){Id = 2}
                 }
             });
 
@@ -38,17 +38,17 @@ namespace XUnitTesting.BoothTest
         [Fact]
         public void GetUsersBookingNoBookingTest()
         {
-            var user = new Core.Entity.User() { Id = 1 };
+            var user = new User() { Id = 1 };
 
             mockBoothRepository.Setup(x => x.GetAll()).Returns(() => new List<Booth>
             {
                new Booth(){
                     Id = 1,
-                    Booker = new Core.Entity.User(){Id = 2}
+                    Booker = new User(){Id = 2}
                 },
                 new Booth(){
                     Id = 2,
-                    Booker = new Core.Entity.User(){Id = 3}
+                    Booker = new User(){Id = 3}
                 }
             });
 
