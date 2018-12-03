@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Application;
 using Core.Application.Implementation;
 using Core.Entity;
 using Microsoft.AspNetCore.Http;
@@ -13,8 +14,8 @@ namespace BazarRestAPI.Controllers
     [ApiController]
     public class BoothsController : ControllerBase
     {
-        private readonly BoothService _service;
-        public BoothsController(BoothService service)
+        private readonly IBoothService _service;
+        public BoothsController(IBoothService service)
         {
             _service = service;
         }
@@ -34,7 +35,7 @@ namespace BazarRestAPI.Controllers
         }
 
         // GET: api/Booths/5 - Get booth with id
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public ActionResult<Booth> Get(int id)
         {
             try
@@ -59,7 +60,21 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            
+        }
+
+        // POST: api/Booths/book - Book booth
+        [HttpPost]
+        [Route("book")]
+        public ActionResult<Booth> BookBoth([FromBody]String token)
+        {
+            try
+            {
+                return Ok(_service.Book(token));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // PUT: api/Booths/5 - Update booth
