@@ -82,7 +82,7 @@ namespace Core.Application.Implementation
         /// Counts the avalible booths.
         /// </summary>
         /// <returns>The avalible booths.</returns>
-        public int CountAvalibleBooths()
+        public int CountAvailableBooths()
         {
             return _boothRepository.GetAll().Where(x => x.Booker == null).Count();
         }
