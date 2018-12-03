@@ -80,6 +80,13 @@ namespace Core.Application.Implementation
                 throw new ArgumentException("Not a valid user");
             }
             booth.Booker = null;
+
+            var wli = _waitingListRepository.GetAll().FirstOrDefault(w => w.Date == _waitingListRepository.GetAll().Min(d => d.Date));
+            if(wli != null)
+            {
+                booth.Booker = wli.Booker;
+                _waitingListRepository.Delete(wli.Id);
+            }
             
             return _boothRepository.Update(booth);
 

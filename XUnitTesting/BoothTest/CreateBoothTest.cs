@@ -24,7 +24,6 @@ namespace XUnitTesting.BoothTest
             mockBoothRepository.Setup(m => m.Create(It.IsAny<Booth>())).
                 Returns(() => new Booth{Id = id});
 
-
             var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).Create(new Booth());
 
             Assert.Equal(id, result.Id);
