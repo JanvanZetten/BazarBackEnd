@@ -42,6 +42,11 @@ namespace Core.Application.Implementation
             return Update(booth);
         }
 
+        public Booth CancelReservation(int boothId, string token)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Counts the avalible booths.
         /// </summary>
