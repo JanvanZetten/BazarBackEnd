@@ -50,6 +50,21 @@ namespace BazarRestAPI.Controllers
             }
         }
 
+        // GET: api/Booths/reservation/5
+        [Route("reservation")]
+        [HttpGet("{id}")]
+        public ActionResult<Booth> GetUserReservation(int id)
+        {
+            try
+            {
+                return Ok(_service.GetUsersBooking(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         //[Authorize]
         [Route("availableCount")] 
         [HttpGet]
