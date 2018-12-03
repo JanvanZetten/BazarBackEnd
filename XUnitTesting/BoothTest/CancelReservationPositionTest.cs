@@ -51,6 +51,10 @@ namespace XUnitTesting.BoothTest
                 Booker = user2,
                 Date = DateTime.Now,
             };
+
+            waitinigListDictionary.Add(1, wli1);
+            waitinigListDictionary.Add(2, wli2);
+
             mockAuthenticationService.Setup(x => x.VerifyUserFromToken(It.IsAny<string>())).Returns<string>((s) =>
             {
                 return user1.Username;
@@ -73,6 +77,7 @@ namespace XUnitTesting.BoothTest
             mockWaitingListRepository.Setup(x => x.Delete(It.IsAny<int>())).Returns<int>((id) =>
             {
                 var value = waitinigListDictionary[id];
+                waitinigListDictionary.Remove(id);
                 return value;
             });
         }
@@ -84,9 +89,6 @@ namespace XUnitTesting.BoothTest
 
             Assert.True(wli1.Id == wli.Id);
             Assert.False(waitinigListDictionary.ContainsValue(wli1));
-
         }
-
-
     }
 }
