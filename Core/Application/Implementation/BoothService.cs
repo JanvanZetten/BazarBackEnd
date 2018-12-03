@@ -59,11 +59,37 @@ namespace Core.Application.Implementation
             return Update(booth);
         }
 
+        public Booth CancelReservation(int boothId, string token)
+        {
+            var username = _authService.VerifyUserFromToken(token);
+            var booth = GetById(boothId);
+            if(booth == null)
+            {
+                throw new ArgumentOutOfRangeException("Did not find booth");
+            }
+            if(booth.Booker == null)
+            {
+                throw new ArgumentException("Cannot cancel a reservation, where a booth has no booker");
+            }
+            if(username == null)
+            {
+                throw new ArgumentException("Not a valid user");
+            }
+            if(booth.Booker.Username != username)
+            {
+                throw new ArgumentException("Not a valid user");
+            }
+            booth.Booker = null;
+            
+            return _boothRepository.Update(booth);
+
+        }
+
         /// <summary>
         /// Counts the avalible booths.
         /// </summary>
         /// <returns>The avalible booths.</returns>
-        public int CountAvalibleBooths()
+        public int CountAvailableBooths()
         {
             return _boothRepository.GetAll().Where(x => x.Booker == null).Count();
         }
