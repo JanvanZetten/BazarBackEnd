@@ -48,6 +48,22 @@ namespace BazarRestAPI.Controllers
             }
         }
 
+        //[Authorize]
+        [Route("availableCount")]
+        [HttpGet]
+        public ActionResult<int> GetAvailableCount()
+        {
+            try
+            {
+                return Ok(_service.CountAvailableBooths());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
         // POST: api/Booths - Create booth
         [HttpPost]
         public ActionResult<Booth> Post([FromBody] Booth booth)
