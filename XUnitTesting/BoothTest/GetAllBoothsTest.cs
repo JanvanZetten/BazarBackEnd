@@ -44,7 +44,7 @@ namespace XUnitTesting.BoothTest
 
             mockBoothRepository.Setup(x => x.GetAll()).Returns(() => BoothList);
 
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object).GetAll();
+            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).GetAll();
 
             Assert.Equal(BoothList, result);
         }

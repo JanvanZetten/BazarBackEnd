@@ -30,7 +30,7 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object).GetUsersBooking(user.Id);
+            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).GetUsersBooking(user.Id);
 
             Assert.Equal(booth, result);
         }
@@ -52,7 +52,7 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object).GetUsersBooking(user.Id);
+            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).GetUsersBooking(user.Id);
 
             Assert.Null(result);
         }
