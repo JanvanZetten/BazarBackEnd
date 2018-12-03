@@ -123,7 +123,7 @@ namespace XUnitTesting.BoothTest
         }
 
         /// <summary>
-        /// Make valid booking.
+        /// Make valid Cancel.
         /// </summary>
         [Fact]
         public void CancelReservationValidInput()
@@ -155,7 +155,7 @@ namespace XUnitTesting.BoothTest
         [Fact]
         public void CancelReservationWithUserNotFound()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            Assert.Throws<ArgumentException>(() =>
             {
                 _boothService.CancelReservation(booth1.Id, token2);
             });
