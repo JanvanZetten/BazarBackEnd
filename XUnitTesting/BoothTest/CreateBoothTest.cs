@@ -14,6 +14,7 @@ namespace XUnitTesting.BoothTest
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
         private Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+        private static Mock<IRepository<WaitingListItem>> mockWaitingListRepository = new Mock<IRepository<WaitingListItem>>();
 
         [Fact]
         public void CreateValidBoothTest()
@@ -23,8 +24,7 @@ namespace XUnitTesting.BoothTest
             mockBoothRepository.Setup(m => m.Create(It.IsAny<Booth>())).
                 Returns(() => new Booth{Id = id});
 
-
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).Create(new Booth());
+            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).Create(new Booth());
 
             Assert.Equal(id, result.Id);
         }
@@ -36,7 +36,7 @@ namespace XUnitTesting.BoothTest
             mockBoothRepository.Setup(m => m.Create(It.Is<Booth>(k => k.Id == 0))).
                 Callback(() => didRun = true);
 
-            new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).Create(new Booth() { Id = 1 });
+            new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).Create(new Booth() { Id = 1 });
 
             Assert.True(didRun);
         }

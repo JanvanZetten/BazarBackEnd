@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BazarRestAPI.DTO;
 using Core.Application;
 using Core.Application.Implementation;
+using Core.Application.Implementation.CustomExceptions;
 using Core.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -82,7 +83,7 @@ namespace BazarRestAPI.Controllers
         // POST: api/Booths/book - Book booth
         [HttpPost]
         [Route("book")]
-        public ActionResult<Booth> BookBoth([FromBody]String token)
+        public ActionResult<Booth> BookBooth([FromBody]String token)
         {
             try
             {

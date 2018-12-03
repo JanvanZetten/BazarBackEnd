@@ -14,6 +14,7 @@ namespace XUnitTesting.BoothTest
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
         private Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+        private static Mock<IRepository<WaitingListItem>> mockWaitingListRepository = new Mock<IRepository<WaitingListItem>>();
 
         [Fact]
         public void testCount()
@@ -42,7 +43,7 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).CountAvailableBooths();
+            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).CountAvailableBooths();
 
             Assert.Equal(3, result);
         }
@@ -62,7 +63,7 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).CountAvailableBooths();
+            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).CountAvailableBooths();
 
             Assert.Equal(0, result);
         }
@@ -94,7 +95,7 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).CountAvailableBooths();
+            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).CountAvailableBooths();
 
             Assert.Equal(1, result);
         }
@@ -126,7 +127,7 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).CountAvailableBooths();
+            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).CountAvailableBooths();
 
             Assert.Equal(0, result);
         }
