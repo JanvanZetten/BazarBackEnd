@@ -137,11 +137,11 @@ namespace Core.Application.Implementation
             var waitingListItem = _waitingListRepository.GetById(waitingId);
             if (waitingListItem == null)
             {
-                throw new ArgumentOutOfRangeException("Did not find booth");
+                throw new ArgumentOutOfRangeException("Did not find waiting list item");
             }
             if (waitingListItem.Booker == null)
             {
-                throw new ArgumentException("Cannot cancel a reservation, where a booth has no booker");
+                throw new ArgumentException("Cannot cancel position in waiting list");
             }
             if (username == null)
             {
