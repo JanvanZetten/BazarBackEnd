@@ -121,7 +121,12 @@ namespace XUnitTesting.BoothTest
                 return waitingListItemDictionary.Values;
             });
 
-            mockWaitingListItemRepository.Setup(x => x.Delete())
+            mockWaitingListItemRepository.Setup(x => x.Delete(It.IsAny<int>())).Returns<int>((id) =>
+            {
+                var wli = waitingListItemDictionary[id];
+                waitingListItemDictionary.Remove(id);
+                return wli;
+            });
 
             mockBoothRepository.Setup(x => x.Update(It.IsAny<Booth>())).Returns<Booth>((b) =>
             {
@@ -151,9 +156,9 @@ namespace XUnitTesting.BoothTest
             _boothService = new BoothService(mockUserRepository.Object, mockBoothRepository.Object,
                 mockAuthenticationService.Object, mockWaitingListItemRepository.Object);
         }
-
+        
         /// <summary>
-        /// Make valid Cancel. 
+        /// Make sure the first entry in waiting list item repository get assigned to cancelled booth.
         /// </summary>
         [Fact]
         public void AssignBoothToWaitingListItemWithOldestDate()
@@ -165,6 +170,9 @@ namespace XUnitTesting.BoothTest
             Assert.True(booth.Booker == waitingListItem.Booker);
         }
 
+        /// <summary>
+        /// Make sure that booker is null when waiting list is empty.
+        /// </summary>
         [Fact]
         public void WaitingListEmpty()
         {

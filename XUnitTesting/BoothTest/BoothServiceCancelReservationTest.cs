@@ -119,7 +119,7 @@ namespace XUnitTesting.BoothTest
                 throw new ArgumentException("Invalid token");
             });
 
-            _boothService = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null);
+            _boothService = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, new Mock<IRepository<WaitingListItem>>().Object);
         }
 
         /// <summary>
