@@ -50,21 +50,6 @@ namespace BazarRestAPI.Controllers
             }
         }
 
-        // GET: api/Booths/reservation/5
-        [Route("reservation")]
-        [HttpGet("{id}")]
-        public ActionResult<Booth> GetUserReservation(string token)
-        {
-            try
-            {
-                return Ok(_service.GetUsersBooking(token));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
         //[Authorize]
         [Route("availableCount")] 
         [HttpGet]
@@ -79,6 +64,21 @@ namespace BazarRestAPI.Controllers
                 return BadRequest(ex.Message);
             }
 
+        }
+
+        // GET: api/Booths/reservation/
+        [Route("reservation")]
+        [HttpPost]
+        public ActionResult<Booth> GetUserReservation([FromBody] string token)
+        {
+            try
+            {
+                return Ok(_service.GetUsersBooking(token));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // POST: api/Booths - Create booth
