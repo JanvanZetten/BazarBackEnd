@@ -21,7 +21,7 @@ namespace XUnitTesting.BoothTest
             var booth = new Booth() { Id = 1 };
             mockBoothRepository.Setup(m => m.Delete(It.IsAny<int>())).Returns(() => booth);
             mockBoothRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns(() => booth);
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object).Delete(booth.Id);
+            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).Delete(booth.Id);
 
             Assert.Equal(booth.Id, result.Id);
         }
@@ -32,7 +32,7 @@ namespace XUnitTesting.BoothTest
             var booth = new Booth() { Id = 0 };
 
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-            new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object).Delete(booth.Id));
+            new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).Delete(booth.Id));
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace XUnitTesting.BoothTest
             mockBoothRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns(() => null);
 
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-            new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object).Delete(booth.Id));
+            new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, null).Delete(booth.Id));
         }
     }
 }

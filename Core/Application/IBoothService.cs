@@ -19,5 +19,6 @@ namespace Core.Application
         Booth GetUsersBooking(int userId);
         int WaitingListPosition(int userId);
         Booth CancelReservation(int boothId, string token);
+        
     }
 }

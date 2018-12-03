@@ -12,12 +12,15 @@ namespace Core.Application.Implementation
         readonly IRepository<User> _userRepository;
         readonly IRepository<Booth> _boothRepository;
         readonly IAuthenticationService _authService;
+        readonly IRepository<WaitingListItem> _waitingListRepository;
 
-        public BoothService(IRepository<User> userRepository, IRepository<Booth> boothRepository, IAuthenticationService authenticationService)
+        public BoothService(IRepository<User> userRepository, IRepository<Booth> boothRepository, 
+            IAuthenticationService authenticationService, IRepository<WaitingListItem> waitingListRepository)
         {
             _userRepository = userRepository;
             _boothRepository = boothRepository;
             _authService = authenticationService;
+            _waitingListRepository = waitingListRepository;
         }
 
         /// <summary>
@@ -63,6 +66,13 @@ namespace Core.Application.Implementation
                 throw new ArgumentException("Not a valid user");
             }
             booth.Booker = null;
+
+            var wli = _waitingListRepository.GetAll().FirstOrDefault(w => w.Date == _waitingListRepository.GetAll().Min(d => d.Date));
+            if(wli != null)
+            {
+                booth.Booker = wli.Booker;
+                _waitingListRepository.Delete(wli.Id);
+            }
             
             return _boothRepository.Update(booth);
 
