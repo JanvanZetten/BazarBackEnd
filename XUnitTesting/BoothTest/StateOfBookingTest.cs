@@ -13,10 +13,10 @@ namespace XUnitTesting.BoothTest
 {
     public class StateOfBookingTest
     {
-        private static Mock<IRepository<WaitingListItem>> mockWaitingListRepository = new Mock<IRepository<WaitingListItem>>();
-        private static Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
-        private static Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
-        private static Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+        private Mock<IRepository<WaitingListItem>> mockWaitingListRepository = new Mock<IRepository<WaitingListItem>>();
+        private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
+        private Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
+        private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
 
         IBoothService _boothServ;
 

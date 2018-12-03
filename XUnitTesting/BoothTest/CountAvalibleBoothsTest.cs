@@ -43,7 +43,7 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).CountAvalibleBooths();
+            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).CountAvailableBooths();
 
             Assert.Equal(3, result);
         }
@@ -63,7 +63,7 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).CountAvalibleBooths();
+            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).CountAvailableBooths();
 
             Assert.Equal(0, result);
         }
@@ -95,7 +95,7 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).CountAvalibleBooths();
+            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).CountAvailableBooths();
 
             Assert.Equal(1, result);
         }
@@ -127,7 +127,7 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).CountAvalibleBooths();
+            int result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).CountAvailableBooths();
 
             Assert.Equal(0, result);
         }
