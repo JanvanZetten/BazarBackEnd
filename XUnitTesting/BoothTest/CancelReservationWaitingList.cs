@@ -63,13 +63,13 @@ namespace XUnitTesting.BoothTest
             {
                 Id = 1,
                 Booker = user1,
-                Date = DateTime.Now.AddYears(-1)
+                Date = DateTime.Now
             };
             wli2 = new WaitingListItem()
             {
                 Id = 2,
                 Booker = user2,
-                Date = DateTime.Now
+                Date = DateTime.Now.AddYears(-1)
             };
 
             userDictionary.Add(1, user1);
