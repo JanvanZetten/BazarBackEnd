@@ -11,11 +11,11 @@ namespace Core.Application.Implementation
     public class BoothService : IBoothService
     {
         readonly IRepository<User> _userRepository;
-        readonly IBoothRepository _boothRepository;
+        readonly IRepository<Booth> _boothRepository;
         readonly IAuthenticationService _authService;
         readonly IWaitingListRepository _waitingListRepository;
 
-        public BoothService(IRepository<User> userRepository, IBoothRepository boothRepository,
+        public BoothService(IRepository<User> userRepository, IRepository<Booth> boothRepository,
          IAuthenticationService authenticationService, IWaitingListRepository waitinglistRepository)
         {
             _userRepository = userRepository;
@@ -179,7 +179,7 @@ namespace Core.Application.Implementation
                 .Select(w => w.i + 1)
                 .FirstOrDefault();
 
-            if (waitingListItemPosition == 0 && waitingListItemPosition == null)
+            if (waitingListItemPosition == null || waitingListItemPosition.Value == 0)
             {
                 throw new ArgumentOutOfRangeException("Invalid user, user is not in waiting list");
             }

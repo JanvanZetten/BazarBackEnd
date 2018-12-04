@@ -21,7 +21,7 @@ namespace XUnitTesting.BoothTest
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
         private Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
-        private Mock<IRepository<WaitingListItem>> mockWaitingListRepository = new Mock<IRepository<WaitingListItem>>();
+        private Mock<IWaitingListRepository> mockWaitingListRepository = new Mock<IWaitingListRepository>();
         readonly IBoothService _boothService;
 
         private Dictionary<int, WaitingListItem> waitinigListDictionary = new Dictionary<int, WaitingListItem>();

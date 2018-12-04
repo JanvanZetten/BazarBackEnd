@@ -14,7 +14,7 @@ namespace XUnitTesting.BoothTest
 {
     public class WaitingListPositionTest
     {
-        private readonly Mock<IRepository<WaitingListItem>> mockWaitingListItemRepository = new Mock<IRepository<WaitingListItem>>();
+        private readonly Mock<IWaitingListRepository> mockWaitingListItemRepository = new Mock<IWaitingListRepository>();
         private readonly Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
         private readonly Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
         private readonly Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
@@ -72,7 +72,7 @@ namespace XUnitTesting.BoothTest
             token3 = "token3";
             #endregion
 
-            mockWaitingListItemRepository.Setup(x => x.GetAll()).Returns(() =>
+            mockWaitingListItemRepository.Setup(x => x.GetAllIncludeAll()).Returns(() =>
             {
                 return listWli;
             });
