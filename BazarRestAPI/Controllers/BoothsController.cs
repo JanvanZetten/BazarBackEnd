@@ -30,7 +30,7 @@ namespace BazarRestAPI.Controllers
             {
                 return Ok(_service.GetAll());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
@@ -49,7 +49,7 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
@@ -64,7 +64,7 @@ namespace BazarRestAPI.Controllers
             {
                 return Ok(_service.CountAvailableBooths());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
@@ -83,7 +83,7 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
@@ -101,7 +101,7 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
@@ -128,7 +128,7 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
@@ -151,7 +151,7 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
@@ -170,7 +170,7 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
@@ -189,7 +189,7 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
@@ -207,7 +207,7 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }

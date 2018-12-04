@@ -40,7 +40,7 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(e);
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
@@ -63,7 +63,7 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(e.Message);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
@@ -81,7 +81,7 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(e.Message);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }

@@ -137,7 +137,7 @@ namespace Core.Application.Implementation
             var waitingListItem = _waitingListRepository.GetById(waitingId);
             if (waitingListItem == null)
             {
-                throw new ArgumentOutOfRangeException("Fandt ikke waiting list item");
+                throw new WaitingListItemNotFoundException();
             }
             if (waitingListItem.Booker == null)
             {
