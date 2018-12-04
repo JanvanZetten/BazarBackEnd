@@ -159,23 +159,11 @@ namespace Core.Application.Implementation
         /// Gets all waiting list items
         /// </summary>
         /// <returns>The list of all waiting items</returns>
-        public List<WaitingListItem> GetAllWaitingListItemsOrdered()
+        private IEnumerable<WaitingListItem> GetAllWaitingListItemsOrdered()
         {
-            return _waitingListRepository.GetAll().OrderBy(w => w.Date).ToList();
+            return _waitingListRepository.GetAll().OrderBy(w => w.Date);
         }
-        /// <summary>
-        /// Returns waiting list item based on users id
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns>Waiting List Item that belongs to user</returns>
-        public WaitingListItem GetSpecificWaitingListItem(string username)
-        {
-            var waitingListItem = _waitingListRepository.GetAll().FirstOrDefault(w => w.Booker.Username == username);
-            if(waitingListItem == null)
-                throw new ArgumentOutOfRangeException("Invalid, user is not in waiting list");
-            
-            return waitingListItem;
-        }
+
         /// <summary>
         /// Gets the position the user is in waiting list
         /// </summary>
@@ -183,7 +171,15 @@ namespace Core.Application.Implementation
         /// <returns>Position in waiting list</returns>
         public int GetWaitingListItemPosition(string token)
         {
-            return GetAllWaitingListItemsOrdered().IndexOf(GetSpecificWaitingListItem(_authService.VerifyUserFromToken(token))) +1;
+            string username = _authService.VerifyUserFromToken(token);
+
+            var waitingListItemPosition = GetAllWaitingListItemsOrdered().Select((s, i)
+                => new { s, i }).Where(w => w.s.Booker.Username == username).Select(w => w.i + 1).FirstOrDefault();
+            if(waitingListItemPosition == 0)
+            {
+                throw new ArgumentOutOfRangeException("Invalid user, user is not in waiting list");
+            }
+            return waitingListItemPosition;
         }
 
         /// <summary>
@@ -234,9 +230,5 @@ namespace Core.Application.Implementation
             return _boothRepository.Update(updatedBooth);
         }
 
-        public int WaitingListPosition(int userId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
