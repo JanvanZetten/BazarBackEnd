@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using Core.Application.Implementation.CustomExceptions;
 using Core.Entity;
 using Microsoft.IdentityModel.Tokens;
 
@@ -90,7 +91,7 @@ namespace Core.Application.Implementation
             var claimsPrincipal = handler.ValidateToken(token, tokenVal, out validatedToken);
             var result = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
             if (result == null)
-                throw new ArgumentException("The token is not valid!");
+                throw new InvalidTokenException("The token is not valid!");
             return result;
         }
     }

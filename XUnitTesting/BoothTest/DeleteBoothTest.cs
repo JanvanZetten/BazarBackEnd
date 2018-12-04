@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Core.Application;
 using Core.Application.Implementation;
+using Core.Application.Implementation.CustomExceptions;
 using Core.Domain;
 using Core.Entity;
 using Moq;
@@ -32,8 +33,9 @@ namespace XUnitTesting.BoothTest
         {
             var booth = new Booth() { Id = 0 };
 
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-            new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).Delete(booth.Id));
+            Assert.Throws<BoothNotFoundException>(() =>
+            new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).
+            Delete(booth.Id));
         }
 
         [Fact]
@@ -42,8 +44,9 @@ namespace XUnitTesting.BoothTest
             var booth = new Booth() { Id = 50 };
             mockBoothRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns(() => null);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-            new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).Delete(booth.Id));
+            Assert.Throws<BoothNotFoundException>(() =>
+            new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).
+            Delete(booth.Id));
         }
     }
 }

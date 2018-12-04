@@ -116,7 +116,7 @@ namespace XUnitTesting.BoothTest
                     return user2.Username;
                 else if (token2 == s)
                     return "asbamse";
-                throw new ArgumentException("Invalid token");
+                throw new InvalidTokenException("Invalid token");
             });
 
             _boothService = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object);
@@ -144,7 +144,7 @@ namespace XUnitTesting.BoothTest
         [Fact]
         public void BookInvalidToken()
         {
-            Assert.Throws<ArgumentException>(() =>
+            Assert.Throws<InvalidTokenException>(() =>
             {
                 _boothService.Book("Mojn");
             });
@@ -153,7 +153,7 @@ namespace XUnitTesting.BoothTest
         [Fact]
         public void BookWithUserNotFound()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            Assert.Throws<UserNotFoundException>(() =>
             {
                 _boothService.Book(token2);
             });

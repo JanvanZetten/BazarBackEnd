@@ -1,5 +1,6 @@
 ﻿using Core.Application;
 using Core.Application.Implementation;
+using Core.Application.Implementation.CustomExceptions;
 using Core.Domain;
 using Core.Entity;
 using Moq;
@@ -150,7 +151,7 @@ namespace XUnitTesting.BoothTest
                     return user1.Username;
                 else if (token2 == s)
                     return "asbamse";
-                throw new ArgumentException("Invalid token");
+                throw new InvalidTokenException("Invalid token");
             });
 
             _boothService = new BoothService(mockUserRepository.Object, mockBoothRepository.Object,
