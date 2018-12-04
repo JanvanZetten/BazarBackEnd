@@ -90,7 +90,7 @@ namespace XUnitTesting.BoothTest
         }
 
         [Fact]
-        public void TheUserIsAlreadyOnWaitingListExpectException()
+        public void TheUserIsOnWaitingListExpectException()
         {
             mockWaitingListRepository.Setup(m => m.GetAll()).Returns(() => new List<WaitingListItem>() {
 
@@ -106,7 +106,7 @@ namespace XUnitTesting.BoothTest
                 Booker = user
             };
 
-            Assert.Throws<AlreadyOnWaitingListException>(() => _boothServ.Book("test"));
+            Assert.Throws<OnWaitingListException>(() => _boothServ.Book("test"));
 
         }
     }

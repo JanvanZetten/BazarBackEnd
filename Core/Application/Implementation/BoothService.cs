@@ -215,11 +215,11 @@ namespace Core.Application.Implementation
         private Booth GetByIdIncludeAll(int id)
         {
             if (id <= 0)
-                throw new ArgumentOutOfRangeException(nameof(id), "ID must be higher than 0");
+                throw new BoothNotFoundException(nameof(id) + "ID must be higher than 0");
 
             var booth = _boothRepository.GetByIdIncludeAll(id);
             if (booth == null)
-                throw new ArgumentOutOfRangeException(nameof(id), "Booth with selected ID was not found.");
+                throw new BoothNotFoundException(id);
 
             return booth;
         }
