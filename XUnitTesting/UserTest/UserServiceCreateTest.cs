@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 using System.Linq;
+using Core.Application.Implementation.CustomExceptions;
 
 namespace XUnitTesting.UserTest
 {
@@ -84,7 +85,7 @@ namespace XUnitTesting.UserTest
             }
             else
             {
-                Assert.Throws<ArgumentException>(() =>
+                Assert.Throws<InputNotValidException>(() =>
                 {
                     result = _userService.Create(test, _password);
                 });
@@ -94,7 +95,7 @@ namespace XUnitTesting.UserTest
         }
 
         /// <summary>
-        /// Test for username ArgumentNullException.
+        /// Test for username InputNotValidException.
         /// </summary>
         [Fact]
         public void CreateUserInvalidUsernameNull()
@@ -102,7 +103,7 @@ namespace XUnitTesting.UserTest
             User test = new User();
 
             User result = null;
-            Assert.Throws<ArgumentNullException>(() =>
+            Assert.Throws<InputNotValidException>(() =>
             {
                 result = _userService.Create(test, _password);
             });
@@ -123,7 +124,7 @@ namespace XUnitTesting.UserTest
 
             _userService.Create(_user, _password);
             User result = null;
-            Assert.Throws<ArgumentException>(() =>
+            Assert.Throws<NotUniqueUsernameException>(() =>
             {
                 result = _userService.Create(test, _password);
             });
@@ -132,13 +133,13 @@ namespace XUnitTesting.UserTest
         }
 
         /// <summary>
-        /// Test for username ArgumentNullException.
+        /// Test for username InputNotValidException.
         /// </summary>
         [Fact]
         public void CreateUserInvalidPasswordNull()
         {
             User result = null;
-            Assert.Throws<ArgumentNullException>(() =>
+            Assert.Throws<InputNotValidException>(() =>
             {
                 result = _userService.Create(_user, null);
             });
@@ -175,7 +176,7 @@ namespace XUnitTesting.UserTest
             }
             else
             {
-                Assert.Throws<ArgumentException>(() =>
+                Assert.Throws<InputNotValidException>(() =>
                 {
                     result = _userService.Create(_user, password);
                 });

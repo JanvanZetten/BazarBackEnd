@@ -78,20 +78,12 @@ namespace XUnitTesting.UserTest
         [Fact]
         public void GetByIdInvalidUser()
         {
-            try
-            {
-                _userService.GetByID(1000);
-            }
-            catch(UserNotFoundException ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            Assert.Throws<UserNotFoundException>(() =>
             {
                 _userService.GetByID(4);
             });
 
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            Assert.Throws<UserNotFoundException>(() =>
             {
                 _userService.GetByID(0);
             });
