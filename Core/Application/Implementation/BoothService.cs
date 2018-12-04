@@ -155,6 +155,37 @@ namespace Core.Application.Implementation
             return _waitingListRepository.Delete(waitingListItem.Id);
 
         }
+        /// <summary>
+        /// Gets all waiting list items
+        /// </summary>
+        /// <returns>The list of all waiting items</returns>
+        public List<WaitingListItem> GetAllWaitingListItemsOrdered()
+        {
+            return _waitingListRepository.GetAll().OrderBy(w => w.Date).ToList();
+        }
+        /// <summary>
+        /// Returns waiting list item based on users id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>Waiting List Item that belongs to user</returns>
+        public WaitingListItem GetSpecificWaitingListItem(int userId)
+        {
+            var waitingListItem = _waitingListRepository.GetAll().FirstOrDefault(w => w.Booker.Id == userId);
+            if(waitingListItem == null)
+            {
+                throw new ArgumentOutOfRangeException("Invalid, user is not in waiting list");
+            }
+            return waitingListItem;
+        }
+        /// <summary>
+        /// Gets the position the user is in waiting list
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Position in waiting list</returns>
+        public int GetWaitingListItemPosition(int userId)
+        {
+            return GetAllWaitingListItemsOrdered().IndexOf(GetSpecificWaitingListItem(userId)) + 1;
+        }
 
         /// <summary>
         /// Gets all booths.

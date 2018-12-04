@@ -20,6 +20,9 @@ namespace Core.Application
         int WaitingListPosition(int userId);
         Booth CancelReservation(int boothId, string token);
         WaitingListItem CancelWaitingPosition(int waitingId, string token);
+        List<WaitingListItem> GetAllWaitingListItemsOrdered();
+        WaitingListItem GetSpecificWaitingListItem(int userId);
+        int GetWaitingListItemPosition(int userId);
 
 
     }
