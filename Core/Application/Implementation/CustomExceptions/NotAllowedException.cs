@@ -7,7 +7,7 @@ namespace Core.Application.Implementation.CustomExceptions
 {
     public class NotAllowedException : Exception
     {
-        public NotAllowedException() : base("Du har ikke tilladelse til det.")
+        public NotAllowedException() : base("Du har ikke tilladelse til dette.")
         {
         }
 
