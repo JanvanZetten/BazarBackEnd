@@ -155,6 +155,32 @@ namespace Core.Application.Implementation
             return _waitingListRepository.Delete(waitingListItem.Id);
 
         }
+        /// <summary>
+        /// Gets all waiting list items
+        /// </summary>
+        /// <returns>The list of all waiting items</returns>
+        private IEnumerable<WaitingListItem> GetAllWaitingListItemsOrdered()
+        {
+            return _waitingListRepository.GetAll().OrderBy(w => w.Date);
+        }
+
+        /// <summary>
+        /// Gets the position the user is in waiting list
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Position in waiting list</returns>
+        public int GetWaitingListItemPosition(string token)
+        {
+            string username = _authService.VerifyUserFromToken(token);
+
+            var waitingListItemPosition = GetAllWaitingListItemsOrdered().Select((s, i)
+                => new { s, i }).Where(w => w.s.Booker.Username == username).Select(w => w.i + 1).FirstOrDefault();
+            if(waitingListItemPosition == 0)
+            {
+                throw new ArgumentOutOfRangeException("Invalid user, user is not in waiting list");
+            }
+            return waitingListItemPosition;
+        }
 
         /// <summary>
         /// Gets all booths.
@@ -173,15 +199,12 @@ namespace Core.Application.Implementation
         public Booth GetById(int id)
         {
             if (id <= 0)
-            {
                 throw new ArgumentOutOfRangeException(nameof(id), "ID must be higher than 0");
-            }
+            
             var booth = _boothRepository.GetById(id);
             if (booth == null)
-            {
                 throw new ArgumentOutOfRangeException(nameof(id), "Booth with selected ID was not found.");
-
-            }
+                
             return booth;
 
         }
@@ -213,9 +236,5 @@ namespace Core.Application.Implementation
             return _boothRepository.Update(updatedBooth);
         }
 
-        public int WaitingListPosition(int userId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
