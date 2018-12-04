@@ -8,7 +8,7 @@ using System.Text;
 
 namespace infrastructure
 {
-    public class WaitingListItemRepository : IRepository<WaitingListItem>
+    public class WaitingListItemRepository : IWaitingListRepository
     {
         private readonly BazarContext _ctx;
         
@@ -59,6 +59,12 @@ namespace infrastructure
         {
             return _ctx.WaitingListItem;
         }
+
+        public IEnumerable<WaitingListItem> GetAllIncludeAll()
+        {
+            return _ctx.WaitingListItem.Include(w => w.Booker);
+        }
+
         /// <summary>
         /// Get WaitingListItem with specific ID
         /// </summary>

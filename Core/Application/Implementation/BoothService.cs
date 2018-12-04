@@ -13,10 +13,10 @@ namespace Core.Application.Implementation
         readonly IRepository<User> _userRepository;
         readonly IRepository<Booth> _boothRepository;
         readonly IAuthenticationService _authService;
-        readonly IRepository<WaitingListItem> _waitingListRepository;
+        readonly IWaitingListRepository _waitingListRepository;
 
         public BoothService(IRepository<User> userRepository, IRepository<Booth> boothRepository,
-         IAuthenticationService authenticationService, IRepository<WaitingListItem> waitinglistRepository)
+         IAuthenticationService authenticationService, IWaitingListRepository waitinglistRepository)
         {
             _userRepository = userRepository;
             _boothRepository = boothRepository;
@@ -161,7 +161,7 @@ namespace Core.Application.Implementation
         /// <returns>The list of all waiting items</returns>
         private IEnumerable<WaitingListItem> GetAllWaitingListItemsOrdered()
         {
-            return _waitingListRepository.GetAll().OrderBy(w => w.Date);
+            return _waitingListRepository.GetAllIncludeAll().OrderBy(w => w.Date);
         }
 
         /// <summary>
@@ -169,17 +169,21 @@ namespace Core.Application.Implementation
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Position in waiting list</returns>
-        public int GetWaitingListItemPosition(string token)
+        int IBoothService.GetWaitingListItemPosition(string token)
         {
             string username = _authService.VerifyUserFromToken(token);
 
-            var waitingListItemPosition = GetAllWaitingListItemsOrdered().Select((s, i)
-                => new { s, i }).Where(w => w.s.Booker.Username == username).Select(w => w.i + 1).FirstOrDefault();
-            if(waitingListItemPosition == 0)
+            int? waitingListItemPosition = GetAllWaitingListItemsOrdered()
+                .Select((s, i) => new { s, i })
+                .Where(w => w.s.Booker?.Username == username)
+                .Select(w => w.i + 1)
+                .FirstOrDefault();
+
+            if (waitingListItemPosition == null || waitingListItemPosition.Value == 0)
             {
                 throw new ArgumentOutOfRangeException("Invalid user, user is not in waiting list");
             }
-            return waitingListItemPosition;
+            return waitingListItemPosition.Value;
         }
 
         /// <summary>
