@@ -137,19 +137,19 @@ namespace Core.Application.Implementation
             var waitingListItem = _waitingListRepository.GetById(waitingId);
             if (waitingListItem == null)
             {
-                throw new ArgumentOutOfRangeException("Did not find waiting list item");
+                throw new ArgumentOutOfRangeException("Fandt ikke waiting list item");
             }
             if (waitingListItem.Booker == null)
             {
-                throw new ArgumentException("Cannot cancel position in waiting list");
+                throw new NotAllowedException(" Det var ikke muligt annullere din position i ventelisten");
             }
             if (username == null)
             {
-                throw new ArgumentException("Not a valid user");
+                throw new UserNotFoundException("Invalid bruger");
             }
             if (waitingListItem.Booker.Username != username)
             {
-                throw new ArgumentException("Not a valid user");
+                throw new NotAllowedException();
             }
 
             return _waitingListRepository.Delete(waitingListItem.Id);
