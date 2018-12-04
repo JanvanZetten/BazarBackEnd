@@ -65,6 +65,21 @@ namespace BazarRestAPI.Controllers
             }
         }
 
+        // GET: api/Booths/reservation/
+        [Route("reservation")]
+        [HttpPost]
+        public ActionResult<Booth> GetUserReservation([FromBody] string token)
+        {
+            try
+            {
+                return Ok(_service.GetUsersBooking(token));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         // POST: api/Booths - Create booth
         [HttpPost]
         public ActionResult<Booth> Post([FromBody] Booth booth)

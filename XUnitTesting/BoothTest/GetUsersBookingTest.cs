@@ -22,6 +22,11 @@ namespace XUnitTesting.BoothTest
             var user = new User() { Id = 1 };
             var booth = new Booth() { Id = 1, Booker = user };
 
+            mockUserRepository.Setup(x => x.GetAll()).Returns(() => new List<User>
+            {
+                user
+            });
+
             mockBoothRepository.Setup(x => x.GetAll()).Returns(() => new List<Booth>
             {
                 booth,
@@ -31,7 +36,12 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).GetUsersBooking(user.Id);
+            mockAuthenticationService.Setup(x => x.VerifyUserFromToken(It.IsAny<string>())).Returns<string>((s) =>
+            {
+                return user.Username;
+            });
+
+            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).GetUsersBooking("");
 
             Assert.Equal(booth, result);
         }
@@ -40,6 +50,11 @@ namespace XUnitTesting.BoothTest
         public void GetUsersBookingNoBookingTest()
         {
             var user = new User() { Id = 1 };
+
+            mockUserRepository.Setup(x => x.GetAll()).Returns(() => new List<User>
+            {
+                user
+            });
 
             mockBoothRepository.Setup(x => x.GetAll()).Returns(() => new List<Booth>
             {
@@ -53,7 +68,12 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).GetUsersBooking(user.Id);
+            mockAuthenticationService.Setup(x => x.VerifyUserFromToken(It.IsAny<string>())).Returns<string>((s) =>
+            {
+                return user.Username;
+            });
+
+            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).GetUsersBooking("");
 
             Assert.Null(result);
         }
