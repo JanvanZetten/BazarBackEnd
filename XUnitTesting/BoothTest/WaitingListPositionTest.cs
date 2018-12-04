@@ -1,5 +1,6 @@
 ﻿using Core.Application;
 using Core.Application.Implementation;
+using Core.Application.Implementation.CustomExceptions;
 using Core.Domain;
 using Core.Entity;
 using Moq;
@@ -114,7 +115,7 @@ namespace XUnitTesting.BoothTest
         [Fact]
         public void GetTheWaitingPositionInvalidInput()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            Assert.Throws<NotOnWaitingListException>(() =>
             {
                 var wli = _service.GetWaitingListItemPosition(token3);
             });

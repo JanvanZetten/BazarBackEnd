@@ -107,7 +107,7 @@ namespace XUnitTesting.BoothTest
                 Booker = user
             };
 
-            Assert.Throws<NotSupportedException>(() => _boothServ.Book("test"));
+            Assert.Throws<AlreadyOnWaitingListException>(() => _boothServ.Book("test"));
 
         }
     }

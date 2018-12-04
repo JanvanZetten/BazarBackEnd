@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Core.Application;
 using Core.Application.Implementation;
+using Core.Application.Implementation.CustomExceptions;
 using Core.Domain;
 using Core.Entity;
 using Moq;
@@ -21,7 +22,8 @@ namespace XUnitTesting.BoothTest
             mockBoothRepository.Setup(m => m.Update(It.IsAny<Booth>())).Returns(() => new Booth());
             mockBoothRepository.Setup(m => m.GetById(It.IsAny<int>())).Returns(() => new Booth());
 
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).Update(new Booth(){Id = 1});
+            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).
+                Update(new Booth(){Id = 1});
 
             Assert.NotNull(result);
         }
@@ -32,7 +34,8 @@ namespace XUnitTesting.BoothTest
             mockBoothRepository.Setup(m => m.Update(It.IsAny<Booth>())).Returns(() => new Booth());
             mockBoothRepository.Setup(m => m.GetById(It.IsAny<int>())).Returns(() => null);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).Update(new Booth()));
+            Assert.Throws<BoothNotFoundException>(() => new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).
+            Update(new Booth()));
         }
     }
 }
