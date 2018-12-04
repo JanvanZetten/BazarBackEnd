@@ -74,6 +74,12 @@ namespace infrastructure
         {
             return _ctx.WaitingListItem.FirstOrDefault(w => w.Id == id);
         }
+
+        public WaitingListItem GetByIdIncludeAll(int id)
+        {
+            return _ctx.WaitingListItem.Include(w => w.Booker).FirstOrDefault(w => w.Id == id);
+        }
+
         /// <summary>
         /// Updating WaitingListItem, using attached to also update references.
         /// </summary>

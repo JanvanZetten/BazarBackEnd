@@ -15,7 +15,7 @@ namespace XUnitTesting.BoothTest
     {
         private Mock<IWaitingListRepository> mockWaitingListRepository = new Mock<IWaitingListRepository>();
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
-        private Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
+        private Mock<IBoothRepository> mockBoothRepository = new Mock<IBoothRepository>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
 
         IBoothService _boothServ;
@@ -31,13 +31,12 @@ namespace XUnitTesting.BoothTest
         public StateOfBookingTest()
         {
 
+            mockBoothRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns(() => booth);
 
-            mockBoothRepository.Setup(x => x.GetAll()).Returns(() => new List<Booth>
+            mockBoothRepository.Setup(x => x.GetAllIncludeAll()).Returns(() => new List<Booth>
             {
                 booth
             });
-
-            mockBoothRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns(() => booth);
 
             mockUserRepository.Setup(x => x.GetAll()).Returns(() => new List<User>
             {
@@ -107,7 +106,7 @@ namespace XUnitTesting.BoothTest
                 Booker = user
             };
 
-            Assert.Throws<NotSupportedException>(() => _boothServ.Book("test"));
+            Assert.Throws<OnWaitingListException>(() => _boothServ.Book("test"));
 
         }
     }

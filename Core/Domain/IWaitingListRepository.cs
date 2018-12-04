@@ -7,5 +7,6 @@ namespace Core.Domain
     public interface IWaitingListRepository: IRepository<WaitingListItem>
     {
         IEnumerable<WaitingListItem> GetAllIncludeAll();
+        WaitingListItem GetByIdIncludeAll(int id);
     }
 }
