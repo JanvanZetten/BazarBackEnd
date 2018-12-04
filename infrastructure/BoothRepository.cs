@@ -74,6 +74,14 @@ namespace infrastructure
             _ctx.Entry(booth).State = EntityState.Detached;
             return booth;
         }
+
+        public Booth GetByIdIncludeAll(int id)
+        {
+            Booth booth = _ctx.Booth.Include(b => b.Booker).FirstOrDefault(b => b.Id == id);
+            _ctx.Entry(booth).State = EntityState.Detached;
+            return booth;
+        }
+
         /// <summary>
         /// Updating booth, using attached to also update references.
         /// </summary>

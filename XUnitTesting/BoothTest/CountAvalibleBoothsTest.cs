@@ -12,14 +12,14 @@ namespace XUnitTesting.BoothTest
     public class CountAvalibleBoothsTest
     {
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
-        private Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
+        private Mock<IBoothRepository> mockBoothRepository = new Mock<IBoothRepository>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
         private static Mock<IWaitingListRepository> mockWaitingListRepository = new Mock<IWaitingListRepository>();
 
         [Fact]
         public void TestCountAmountOfWaitingListItems()
         {
-            mockBoothRepository.Setup(x => x.GetAll()).Returns(() => new List<Booth>
+            mockBoothRepository.Setup(x => x.GetAllIncludeAll()).Returns(() => new List<Booth>
             {
                 new Booth(){
                     Id = 1,
@@ -51,7 +51,7 @@ namespace XUnitTesting.BoothTest
         [Fact]
         public void testCountNone()
         {
-            mockBoothRepository.Setup(x => x.GetAll()).Returns(() => new List<Booth>
+            mockBoothRepository.Setup(x => x.GetAllIncludeAll()).Returns(() => new List<Booth>
             {
                 new Booth(){
                     Id = 1,
@@ -71,7 +71,7 @@ namespace XUnitTesting.BoothTest
         [Fact]
         public void testCountSingle()
         {
-            mockBoothRepository.Setup(x => x.GetAll()).Returns(() => new List<Booth>
+            mockBoothRepository.Setup(x => x.GetAllIncludeAll()).Returns(() => new List<Booth>
             {
                 new Booth(){
                     Id = 1,
@@ -103,7 +103,7 @@ namespace XUnitTesting.BoothTest
         [Fact]
         public void testCountAll()
         {
-            mockBoothRepository.Setup(x => x.GetAll()).Returns(() => new List<Booth>
+            mockBoothRepository.Setup(x => x.GetAllIncludeAll()).Returns(() => new List<Booth>
             {
                 new Booth(){
                     Id = 1,

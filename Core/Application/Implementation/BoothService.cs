@@ -11,11 +11,11 @@ namespace Core.Application.Implementation
     public class BoothService : IBoothService
     {
         readonly IRepository<User> _userRepository;
-        readonly IRepository<Booth> _boothRepository;
+        readonly IBoothRepository _boothRepository;
         readonly IAuthenticationService _authService;
         readonly IWaitingListRepository _waitingListRepository;
 
-        public BoothService(IRepository<User> userRepository, IRepository<Booth> boothRepository,
+        public BoothService(IRepository<User> userRepository, IBoothRepository boothRepository,
          IAuthenticationService authenticationService, IWaitingListRepository waitinglistRepository)
         {
             _userRepository = userRepository;
@@ -38,10 +38,10 @@ namespace Core.Application.Implementation
             if (user == null)
                 throw new UserNotFoundException();
             
-            var booth = _boothRepository.GetAll().FirstOrDefault(b => b.Booker == null);
+            var booth = _boothRepository.GetAllIncludeAll().FirstOrDefault(b => b.Booker == null);
             if (booth == null)
             {
-                if (_waitingListRepository.GetAll().Any(w => w.Booker.Id == user.Id))
+                if (_waitingListRepository.GetAllIncludeAll().Any(w => w.Booker.Id == user.Id))
                     throw new AlreadyOnWaitingListException();
                 else
                 {
@@ -62,7 +62,8 @@ namespace Core.Application.Implementation
         public Booth CancelReservation(int boothId, string token)
         {
             var username = _authService.VerifyUserFromToken(token);
-            var booth = GetById(boothId);
+
+            var booth = GetByIdIncludeAll(boothId);
             if(booth == null)
             {
                 throw new BoothNotFoundException();
@@ -71,17 +72,14 @@ namespace Core.Application.Implementation
             {
                 throw new NotAllowedException("Cannot cancel a reservation, where a booth has no booker");
             }
-            if(username == null)
-            {
-                throw new NotAllowedException();
-            }
             if(booth.Booker.Username != username)
             {
                 throw new NotAllowedException();
             }
+
             booth.Booker = null;
 
-            var wli = _waitingListRepository.GetAll().FirstOrDefault(w => w.Date == _waitingListRepository.GetAll().Min(d => d.Date));
+            var wli = _waitingListRepository.GetAllIncludeAll().FirstOrDefault(w => w.Date == _waitingListRepository.GetAll().Min(d => d.Date));
             if(wli != null)
             {
                 booth.Booker = wli.Booker;
@@ -98,7 +96,7 @@ namespace Core.Application.Implementation
         /// <returns>The avalible booths.</returns>
         public int CountAvailableBooths()
         {
-            return _boothRepository.GetAll().Where(x => x.Booker == null).Count();
+            return _boothRepository.GetAllIncludeAll().Where(x => x.Booker == null).Count();
         }
 
         /// <summary>
@@ -134,7 +132,8 @@ namespace Core.Application.Implementation
         public WaitingListItem CancelWaitingPosition(int waitingId, string token)
         {
             var username = _authService.VerifyUserFromToken(token);
-            var waitingListItem = _waitingListRepository.GetById(waitingId);
+
+            var waitingListItem = _waitingListRepository.GetByIdIncludeAll(waitingId);
             if (waitingListItem == null)
             {
                 throw new WaitingListItemNotFoundException();
@@ -142,10 +141,6 @@ namespace Core.Application.Implementation
             if (waitingListItem.Booker == null)
             {
                 throw new NotAllowedException(" Det var ikke muligt annullere din position i ventelisten");
-            }
-            if (username == null)
-            {
-                throw new UserNotFoundException("Invalid bruger");
             }
             if (waitingListItem.Booker.Username != username)
             {
@@ -210,7 +205,23 @@ namespace Core.Application.Implementation
                 throw new BoothNotFoundException(id);
                 
             return booth;
+        }
+        
+        /// <summary>
+        /// Gets the booth by id.
+        /// </summary>
+        /// <returns>The booth.</returns>
+        /// <param name="id">Identifier.</param>
+        private Booth GetByIdIncludeAll(int id)
+        {
+            if (id <= 0)
+                throw new BoothNotFoundException(nameof(id) + "ID must be higher than 0");
 
+            var booth = _boothRepository.GetByIdIncludeAll(id);
+            if (booth == null)
+                throw new BoothNotFoundException(id);
+
+            return booth;
         }
 
         /// <summary>
@@ -226,7 +237,7 @@ namespace Core.Application.Implementation
             if (user == null)
                 throw new UserNotFoundException();
             
-            return _boothRepository.GetAll().FirstOrDefault(b => b.Booker.Id == user.Id);
+            return _boothRepository.GetAllIncludeAll().FirstOrDefault(b => b.Booker.Id == user.Id);
         }
 
         /// <summary>

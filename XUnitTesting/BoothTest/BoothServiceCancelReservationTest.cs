@@ -16,7 +16,7 @@ namespace XUnitTesting.BoothTest
         readonly IBoothService _boothService;
 
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
-        private Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
+        private Mock<IBoothRepository> mockBoothRepository = new Mock<IBoothRepository>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
         private Mock<IWaitingListRepository> mockWaitingListRepository = new Mock<IWaitingListRepository>();
 
@@ -79,7 +79,7 @@ namespace XUnitTesting.BoothTest
                 return userDictionary.Values;
             });
 
-            mockBoothRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns<int>((id) =>
+            mockBoothRepository.Setup(x => x.GetByIdIncludeAll(It.IsAny<int>())).Returns<int>((id) =>
             {
                 if (boothDictionary.ContainsKey(id))
                 {
@@ -89,11 +89,6 @@ namespace XUnitTesting.BoothTest
                 {
                     return null;
                 }
-            });
-
-            mockBoothRepository.Setup(x => x.GetAll()).Returns(() =>
-            {
-                return boothDictionary.Values;
             });
 
             mockBoothRepository.Setup(x => x.Update(It.IsAny<Booth>())).Returns<Booth>((b) =>

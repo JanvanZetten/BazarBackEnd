@@ -11,10 +11,7 @@ namespace XUnitTesting.BoothTest
 {
     public class UpdateBoothTest
     {
-        private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
-        private Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
-        private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
-        private static Mock<IWaitingListRepository> mockWaitingListRepository = new Mock<IWaitingListRepository>();
+        private Mock<IBoothRepository> mockBoothRepository = new Mock<IBoothRepository>();
 
         [Fact]
         public void UpdateBoothValidTest()
@@ -22,8 +19,7 @@ namespace XUnitTesting.BoothTest
             mockBoothRepository.Setup(m => m.Update(It.IsAny<Booth>())).Returns(() => new Booth());
             mockBoothRepository.Setup(m => m.GetById(It.IsAny<int>())).Returns(() => new Booth());
 
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).
-                Update(new Booth(){Id = 1});
+            var result = new BoothService(null, mockBoothRepository.Object, null, null).Update(new Booth(){Id = 1});
 
             Assert.NotNull(result);
         }
@@ -34,8 +30,7 @@ namespace XUnitTesting.BoothTest
             mockBoothRepository.Setup(m => m.Update(It.IsAny<Booth>())).Returns(() => new Booth());
             mockBoothRepository.Setup(m => m.GetById(It.IsAny<int>())).Returns(() => null);
 
-            Assert.Throws<BoothNotFoundException>(() => new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).
-            Update(new Booth()));
+            Assert.Throws<BoothNotFoundException>(() => new BoothService(null, mockBoothRepository.Object, null, null).Update(new Booth()));
         }
     }
 }

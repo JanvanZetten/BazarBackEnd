@@ -17,7 +17,7 @@ namespace XUnitTesting.BoothTest
 
         private Mock<IWaitingListRepository> mockWaitingListItemRepository = new Mock<IWaitingListRepository>();
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
-        private Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
+        private Mock<IBoothRepository> mockBoothRepository = new Mock<IBoothRepository>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
 
         private Dictionary<int, User> userDictionary = new Dictionary<int, User>();
@@ -100,7 +100,7 @@ namespace XUnitTesting.BoothTest
                 return userDictionary.Values;
             });
 
-            mockBoothRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns<int>((id) =>
+            mockBoothRepository.Setup(x => x.GetByIdIncludeAll(It.IsAny<int>())).Returns<int>((id) =>
             {
                 if (boothDictionary.ContainsKey(id))
                 {
@@ -112,12 +112,17 @@ namespace XUnitTesting.BoothTest
                 }
             });
 
-            mockBoothRepository.Setup(x => x.GetAll()).Returns(() =>
+            mockBoothRepository.Setup(x => x.GetAllIncludeAll()).Returns(() =>
             {
                 return boothDictionary.Values;
             });
 
             mockWaitingListItemRepository.Setup(x => x.GetAll()).Returns(() =>
+            {
+                return waitingListItemDictionary.Values;
+            });
+
+            mockWaitingListItemRepository.Setup(x => x.GetAllIncludeAll()).Returns(() =>
             {
                 return waitingListItemDictionary.Values;
             });

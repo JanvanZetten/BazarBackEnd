@@ -16,8 +16,6 @@ namespace XUnitTesting.BoothTest
     public class WaitingListPositionTest
     {
         private readonly Mock<IWaitingListRepository> mockWaitingListItemRepository = new Mock<IWaitingListRepository>();
-        private readonly Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
-        private readonly Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
         private readonly Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
         private readonly IBoothService _service;
 
@@ -93,7 +91,7 @@ namespace XUnitTesting.BoothTest
             });
             
 
-            _service = new BoothService(mockUserRepository.Object, mockBoothRepository.Object,
+            _service = new BoothService(null, null,
                 mockAuthenticationService.Object, mockWaitingListItemRepository.Object);
         }
 

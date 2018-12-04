@@ -19,7 +19,7 @@ namespace XUnitTesting.BoothTest
         WaitingListItem wli2;
 
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
-        private Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
+        private Mock<IBoothRepository> mockBoothRepository = new Mock<IBoothRepository>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
         private Mock<IWaitingListRepository> mockWaitingListRepository = new Mock<IWaitingListRepository>();
         readonly IBoothService _boothService;
@@ -60,7 +60,7 @@ namespace XUnitTesting.BoothTest
                 return user1.Username;
             });
 
-            mockWaitingListRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns<int>((id) =>
+            mockWaitingListRepository.Setup(x => x.GetByIdIncludeAll(It.IsAny<int>())).Returns<int>((id) =>
             {
                 if (waitinigListDictionary.ContainsKey(id))
                 {

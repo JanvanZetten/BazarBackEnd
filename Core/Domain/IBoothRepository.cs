@@ -7,5 +7,6 @@ namespace Core.Domain
     public interface IBoothRepository: IRepository<Booth>
     {
         IEnumerable<Booth> GetAllIncludeAll();
+        Booth GetByIdIncludeAll(int id);
     }
 }
