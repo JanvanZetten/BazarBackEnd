@@ -1,5 +1,6 @@
 ﻿using Core.Application;
 using Core.Application.Implementation;
+using Core.Application.Implementation.CustomExceptions;
 using Core.Domain;
 using Core.Entity;
 using Moq;
@@ -112,7 +113,7 @@ namespace XUnitTesting.BoothTest
                     return user1.Username;
                 else if (token2 == s)
                     return "asbamse";
-                throw new ArgumentException("Invalid token");
+                throw new InvalidTokenException("Invalid token");
             });
 
             _boothService = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object);
@@ -133,7 +134,7 @@ namespace XUnitTesting.BoothTest
         [Fact]
         public void CancelReservationInvalidUser()
         {
-            Assert.Throws<ArgumentException>(() =>
+            Assert.Throws<NotAllowedException>(() =>
             {
                 _boothService.CancelReservation(booth2.Id, token1);
             });
@@ -142,7 +143,7 @@ namespace XUnitTesting.BoothTest
         [Fact]
         public void CancelReservationInvalidToken()
         {
-            Assert.Throws<ArgumentException>(() =>
+            Assert.Throws<InvalidTokenException>(() =>
             {
                 _boothService.CancelReservation(booth1.Id, "Random");
             });
@@ -151,7 +152,7 @@ namespace XUnitTesting.BoothTest
         [Fact]
         public void CancelReservationWithUserNotFound()
         {
-            Assert.Throws<ArgumentException>(() =>
+            Assert.Throws<NotAllowedException>(() =>
             {
                 _boothService.CancelReservation(booth1.Id, token2);
             });
@@ -160,7 +161,7 @@ namespace XUnitTesting.BoothTest
         [Fact]
         public void CancelReservationBoothDoesNotExist()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            Assert.Throws<BoothNotFoundException>(() =>
             {
                 _boothService.CancelReservation(43, token1);
             });

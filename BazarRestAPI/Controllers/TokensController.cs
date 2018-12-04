@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BazarRestAPI.DTO;
 using Core.Application;
+using Core.Application.Implementation.CustomExceptions;
 using Core.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -60,9 +61,21 @@ namespace BazarRestAPI.Controllers
 
                 return Ok(_authService.GenerateToken(userCreated));
             }
-            catch(Exception ex)
+            catch(InputNotValidException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (NotUniqueUsernameException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(UserNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
 
         }
