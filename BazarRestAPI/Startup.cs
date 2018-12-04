@@ -7,6 +7,7 @@ using Core.Application.Implementation;
 using Core.Domain;
 using Core.Entity;
 using infrastructure;
+using infrastructure.Development;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -103,7 +104,7 @@ namespace BazarRestAPI
                 using (var scope = app.ApplicationServices.CreateScope())
                 {
                     var ctx = scope.ServiceProvider.GetService<BazarContext>();
-                    ctx.Database.EnsureCreated();
+                    DatabaseInitialize.Initialize(ctx);
                 }
             }
             else
