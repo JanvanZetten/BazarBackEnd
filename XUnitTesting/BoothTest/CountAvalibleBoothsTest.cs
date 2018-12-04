@@ -17,7 +17,7 @@ namespace XUnitTesting.BoothTest
         private static Mock<IRepository<WaitingListItem>> mockWaitingListRepository = new Mock<IRepository<WaitingListItem>>();
 
         [Fact]
-        public void testCount()
+        public void TestCountAmountOfWaitingListItems()
         {
             mockBoothRepository.Setup(x => x.GetAll()).Returns(() => new List<Booth>
             {
@@ -27,7 +27,7 @@ namespace XUnitTesting.BoothTest
                 },
                 new Booth(){
                     Id = 2,
-                    Booker = new Core.Entity.User()
+                    Booker = new User()
                 },
                 new Booth(){
                     Id = 3,
@@ -39,7 +39,7 @@ namespace XUnitTesting.BoothTest
                 },
                 new Booth(){
                     Id = 5,
-                    Booker = new Core.Entity.User()
+                    Booker = new User()
                 }
             });
 
@@ -55,11 +55,11 @@ namespace XUnitTesting.BoothTest
             {
                 new Booth(){
                     Id = 1,
-                    Booker = new Core.Entity.User()
+                    Booker = new User()
                 },
                 new Booth(){
                     Id = 2,
-                    Booker = new Core.Entity.User()
+                    Booker = new User()
                 }
             });
 
@@ -75,15 +75,15 @@ namespace XUnitTesting.BoothTest
             {
                 new Booth(){
                     Id = 1,
-                    Booker = new Core.Entity.User()
+                    Booker = new User()
                 },
                 new Booth(){
                     Id = 2,
-                    Booker = new Core.Entity.User()
+                    Booker = new User()
                 },
                 new Booth(){
                     Id = 3,
-                    Booker = new Core.Entity.User()
+                    Booker = new User()
                 },
                 new Booth(){
                     Id = 4,
@@ -91,7 +91,7 @@ namespace XUnitTesting.BoothTest
                 },
                 new Booth(){
                     Id = 5,
-                    Booker = new Core.Entity.User()
+                    Booker = new User()
                 }
             });
 
@@ -107,23 +107,23 @@ namespace XUnitTesting.BoothTest
             {
                 new Booth(){
                     Id = 1,
-                    Booker = new Core.Entity.User()
+                    Booker = new User()
                 },
                 new Booth(){
                     Id = 2,
-                    Booker = new Core.Entity.User()
+                    Booker = new User()
                 },
                 new Booth(){
                     Id = 3,
-                    Booker = new Core.Entity.User()
+                    Booker = new User()
                 },
                 new Booth(){
                     Id = 4,
-                    Booker = new Core.Entity.User()
+                    Booker = new User()
                 },
                 new Booth(){
                     Id = 5,
-                    Booker = new Core.Entity.User()
+                    Booker = new User()
                 }
             });
 

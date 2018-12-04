@@ -168,13 +168,12 @@ namespace Core.Application.Implementation
         /// </summary>
         /// <param name="userId"></param>
         /// <returns>Waiting List Item that belongs to user</returns>
-        public WaitingListItem GetSpecificWaitingListItem(int userId)
+        public WaitingListItem GetSpecificWaitingListItem(string username)
         {
-            var waitingListItem = _waitingListRepository.GetAll().FirstOrDefault(w => w.Booker.Id == userId);
+            var waitingListItem = _waitingListRepository.GetAll().FirstOrDefault(w => w.Booker.Username == username);
             if(waitingListItem == null)
-            {
                 throw new ArgumentOutOfRangeException("Invalid, user is not in waiting list");
-            }
+            
             return waitingListItem;
         }
         /// <summary>
@@ -182,9 +181,9 @@ namespace Core.Application.Implementation
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Position in waiting list</returns>
-        public int GetWaitingListItemPosition(int userId)
+        public int GetWaitingListItemPosition(string token)
         {
-            return GetAllWaitingListItemsOrdered().IndexOf(GetSpecificWaitingListItem(userId)) + 1;
+            return GetAllWaitingListItemsOrdered().IndexOf(GetSpecificWaitingListItem(_authService.VerifyUserFromToken(token))) +1;
         }
 
         /// <summary>
@@ -204,15 +203,12 @@ namespace Core.Application.Implementation
         public Booth GetById(int id)
         {
             if (id <= 0)
-            {
                 throw new ArgumentOutOfRangeException(nameof(id), "ID must be higher than 0");
-            }
+            
             var booth = _boothRepository.GetById(id);
             if (booth == null)
-            {
                 throw new ArgumentOutOfRangeException(nameof(id), "Booth with selected ID was not found.");
-
-            }
+                
             return booth;
 
         }
