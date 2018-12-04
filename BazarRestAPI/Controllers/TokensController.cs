@@ -26,7 +26,7 @@ namespace BazarRestAPI.Controllers
         [HttpPost]
         public IActionResult Login([FromBody]  UserDTO userDTO)
         {
-            var user = _userService.GetAll().FirstOrDefault(u => u.Username == userDTO.Username);
+            var user = _userService.GetAll().FirstOrDefault(u => u.Username.ToLower() == userDTO.Username.ToLower());
 
             var wrong = BadRequest("Wrong username or password.");
             wrong.StatusCode = 401;
