@@ -32,7 +32,7 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
         }
 
@@ -44,9 +44,14 @@ namespace BazarRestAPI.Controllers
             {
                 return Ok(_service.GetById(id));
             }
-            catch (Exception ex)
+
+            catch (BoothNotFoundException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
         }
 
@@ -61,7 +66,7 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
         }
 
@@ -74,9 +79,13 @@ namespace BazarRestAPI.Controllers
             {
                 return Ok(_service.GetUsersBooking(token));
             }
-            catch (Exception ex)
+            catch (UserNotFoundException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
         }
 
@@ -88,9 +97,13 @@ namespace BazarRestAPI.Controllers
             {
                 return Ok(_service.Create(booth));
             }
-            catch (Exception ex)
+            catch (BoothNotFoundException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
         }
 
@@ -103,9 +116,21 @@ namespace BazarRestAPI.Controllers
             {
                 return Ok(_service.Book(token));
             }
-            catch (Exception ex)
+            catch (UserNotFoundException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (AlreadyOnWaitingListException ex)
+            {
+                return BadRequest(ex.Message);
+            }         
+            catch (OnWaitingListException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
         }
 
@@ -117,9 +142,18 @@ namespace BazarRestAPI.Controllers
             {
                 return Ok(_service.CancelReservation(dto.id, dto.token));
             }
-            catch (Exception ex)
+
+            catch (BoothNotFoundException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch(NotAllowedException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
         }
 
@@ -131,9 +165,14 @@ namespace BazarRestAPI.Controllers
             {
                 return Ok(_service.GetWaitingListItemPosition(token));
             }
-            catch (Exception ex)
+
+            catch (NotOnWaitingListException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
         }
 
@@ -146,9 +185,13 @@ namespace BazarRestAPI.Controllers
                 booth.Id = id;
                 return Ok(_service.Update(booth));
             }
-            catch(Exception ex)
+            catch(BoothNotFoundException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
         }
 
@@ -160,9 +203,13 @@ namespace BazarRestAPI.Controllers
             {
                 return Ok(_service.Delete(id));
             }
-            catch (Exception ex)
+            catch(BoothNotFoundException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
         }
     }

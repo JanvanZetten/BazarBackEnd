@@ -36,13 +36,13 @@ namespace Core.Application.Implementation
             var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == username);
 
             if (user == null)
-                throw new ArgumentOutOfRangeException("Could not find the specified user.");
+                throw new UserNotFoundException();
             
             var booth = _boothRepository.GetAll().FirstOrDefault(b => b.Booker == null);
             if (booth == null)
             {
                 if (_waitingListRepository.GetAll().Any(w => w.Booker.Id == user.Id))
-                    throw new NotSupportedException("Du er allerede på ventelisten.");
+                    throw new AlreadyOnWaitingListException();
                 else
                 {
                     _waitingListRepository.Create(new WaitingListItem()
@@ -65,19 +65,19 @@ namespace Core.Application.Implementation
             var booth = GetById(boothId);
             if(booth == null)
             {
-                throw new ArgumentOutOfRangeException("Did not find booth");
+                throw new BoothNotFoundException();
             }
             if(booth.Booker == null)
             {
-                throw new ArgumentException("Cannot cancel a reservation, where a booth has no booker");
+                throw new NotAllowedException("Cannot cancel a reservation, where a booth has no booker");
             }
             if(username == null)
             {
-                throw new ArgumentException("Not a valid user");
+                throw new NotAllowedException();
             }
             if(booth.Booker.Username != username)
             {
-                throw new ArgumentException("Not a valid user");
+                throw new NotAllowedException();
             }
             booth.Booker = null;
 
@@ -177,7 +177,7 @@ namespace Core.Application.Implementation
                 => new { s, i }).Where(w => w.s.Booker.Username == username).Select(w => w.i + 1).FirstOrDefault();
             if(waitingListItemPosition == 0)
             {
-                throw new ArgumentOutOfRangeException("Invalid user, user is not in waiting list");
+                throw new NotOnWaitingListException();
             }
             return waitingListItemPosition;
         }
@@ -199,11 +199,11 @@ namespace Core.Application.Implementation
         public Booth GetById(int id)
         {
             if (id <= 0)
-                throw new ArgumentOutOfRangeException(nameof(id), "ID must be higher than 0");
+                throw new BoothNotFoundException(nameof(id) +  " ID must be higher than 0");
             
             var booth = _boothRepository.GetById(id);
             if (booth == null)
-                throw new ArgumentOutOfRangeException(nameof(id), "Booth with selected ID was not found.");
+                throw new BoothNotFoundException(id);
                 
             return booth;
 
@@ -220,7 +220,7 @@ namespace Core.Application.Implementation
             var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == username);
 
             if (user == null)
-                throw new ArgumentOutOfRangeException("Could not find the specified user.");
+                throw new UserNotFoundException();
             
             return _boothRepository.GetAll().FirstOrDefault(b => b.Booker.Id == user.Id);
         }

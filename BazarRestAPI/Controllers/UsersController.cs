@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Application;
+using Core.Application.Implementation.CustomExceptions;
 using Core.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,9 +36,13 @@ namespace BazarRestAPI.Controllers
             {
                 return Ok(_userService.GetByID(id));
             }
+            catch(UserNotFoundException e)
+            {
+                return BadRequest(e);
+            }
             catch(Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
         }
 
@@ -50,9 +55,17 @@ namespace BazarRestAPI.Controllers
                 value.Id = id;
                 return Ok(_userService.Update(value));
             }
-            catch (Exception e)
+            catch(NotUniqueUsernameException e)
             {
                 return BadRequest(e.Message);
+            }
+            catch(UserNotFoundException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
         }
 
@@ -64,9 +77,13 @@ namespace BazarRestAPI.Controllers
             {
                 return Ok(_userService.Delete(id));
             }
-            catch (Exception e)
+            catch (UserNotFoundException e)
             {
                 return BadRequest(e.Message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
         }
     }

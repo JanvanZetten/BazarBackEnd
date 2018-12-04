@@ -1,10 +1,12 @@
 ﻿using Core.Application;
 using Core.Application.Implementation;
+using Core.Application.Implementation.CustomExceptions;
 using Core.Domain;
 using Core.Entity;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Xunit;
@@ -76,6 +78,14 @@ namespace XUnitTesting.UserTest
         [Fact]
         public void GetByIdInvalidUser()
         {
+            try
+            {
+                _userService.GetByID(1000);
+            }
+            catch(UserNotFoundException ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 _userService.GetByID(4);
