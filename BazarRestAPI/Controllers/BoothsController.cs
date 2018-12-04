@@ -21,6 +21,7 @@ namespace BazarRestAPI.Controllers
         {
             _service = service;
         }
+
         // GET: api/Booths - Get All Booths
         [HttpGet]
         public ActionResult<IEnumerable<Booth>> Get()
@@ -33,7 +34,6 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-
         }
 
         // GET: api/Booths/5 - Get booth with id
@@ -63,7 +63,6 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-
         }
 
         // POST: api/Booths - Create booth
@@ -109,6 +108,19 @@ namespace BazarRestAPI.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("waitinglistPosition")]
+        public ActionResult<Booth> WaitingListPosition([FromBody] string token)
+        {
+            try
+            {
+                return Ok(_service.GetWaitingListItemPosition(token));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         // PUT: api/Booths/5 - Update booth
         [HttpPut("{id}")]
@@ -137,7 +149,6 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-
         }
     }
 }
