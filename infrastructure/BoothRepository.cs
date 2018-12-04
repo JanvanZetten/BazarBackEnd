@@ -8,7 +8,7 @@ using System.Text;
 
 namespace infrastructure
 {
-    public class BoothRepository : IRepository<Booth>
+    public class BoothRepository : IBoothRepository
     {
         private readonly BazarContext _ctx;
 
@@ -57,6 +57,12 @@ namespace infrastructure
         {
             return _ctx.Booth;
         }
+
+        public IEnumerable<Booth> GetAllIncludeAll()
+        {
+            return _ctx.Booth.Include(b => b.Booker);
+        }
+
         /// <summary>
         /// Get booth with specific ID
         /// </summary>
