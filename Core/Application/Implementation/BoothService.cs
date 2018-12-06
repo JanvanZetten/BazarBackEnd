@@ -230,8 +230,8 @@ namespace Core.Application.Implementation
 
             if (user == null)
                 throw new UserNotFoundException();
-            
-            var list = _boothRepository.GetAllIncludeAll().Where(b => b.Booker.Id == user.Id);
+                
+            var list = _boothRepository.GetAllIncludeAll().Where(b => b.Booker?.Id == user.Id);
 
             if (list.Count() == 0)
                 throw new NoBookingsFoundException();
