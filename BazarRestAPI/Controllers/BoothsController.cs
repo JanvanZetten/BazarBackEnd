@@ -73,7 +73,7 @@ namespace BazarRestAPI.Controllers
         // GET: api/Booths/reservation/
         [Route("reservation")]
         [HttpPost]
-        public ActionResult<Booth> GetUserReservation([FromBody] string token)
+        public ActionResult<List<Booth>> GetUserReservation([FromBody] string token)
         {
             try
             {
