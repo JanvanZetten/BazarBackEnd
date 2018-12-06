@@ -138,7 +138,7 @@ namespace Core.Application.Implementation
             }
             if (waitingListItem.Booker == null)
             {
-                throw new NotAllowedException(" Det var ikke muligt annullere din position i ventelisten");
+                throw new NotAllowedException(" Det var ikke muligt at annullere din position i ventelisten");
             }
 
             return _waitingListRepository.Delete(waitingListItem.Id);
