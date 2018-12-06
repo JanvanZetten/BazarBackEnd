@@ -10,12 +10,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Reference Include="Microsoft.AspNetCore.Hosting">
-      <HintPath>..\..\..\..\..\usr\local\share\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.hosting\2.1.1\lib\netstandard2.0\Microsoft.AspNetCore.Hosting.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.4" />
   </ItemGroup>
 </Project>
