@@ -60,16 +60,14 @@ namespace XUnitTesting.BoothTest
                 return user1.Username;
             });
 
-            mockWaitingListRepository.Setup(x => x.GetByIdIncludeAll(It.IsAny<int>())).Returns<int>((id) =>
+            mockWaitingListRepository.Setup(x => x.GetAllIncludeAll()).Returns(() =>
             {
-                if (waitinigListDictionary.ContainsKey(id))
+                List<WaitingListItem> list = new List<WaitingListItem>()
                 {
-                    return waitinigListDictionary[id];
-                }
-                else
-                {
-                    return null;
-                }
+                    wli1,
+                    wli2
+                };
+                return list;
             });
 
             _boothService = new BoothService(mockUserRepository.Object, mockBoothRepository.Object,
@@ -85,7 +83,7 @@ namespace XUnitTesting.BoothTest
         [Fact]
         public void CancelReservationTest()
         {
-            var wli = _boothService.CancelWaitingPosition(wli1.Id, token1);
+            var wli = _boothService.CancelWaitingPosition(token1);
 
             Assert.True(wli1.Id == wli.Id);
             Assert.False(waitinigListDictionary.ContainsValue(wli1));
