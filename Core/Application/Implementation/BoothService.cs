@@ -231,7 +231,7 @@ namespace Core.Application.Implementation
             if (user == null)
                 throw new UserNotFoundException();
             
-            return _boothRepository.GetAllIncludeAll().FirstOrDefault(b => b.Booker.Id == user.Id);
+            return _boothRepository.GetAllIncludeAll().FirstOrDefault(b => b.Booker?.Id == user.Id);
         }
 
         /// <summary>
