@@ -73,13 +73,17 @@ namespace BazarRestAPI.Controllers
         // GET: api/Booths/reservation/
         [Route("reservation")]
         [HttpPost]
-        public ActionResult<Booth> GetUserReservation([FromBody] string token)
+        public ActionResult<List<Booth>> GetUserReservation([FromBody] string token)
         {
             try
             {
                 return Ok(_service.GetUsersBooking(token));
             }
             catch (UserNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (NoBookingsFoundException ex)
             {
                 return BadRequest(ex.Message);
             }

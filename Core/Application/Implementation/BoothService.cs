@@ -223,15 +223,20 @@ namespace Core.Application.Implementation
         /// </summary>
         /// <returns>The users booking.</returns>
         /// <param name="token">User identifier.</param>
-        public Booth GetUsersBooking(string token)
+        public IEnumerable<Booth> GetUsersBooking(string token)
         {
             var username = _authService.VerifyUserFromToken(token);
             var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == username);
 
             if (user == null)
                 throw new UserNotFoundException();
-            
-            return _boothRepository.GetAllIncludeAll().FirstOrDefault(b => b.Booker?.Id == user.Id);
+                
+            var list = _boothRepository.GetAllIncludeAll().Where(b => b.Booker?.Id == user.Id);
+
+            if (list.Count() == 0)
+                throw new NoBookingsFoundException();
+
+            return list;
         }
 
         /// <summary>
