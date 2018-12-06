@@ -215,7 +215,7 @@ namespace BazarRestAPI.Controllers
 
         [HttpPost]
         [Route("cancelWaitingPosition")]
-        public ActionResult<WaitingListItem> CancelWaitingPositing([FromBody] TokenBoothDTO dto)
+        public ActionResult<WaitingListItem> CancelWaitingPosition([FromBody] TokenBoothDTO dto)
         {
             try
             {
