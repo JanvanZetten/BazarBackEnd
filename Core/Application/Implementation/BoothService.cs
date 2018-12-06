@@ -232,6 +232,10 @@ namespace Core.Application.Implementation
                 throw new UserNotFoundException();
             
             var list = _boothRepository.GetAllIncludeAll().Where(b => b.Booker.Id == user.Id);
+
+            if (list.Count() == 0)
+                throw new NoBookingsFoundException();
+
             return list;
         }
 

@@ -83,6 +83,10 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
+            catch (NoBookingsFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (Exception)
             {
                 return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
