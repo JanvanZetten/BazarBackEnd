@@ -11,17 +11,22 @@ using Xunit;
 
 namespace XUnitTesting.BoothTest
 {
-    public class BoothServiceBookTest
+    public class CancelReservationWaitingList
     {
         readonly IBoothService _boothService;
 
+        private Mock<IWaitingListRepository> mockWaitingListItemRepository = new Mock<IWaitingListRepository>();
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
         private Mock<IBoothRepository> mockBoothRepository = new Mock<IBoothRepository>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
-        private static Mock<IWaitingListRepository> mockWaitingListRepository = new Mock<IWaitingListRepository>();
 
         private Dictionary<int, User> userDictionary = new Dictionary<int, User>();
         private Dictionary<int, Booth> boothDictionary = new Dictionary<int, Booth>();
+
+        private Dictionary<int, WaitingListItem> waitingListItemDictionary = new Dictionary<int, WaitingListItem>();
+
+        private WaitingListItem wli1;
+        private WaitingListItem wli2;
 
         private User user1;
         private User user2;
@@ -32,7 +37,7 @@ namespace XUnitTesting.BoothTest
         private string token1 = "Hello";
         private string token2 = "Adieu";
 
-        public BoothServiceBookTest()
+        public CancelReservationWaitingList()
         {
             user1 = new User()
             {
@@ -47,18 +52,36 @@ namespace XUnitTesting.BoothTest
 
             booth1 = new Booth()
             {
-                Id = 1
+                Id = 1,
+                Booker = user1
             };
             booth2 = new Booth()
             {
-                Id = 2
+                Id = 2,
+                Booker = user2
+            };
+            wli1 = new WaitingListItem()
+            {
+                Id = 1,
+                Booker = user1,
+                Date = DateTime.Now
+            };
+            wli2 = new WaitingListItem()
+            {
+                Id = 2,
+                Booker = user2,
+                Date = DateTime.Now.AddYears(-1)
             };
 
             userDictionary.Add(1, user1);
             userDictionary.Add(2, user2);
 
+
             boothDictionary.Add(1, booth1);
             boothDictionary.Add(2, booth2);
+
+            waitingListItemDictionary.Add(1, wli1);
+            waitingListItemDictionary.Add(2, wli2);
 
             mockUserRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns<int>((id) =>
             {
@@ -77,7 +100,7 @@ namespace XUnitTesting.BoothTest
                 return userDictionary.Values;
             });
 
-            mockBoothRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns<int>((id) =>
+            mockBoothRepository.Setup(x => x.GetByIdIncludeAll(It.IsAny<int>())).Returns<int>((id) =>
             {
                 if (boothDictionary.ContainsKey(id))
                 {
@@ -92,6 +115,23 @@ namespace XUnitTesting.BoothTest
             mockBoothRepository.Setup(x => x.GetAllIncludeAll()).Returns(() =>
             {
                 return boothDictionary.Values;
+            });
+
+            mockWaitingListItemRepository.Setup(x => x.GetAll()).Returns(() =>
+            {
+                return waitingListItemDictionary.Values;
+            });
+
+            mockWaitingListItemRepository.Setup(x => x.GetAllIncludeAll()).Returns(() =>
+            {
+                return waitingListItemDictionary.Values;
+            });
+
+            mockWaitingListItemRepository.Setup(x => x.Delete(It.IsAny<int>())).Returns<int>((id) =>
+            {
+                var wli = waitingListItemDictionary[id];
+                waitingListItemDictionary.Remove(id);
+                return wli;
             });
 
             mockBoothRepository.Setup(x => x.Update(It.IsAny<Booth>())).Returns<Booth>((b) =>
@@ -113,62 +153,39 @@ namespace XUnitTesting.BoothTest
             mockAuthenticationService.Setup(x => x.VerifyUserFromToken(It.IsAny<string>())).Returns<string>((s) =>
             {
                 if (token1 == s)
-                    return user2.Username;
+                    return user1.Username;
                 else if (token2 == s)
                     return "asbamse";
                 throw new InvalidTokenException("Invalid token");
             });
 
-            _boothService = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object);
+            _boothService = new BoothService(mockUserRepository.Object, mockBoothRepository.Object,
+                mockAuthenticationService.Object, mockWaitingListItemRepository.Object);
+        }
+        
+        /// <summary>
+        /// Make sure the first entry in waiting list item repository get assigned to cancelled booth.
+        /// </summary>
+        [Fact]
+        public void AssignBoothToWaitingListItemWithOldestDate()
+        {
+            var waitingListItem = waitingListItemDictionary.Values.
+                FirstOrDefault( w => w.Date == waitingListItemDictionary.Values.Min(d => d.Date));
+            var booth = _boothService.CancelReservation(booth1.Id, token1);
+
+            Assert.True(booth.Booker == waitingListItem.Booker);
         }
 
         /// <summary>
-        /// Make valid booking.
+        /// Make sure that booker is null when waiting list is empty.
         /// </summary>
         [Fact]
-        public void BookValidInput()
+        public void WaitingListEmpty()
         {
-            Booth booth = _boothService.Book(token1);
-
-            Assert.True(boothDictionary.Values.Any(b => b.Booker.Username == user2.Username));
+            waitingListItemDictionary.Clear();
+            var booth = _boothService.CancelReservation(booth1.Id, token1);
+            Assert.True(booth.Booker == null);
         }
-
-        [Fact]
-        public void BookInvalidUser()
-        {
-            Booth booth = _boothService.Book(token1);
-
-            Assert.False(boothDictionary.Values.Any(b => b.Booker?.Username == user1.Username));
-        }
-
-        [Fact]
-        public void BookInvalidToken()
-        {
-            Assert.Throws<InvalidTokenException>(() =>
-            {
-                _boothService.Book("Mojn");
-            });
-        }
-
-        [Fact]
-        public void BookWithUserNotFound()
-        {
-            Assert.Throws<UserNotFoundException>(() =>
-            {
-                _boothService.Book(token2);
-            });
-        }
-
-        [Fact]
-        public void BookWithNoBoothsAvailable()
-        {
-            Booth booth1 = _boothService.Book(token1);
-            Booth booth2 = _boothService.Book(token1);
-
-            Assert.Throws<OnWaitingListException>(() =>
-            {
-                _boothService.Book(token1);
-            });
-        }
+       
     }
 }

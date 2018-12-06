@@ -14,10 +14,12 @@ namespace Core.Application
         Booth Update(Booth updatedBooth);
 
         //Extra
-        int CountAvalibleBooths();
+        int CountAvailableBooths();
         Booth Book(string token);
-        Booth GetUsersBooking(int userId);
-        int WaitingListPosition(int userId);
+        Booth GetUsersBooking(string token);
+        Booth CancelReservation(int boothId, string token);
+        WaitingListItem CancelWaitingPosition(string token);
+        int GetWaitingListItemPosition(string token);
 
 
     }

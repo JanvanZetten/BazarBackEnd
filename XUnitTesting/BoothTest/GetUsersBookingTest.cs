@@ -12,25 +12,36 @@ namespace XUnitTesting.BoothTest
     public class GetUsersBookingTest
     {
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
-        private Mock<IRepository<Booth>> mockBoothRepository = new Mock<IRepository<Booth>>();
+        private Mock<IBoothRepository> mockBoothRepository = new Mock<IBoothRepository>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+        private static Mock<IWaitingListRepository> mockWaitingListRepository = new Mock<IWaitingListRepository>();
 
         [Fact]
         public void GetUsersBookingSingleBookingTest()
         {
-            var user = new Core.Entity.User() { Id = 1 };
+            var user = new User() { Id = 1 };
             var booth = new Booth() { Id = 1, Booker = user };
 
-            mockBoothRepository.Setup(x => x.GetAll()).Returns(() => new List<Booth>
+            mockUserRepository.Setup(x => x.GetAll()).Returns(() => new List<User>
+            {
+                user
+            });
+
+            mockBoothRepository.Setup(x => x.GetAllIncludeAll()).Returns(() => new List<Booth>
             {
                 booth,
                 new Booth(){
                     Id = 2,
-                    Booker = new Core.Entity.User(){Id = 2}
+                    Booker = new User(){Id = 2}
                 }
             });
 
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object).GetUsersBooking(user.Id);
+            mockAuthenticationService.Setup(x => x.VerifyUserFromToken(It.IsAny<string>())).Returns<string>((s) =>
+            {
+                return user.Username;
+            });
+
+            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).GetUsersBooking("");
 
             Assert.Equal(booth, result);
         }
@@ -38,21 +49,31 @@ namespace XUnitTesting.BoothTest
         [Fact]
         public void GetUsersBookingNoBookingTest()
         {
-            var user = new Core.Entity.User() { Id = 1 };
+            var user = new User() { Id = 1 };
+
+            mockUserRepository.Setup(x => x.GetAll()).Returns(() => new List<User>
+            {
+                user
+            });
 
             mockBoothRepository.Setup(x => x.GetAll()).Returns(() => new List<Booth>
             {
                new Booth(){
                     Id = 1,
-                    Booker = new Core.Entity.User(){Id = 2}
+                    Booker = new User(){Id = 2}
                 },
                 new Booth(){
                     Id = 2,
-                    Booker = new Core.Entity.User(){Id = 3}
+                    Booker = new User(){Id = 3}
                 }
             });
 
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object).GetUsersBooking(user.Id);
+            mockAuthenticationService.Setup(x => x.VerifyUserFromToken(It.IsAny<string>())).Returns<string>((s) =>
+            {
+                return user.Username;
+            });
+
+            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).GetUsersBooking("");
 
             Assert.Null(result);
         }

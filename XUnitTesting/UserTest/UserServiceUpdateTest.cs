@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 using System.Linq;
+using Core.Application.Implementation.CustomExceptions;
 
 namespace XUnitTesting.UserTest
 {
@@ -120,7 +121,7 @@ namespace XUnitTesting.UserTest
             }
             else
             {
-                Assert.Throws<ArgumentException>(() =>
+                Assert.Throws<InputNotValidException>(() =>
                 {
                     result = _userService.Update(test);
                 });
@@ -130,7 +131,7 @@ namespace XUnitTesting.UserTest
         }
 
         /// <summary>
-        /// Test for username ArgumentNullException.
+        /// Test for username UserNotFoundException.
         /// </summary>
         [Fact]
         public void UpdateUserInvalidUsernameNull()
@@ -141,7 +142,7 @@ namespace XUnitTesting.UserTest
             };
 
             User result = null;
-            Assert.Throws<ArgumentNullException>(() =>
+            Assert.Throws<InputNotValidException>(() =>
             {
                 result = _userService.Update(test);
             });
@@ -162,7 +163,7 @@ namespace XUnitTesting.UserTest
             };
             
             User result = null;
-            Assert.Throws<ArgumentException>(() =>
+            Assert.Throws<NotUniqueUsernameException>(() =>
             {
                 result = _userService.Update(test);
             });
@@ -182,7 +183,7 @@ namespace XUnitTesting.UserTest
                 Username = "alex"
             };
 
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            Assert.Throws<UserNotFoundException>(() =>
             {
                 _userService.Update(test);
             });

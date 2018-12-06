@@ -1,5 +1,6 @@
 ﻿using Core.Domain;
 using Core.Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,7 +61,9 @@ namespace infrastructure
         /// </summary>
         public User GetById(int id)
         {
-            return _ctx.Users.FirstOrDefault(u => u.Id == id);
+            User user =_ctx.Users.FirstOrDefault(u => u.Id == id);
+            _ctx.Entry(user).State = EntityState.Detached;
+            return user;
         }
 
         /// <summary>

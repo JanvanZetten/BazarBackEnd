@@ -8,7 +8,7 @@ using System.Text;
 
 namespace infrastructure
 {
-    public class BoothRepository : IRepository<Booth>
+    public class BoothRepository : IBoothRepository
     {
         private readonly BazarContext _ctx;
 
@@ -57,6 +57,12 @@ namespace infrastructure
         {
             return _ctx.Booth;
         }
+
+        public IEnumerable<Booth> GetAllIncludeAll()
+        {
+            return _ctx.Booth.Include(b => b.Booker);
+        }
+
         /// <summary>
         /// Get booth with specific ID
         /// </summary>
@@ -64,8 +70,18 @@ namespace infrastructure
         /// <returns>Specific booth</returns>
         public Booth GetById(int id)
         {
-            return _ctx.Booth.FirstOrDefault(b => b.Id == id);
+            Booth booth = _ctx.Booth.FirstOrDefault(b => b.Id == id);
+            _ctx.Entry(booth).State = EntityState.Detached;
+            return booth;
         }
+
+        public Booth GetByIdIncludeAll(int id)
+        {
+            Booth booth = _ctx.Booth.Include(b => b.Booker).FirstOrDefault(b => b.Id == id);
+            _ctx.Entry(booth).State = EntityState.Detached;
+            return booth;
+        }
+
         /// <summary>
         /// Updating booth, using attached to also update references.
         /// </summary>

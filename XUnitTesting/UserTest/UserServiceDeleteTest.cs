@@ -1,5 +1,6 @@
 ﻿using Core.Application;
 using Core.Application.Implementation;
+using Core.Application.Implementation.CustomExceptions;
 using Core.Domain;
 using Core.Entity;
 using Moq;
@@ -71,7 +72,7 @@ namespace XUnitTesting.UserTest
             userDictionary.Add(user1.Id, user1);
             userDictionary.Add(user2.Id, user2);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            Assert.Throws<UserNotFoundException>(() =>
             {
                 _userService.Delete(3);
             });
