@@ -131,8 +131,6 @@ namespace Core.Application.Implementation
         /// <returns></returns>
         public WaitingListItem CancelWaitingPosition(string token)
         {
-            var username = _authService.VerifyUserFromToken(token);
-
             WaitingListItem waitingListItem = _waitingListRepository.GetAllIncludeAll().FirstOrDefault(w => w.Booker.Username == _authService.VerifyUserFromToken(token));
             if (waitingListItem == null)
             {
