@@ -212,5 +212,28 @@ namespace BazarRestAPI.Controllers
                 return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
             }
         }
+
+        [HttpPost]
+        [Route("cancelWaitingPosition")]
+        public ActionResult<WaitingListItem> CancelWaitingPositing([FromBody] TokenBoothDTO dto)
+        {
+            try
+            {
+                return Ok(_service.CancelWaitingPosition(dto.token));
+            }
+
+            catch (WaitingListItemNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (NotAllowedException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+            }
+        }
     }
 }

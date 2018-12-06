@@ -129,11 +129,11 @@ namespace Core.Application.Implementation
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public WaitingListItem CancelWaitingPosition(int waitingId, string token)
+        public WaitingListItem CancelWaitingPosition(string token)
         {
             var username = _authService.VerifyUserFromToken(token);
 
-            var waitingListItem = _waitingListRepository.GetByIdIncludeAll(waitingId);
+            WaitingListItem waitingListItem = _waitingListRepository.GetAllIncludeAll().FirstOrDefault(w => w.Booker.Username == _authService.VerifyUserFromToken(token));
             if (waitingListItem == null)
             {
                 throw new WaitingListItemNotFoundException();
@@ -141,10 +141,6 @@ namespace Core.Application.Implementation
             if (waitingListItem.Booker == null)
             {
                 throw new NotAllowedException(" Det var ikke muligt annullere din position i ventelisten");
-            }
-            if (waitingListItem.Booker.Username != username)
-            {
-                throw new NotAllowedException();
             }
 
             return _waitingListRepository.Delete(waitingListItem.Id);
