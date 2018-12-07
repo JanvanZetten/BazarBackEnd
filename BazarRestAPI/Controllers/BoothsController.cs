@@ -174,7 +174,7 @@ namespace BazarRestAPI.Controllers
                 return Ok(_service.CancelReservation(dto.id, dto.token));
             }
 
-            catch (BoothNotFoundException ex)
+            catch (UserNotFoundException ex)
             {
                 return BadRequest(ex.Message);
             }
