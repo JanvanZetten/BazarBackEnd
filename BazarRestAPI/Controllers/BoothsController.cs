@@ -223,6 +223,10 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
+            catch(UserNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch(Exception)
             {
                 return BadRequest(DefaultExceptionMessage);
