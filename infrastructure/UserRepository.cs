@@ -62,10 +62,6 @@ namespace infrastructure
         public User GetById(int id)
         {
             User user =_ctx.Users.FirstOrDefault(u => u.Id == id);
-            if(user == null)
-            {
-                return null;
-            }
             _ctx.Entry(user).State = EntityState.Detached;
             return user;
         }
