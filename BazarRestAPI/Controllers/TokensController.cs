@@ -59,7 +59,7 @@ namespace BazarRestAPI.Controllers
 
                 var userCreated = _userService.Create(user, userDTO.Password);
 
-                return Ok(_authService.GenerateToken(userCreated));
+                return Ok(new { username = userDTO.Username});
             }
             catch(InputNotValidException ex)
             {

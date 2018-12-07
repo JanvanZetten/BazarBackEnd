@@ -16,7 +16,7 @@ namespace Core.Application
         //Extra
         int CountAvailableBooths();
         Booth Book(string token);
-        Booth GetUsersBooking(string token);
+        List<Booth> GetUsersBooking(string token);
         Booth CancelReservation(int boothId, string token);
         WaitingListItem CancelWaitingPosition(string token);
         int GetWaitingListItemPosition(string token);

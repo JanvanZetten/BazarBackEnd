@@ -158,7 +158,7 @@ namespace Core.Application.Implementation
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Position in waiting list</returns>
-        int IBoothService.GetWaitingListItemPosition(string token)
+        public int GetWaitingListItemPosition(string token)
         {
             string username = _authService.VerifyUserFromToken(token);
 
@@ -223,15 +223,20 @@ namespace Core.Application.Implementation
         /// </summary>
         /// <returns>The users booking.</returns>
         /// <param name="token">User identifier.</param>
-        public Booth GetUsersBooking(string token)
+        public List<Booth> GetUsersBooking(string token)
         {
             var username = _authService.VerifyUserFromToken(token);
             var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == username);
 
             if (user == null)
                 throw new UserNotFoundException();
-            
-            return _boothRepository.GetAllIncludeAll().FirstOrDefault(b => b.Booker.Id == user.Id);
+                
+            var list = _boothRepository.GetAllIncludeAll().Where(b => b.Booker?.Id == user.Id).ToList();
+
+            if (list.Count() == 0)
+                throw new NoBookingsFoundException();
+
+            return list;
         }
 
         /// <summary>

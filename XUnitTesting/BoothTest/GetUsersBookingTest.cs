@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Core.Application;
 using Core.Application.Implementation;
+using Core.Application.Implementation.CustomExceptions;
 using Core.Domain;
 using Core.Entity;
 using Moq;
@@ -20,7 +21,8 @@ namespace XUnitTesting.BoothTest
         public void GetUsersBookingSingleBookingTest()
         {
             var user = new User() { Id = 1 };
-            var booth = new Booth() { Id = 1, Booker = user };
+            var booth1 = new Booth() { Id = 1, Booker = user };
+            var booth2 = new Booth() { Id = 2, Booker = user };
 
             mockUserRepository.Setup(x => x.GetAll()).Returns(() => new List<User>
             {
@@ -29,7 +31,8 @@ namespace XUnitTesting.BoothTest
 
             mockBoothRepository.Setup(x => x.GetAllIncludeAll()).Returns(() => new List<Booth>
             {
-                booth,
+                booth1,
+                booth2,
                 new Booth(){
                     Id = 2,
                     Booker = new User(){Id = 2}
@@ -41,9 +44,11 @@ namespace XUnitTesting.BoothTest
                 return user.Username;
             });
 
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).GetUsersBooking("");
+            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).
+                GetUsersBooking("");
 
-            Assert.Equal(booth, result);
+            Assert.Contains(booth1, result);
+            Assert.Contains(booth2, result);
         }
 
         [Fact]
@@ -72,10 +77,11 @@ namespace XUnitTesting.BoothTest
             {
                 return user.Username;
             });
-
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).GetUsersBooking("");
-
-            Assert.Null(result);
+            
+            Assert.Throws<NoBookingsFoundException>(() =>
+                new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).
+                GetUsersBooking("")
+            );
         }
     }
 }
