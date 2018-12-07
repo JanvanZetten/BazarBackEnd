@@ -17,12 +17,14 @@ namespace BazarRestAPI.Controllers
     {
         private readonly IUserService _userService;
         private readonly IAuthenticationService _authService;
+        private string DefaultExceptionMessage = "Der er sket en fejl. Kontakt din administrator for yderligere information.";
 
         public TokensController(IUserService userService, IAuthenticationService authService)
         {
             _userService = userService;
             _authService = authService;
         }
+
         // POST api/values
         [HttpPost]
         public IActionResult Login([FromBody]  UserDTO userDTO)
@@ -57,7 +59,7 @@ namespace BazarRestAPI.Controllers
                     Username = userDTO.Username
                 };
 
-                var userCreated = _userService.Create(user, userDTO.Password);
+                var userCreated = _userService.Create(user, userDTO.Password, false);
 
                 return Ok(new { username = userDTO.Username});
             }
@@ -75,7 +77,41 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
+            }
+
+        }
+
+        [Route("createUserAdmin")]
+        [HttpPost]
+        public ActionResult<string> CreateUserAdmin([FromBody] UserDTO userDTO)
+        {
+            try
+            {
+                var user = new User()
+                {
+                    Username = userDTO.Username
+                };
+
+                var userCreated = _userService.Create(user, userDTO.Password, userDTO.IsAdmin);
+
+                return Ok(new { username = userDTO.Username });
+            }
+            catch (InputNotValidException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (NotUniqueUsernameException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (UserNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(DefaultExceptionMessage);
             }
 
         }

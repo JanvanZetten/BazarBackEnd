@@ -18,7 +18,7 @@ namespace Core.Application.Implementation
             _authService = authService;
         }
             
-        public User Create(User user, string password)
+        public User Create(User user, string password, bool isAdmin)
         {
             if (user == null)
                 throw new UserNotFoundException("The user is null.");
@@ -33,6 +33,7 @@ namespace Core.Application.Implementation
 
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
+            user.IsAdmin = isAdmin;
 
             return _userRepository.Create(user);
         }

@@ -15,6 +15,7 @@ namespace BazarRestAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private string DefaultExceptionMessage = "Der er sket en fejl. Kontakt din administrator for yderligere information.";
 
         public UsersController(IUserService UserService)
         {
@@ -42,7 +43,7 @@ namespace BazarRestAPI.Controllers
             }
             catch(Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
@@ -65,7 +66,7 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
@@ -83,7 +84,7 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
     }

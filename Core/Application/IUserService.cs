@@ -7,7 +7,7 @@ namespace Core.Application
 {
     public interface IUserService
     {
-        User Create(User user, string password);
+        User Create(User user, string password, bool isAdmin);
         IEnumerable<User> GetAll();
         User GetByID(int id);
         User Update(User user);
