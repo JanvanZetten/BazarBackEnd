@@ -7,6 +7,7 @@ using Core.Application;
 using Core.Application.Implementation;
 using Core.Application.Implementation.CustomExceptions;
 using Core.Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,7 @@ namespace BazarRestAPI.Controllers
 
         // GET: api/Booths - Get All Booths
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<IEnumerable<Booth>> Get()
         {
             try
@@ -41,6 +43,7 @@ namespace BazarRestAPI.Controllers
         // GET: api/Booths/IncludeAll - Get All Booths with bookers
         [Route("IncludeAll")]
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<IEnumerable<Booth>> GetAllIncludeAll()
         {
             try
@@ -55,6 +58,7 @@ namespace BazarRestAPI.Controllers
 
         // GET: api/Booths/5 - Get booth with id
         [HttpGet("{id}")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<Booth> Get(int id)
         {
             try
@@ -72,9 +76,10 @@ namespace BazarRestAPI.Controllers
             }
         }
 
-        //[Authorize]
+        // GET: api/Booths/availableCount - Get available Booths
         [Route("availableCount")] 
         [HttpGet]
+        [Authorize]
         public ActionResult<int> GetAvailableCount()
         {
             try
@@ -87,9 +92,10 @@ namespace BazarRestAPI.Controllers
             }
         }
 
-        // GET: api/Booths/reservation/
+        // POST: api/Booths/reservation - Get booking
         [Route("reservation")]
         [HttpPost]
+        [Authorize]
         public ActionResult<List<Booth>> GetUserReservation([FromBody] string token)
         {
             try
@@ -112,6 +118,7 @@ namespace BazarRestAPI.Controllers
 
         // POST: api/Booths - Create booth
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<Booth> Post([FromBody] Booth booth)
         {
             try
@@ -129,8 +136,9 @@ namespace BazarRestAPI.Controllers
         }
 
         // POST: api/Booths/book - Book booth
-        [HttpPost]
         [Route("book")]
+        [HttpPost]
+        [Authorize]
         public ActionResult<Booth> BookBooth([FromBody]String token)
         {
             try
@@ -155,8 +163,10 @@ namespace BazarRestAPI.Controllers
             }
         }
 
-        [HttpPost]
+        // POST: api/Booths/cancelReservation - Removes User from Booth
         [Route("cancelReservation")]
+        [HttpPost]
+        [Authorize]
         public ActionResult<Booth> CancelReservation([FromBody] TokenBoothDTO dto)
         {
             try
@@ -178,8 +188,10 @@ namespace BazarRestAPI.Controllers
             }
         }
 
-        [HttpPost]
+        // POST: api/Booths/waitinglistPosition - Gets Waiting List Pos.
         [Route("waitinglistPosition")]
+        [HttpPost]
+        [Authorize]
         public ActionResult<Booth> WaitingListPosition([FromBody] string token)
         {
             try
@@ -199,6 +211,7 @@ namespace BazarRestAPI.Controllers
 
         // PUT: api/Booths/5 - Update booth
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<Booth> Put(int id, [FromBody] Booth booth)
         {
             try
@@ -216,8 +229,9 @@ namespace BazarRestAPI.Controllers
             }
         }
 
-        // DELETE: api/ApiWithActions/5 - Delete Booth
+        // DELETE: api/Booths/5 - Delete Booth
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<Booth> Delete(int id)
         {
             try
@@ -234,15 +248,16 @@ namespace BazarRestAPI.Controllers
             }
         }
 
-        [HttpPost]
+        // POST: api/Booths/cancelWaitingPosition - Remove user from Waiting List
         [Route("cancelWaitingPosition")]
+        [HttpPost]
+        [Authorize]
         public ActionResult<WaitingListItem> CancelWaitingPosition([FromBody] TokenBoothDTO dto)
         {
             try
             {
                 return Ok(_service.CancelWaitingPosition(dto.token));
             }
-
             catch (WaitingListItemNotFoundException ex)
             {
                 return BadRequest(ex.Message);
