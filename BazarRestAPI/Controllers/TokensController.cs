@@ -56,10 +56,11 @@ namespace BazarRestAPI.Controllers
             {
                 var user = new User()
                 {
-                    Username = userDTO.Username
+                    Username = userDTO.Username,
+                    IsAdmin = false
                 };
 
-                var userCreated = _userService.Create(user, userDTO.Password, false);
+                var userCreated = _userService.Create(user, userDTO.Password);
 
                 return Ok(new { username = userDTO.Username});
             }
@@ -75,7 +76,7 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest(DefaultExceptionMessage);
             }
@@ -90,10 +91,11 @@ namespace BazarRestAPI.Controllers
             {
                 var user = new User()
                 {
-                    Username = userDTO.Username
+                    Username = userDTO.Username,
+                    IsAdmin = userDTO.IsAdmin
                 };
 
-                var userCreated = _userService.Create(user, userDTO.Password, userDTO.IsAdmin);
+                var userCreated = _userService.Create(user, userDTO.Password);
 
                 return Ok(new { username = userDTO.Username });
             }
@@ -109,7 +111,7 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest(DefaultExceptionMessage);
             }

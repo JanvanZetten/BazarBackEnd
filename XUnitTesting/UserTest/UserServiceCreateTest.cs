@@ -52,7 +52,7 @@ namespace XUnitTesting.UserTest
         {
             userDictionary.Clear();
 
-            var result = _userService.Create(_user, _password, false);
+            var result = _userService.Create(_user, _password);
 
             Assert.Equal(_user.Username, result.Username);
         }
@@ -79,7 +79,7 @@ namespace XUnitTesting.UserTest
             User result = null;
             if (isValid)
             {
-                result = _userService.Create(test, _password, false);
+                result = _userService.Create(test, _password);
 
                 Assert.Equal(test.Username, result.Username);
             }
@@ -87,7 +87,7 @@ namespace XUnitTesting.UserTest
             {
                 Assert.Throws<InputNotValidException>(() =>
                 {
-                    result = _userService.Create(test, _password, false);
+                    result = _userService.Create(test, _password);
                 });
 
                 Assert.Null(result);
@@ -105,7 +105,7 @@ namespace XUnitTesting.UserTest
             User result = null;
             Assert.Throws<InputNotValidException>(() =>
             {
-                result = _userService.Create(test, _password, false);
+                result = _userService.Create(test, _password);
             });
 
             Assert.Null(result);
@@ -122,11 +122,11 @@ namespace XUnitTesting.UserTest
                 Username = "Jan"
             };
 
-            _userService.Create(_user, _password, false);
+            _userService.Create(_user, _password);
             User result = null;
             Assert.Throws<NotUniqueUsernameException>(() =>
             {
-                result = _userService.Create(test, _password, false);
+                result = _userService.Create(test, _password);
             });
 
             Assert.Null(result);
@@ -141,7 +141,7 @@ namespace XUnitTesting.UserTest
             User result = null;
             Assert.Throws<InputNotValidException>(() =>
             {
-                result = _userService.Create(_user, null, false);
+                result = _userService.Create(_user, null);
             });
 
             Assert.Null(result);
@@ -170,7 +170,7 @@ namespace XUnitTesting.UserTest
             User result = null;
             if (isValid)
             {
-                result = _userService.Create(_user, password, false);
+                result = _userService.Create(_user, password);
 
                 Assert.Equal(_user.Username, result.Username);
             }
@@ -178,7 +178,7 @@ namespace XUnitTesting.UserTest
             {
                 Assert.Throws<InputNotValidException>(() =>
                 {
-                    result = _userService.Create(_user, password, false);
+                    result = _userService.Create(_user, password);
                 });
 
                 Assert.Null(result);
