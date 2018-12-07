@@ -14,14 +14,16 @@ namespace Core.Application.Implementation
         readonly IBoothRepository _boothRepository;
         readonly IAuthenticationService _authService;
         readonly IWaitingListRepository _waitingListRepository;
+        readonly IUserService _userService;
 
         public BoothService(IRepository<User> userRepository, IBoothRepository boothRepository,
-         IAuthenticationService authenticationService, IWaitingListRepository waitinglistRepository)
+         IAuthenticationService authenticationService, IWaitingListRepository waitinglistRepository, IUserService userService)
         {
             _userRepository = userRepository;
             _boothRepository = boothRepository;
             _authService = authenticationService;
             _waitingListRepository = waitinglistRepository;
+            _userService = userService;
         }
 
         /// <summary>
@@ -109,7 +111,8 @@ namespace Core.Application.Implementation
             newBooth.Id = 0;
             if (newBooth.Booker != null)
             {
-                GetById(newBooth.Booker.Id);
+                _userService.GetByID(newBooth.Booker.Id);
+
             }
             return _boothRepository.Create(newBooth);
         }
@@ -194,7 +197,7 @@ namespace Core.Application.Implementation
             if (id <= 0)
                 throw new BoothNotFoundException(nameof(id) +  " ID must be higher than 0");
             
-            var booth = _boothRepository.GetById(id);
+            var booth = _boothRepository.GetByIdIncludeAll(id);
             if (booth == null)
                 throw new BoothNotFoundException(id);
                 
