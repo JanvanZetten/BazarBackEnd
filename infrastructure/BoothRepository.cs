@@ -32,9 +32,9 @@ namespace infrastructure
         /// <returns>Created booth</returns>
         public Booth Create(Booth entity)
         {
-            var savedUser =_ctx.Booth.Add(entity).Entity;
+            _ctx.Attach(entity).State = EntityState.Added;
             _ctx.SaveChanges();
-            return savedUser;
+            return entity;
         }
         /// <summary>
         /// Deletes booth
