@@ -109,7 +109,11 @@ namespace Core.Application.Implementation
             newBooth.Id = 0;
             if (newBooth.Booker != null)
             {
-                GetById(newBooth.Booker.Id);
+               var user = _userRepository.GetById(newBooth.Booker.Id);
+                if(user == null)
+                {
+                    throw new UserNotFoundException();
+                }
             }
             return _boothRepository.Create(newBooth);
         }

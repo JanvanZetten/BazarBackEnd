@@ -116,6 +116,10 @@ namespace BazarRestAPI.Controllers
             {
                 return Ok(_service.Create(booth));
             }
+            catch (UserNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (BoothNotFoundException ex)
             {
                 return BadRequest(ex.Message);
