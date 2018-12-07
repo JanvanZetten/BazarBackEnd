@@ -17,6 +17,8 @@ namespace BazarRestAPI.Controllers
     public class BoothsController : ControllerBase
     {
         private readonly IBoothService _service;
+        private string DefaultExceptionMessage = "Der er sket en fejl. Kontakt din administrator for yderligere information.";
+
         public BoothsController(IBoothService service)
         {
             _service = service;
@@ -32,7 +34,7 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
@@ -47,7 +49,7 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
@@ -66,7 +68,7 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
@@ -81,7 +83,7 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
@@ -104,7 +106,7 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
@@ -122,7 +124,7 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
@@ -149,7 +151,7 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
@@ -172,7 +174,7 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
@@ -191,7 +193,7 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
@@ -210,7 +212,7 @@ namespace BazarRestAPI.Controllers
             }
             catch(Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
@@ -228,7 +230,7 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
@@ -251,7 +253,7 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
     }

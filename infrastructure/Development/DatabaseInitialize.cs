@@ -18,10 +18,10 @@ namespace infrastructure.Development
 
             var users = new List<User>
             {
-                new User { Username="Jan", PasswordHash=passwordHash, PasswordSalt=passwordSalt },
-                new User { Username="Alex", PasswordHash=passwordHash, PasswordSalt=passwordSalt },
-                new User { Username="Hussain", PasswordHash=passwordHash, PasswordSalt=passwordSalt },
-                new User { Username="Asbjørn", PasswordHash=passwordHash, PasswordSalt=passwordSalt }
+                new User { Username="Jan", PasswordHash=passwordHash, PasswordSalt=passwordSalt, IsAdmin=true },
+                new User { Username="Alex", PasswordHash=passwordHash, PasswordSalt=passwordSalt, IsAdmin=true },
+                new User { Username="Hussain", PasswordHash=passwordHash, PasswordSalt=passwordSalt, IsAdmin=false },
+                new User { Username="Asbjørn", PasswordHash=passwordHash, PasswordSalt=passwordSalt, IsAdmin=false }
             };
 
             context.Users.AddRange(users);
