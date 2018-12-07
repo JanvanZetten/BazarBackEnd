@@ -9,6 +9,7 @@ namespace Core.Application
         //CRUD
         Booth GetById(int id);
         List<Booth> GetAll();
+        List<Booth> GetAllIncludeAll();
         Booth Delete(int id);
         Booth Create(Booth newBooth);
         Booth Update(Booth updatedBooth);

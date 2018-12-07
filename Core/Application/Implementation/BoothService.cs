@@ -250,5 +250,20 @@ namespace Core.Application.Implementation
             return _boothRepository.Update(updatedBooth);
         }
 
+        /// <summary>
+        /// Gets all booths including the booker.
+        /// </summary>
+        /// <returns></returns>
+        public List<Booth> GetAllIncludeAll()
+        {
+            return _boothRepository.GetAllIncludeAll().Select(b => {
+                if (b.Booker != null)
+                {
+                    b.Booker.PasswordHash = null;
+                    b.Booker.PasswordSalt = null;
+                }
+                return b;
+            }).ToList();
+        }
     }
 }

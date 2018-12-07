@@ -36,6 +36,21 @@ namespace BazarRestAPI.Controllers
             }
         }
 
+        // GET: api/Booths/IncludeAll - Get All Booths with bookers
+        [Route("IncludeAll")]
+        [HttpGet]
+        public ActionResult<IEnumerable<Booth>> GetAllIncludeAll()
+        {
+            try
+            {
+                return Ok(_service.GetAllIncludeAll());
+            }
+            catch (Exception)
+            {
+                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+            }
+        }
+
         // GET: api/Booths/5 - Get booth with id
         [HttpGet("{id}")]
         public ActionResult<Booth> Get(int id)
