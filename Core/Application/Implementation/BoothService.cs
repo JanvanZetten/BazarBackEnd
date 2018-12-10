@@ -210,7 +210,7 @@ namespace Core.Application.Implementation
         /// </summary>
         /// <returns>The booth.</returns>
         /// <param name="id">Identifier.</param>
-        private Booth GetByIdIncludeAll(int id)
+        public Booth GetByIdIncludeAll(int id)
         {
             if (id <= 0)
                 throw new BoothNotFoundException(nameof(id) + "ID must be higher than 0");
