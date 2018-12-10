@@ -12,7 +12,7 @@ namespace Core.Application
         List<Booth> GetAll();
         List<Booth> GetAllIncludeAll();
         Booth Delete(int id);
-        Booth Create(Booth newBooth);
+        List<Booth> Create(int amount, Booth newBooth);
         Booth Update(Booth updatedBooth);
 
         //Extra
