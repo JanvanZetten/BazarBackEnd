@@ -81,6 +81,8 @@ namespace BazarRestAPI.Controllers
             try
             {
                 value.Id = id;
+                value.PasswordHash = null;
+                value.PasswordSalt = null;
                 User user = _userService.Update(value);
                 return Ok(UserToDTO(user));
             }
