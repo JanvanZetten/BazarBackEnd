@@ -6,6 +6,7 @@ using BazarRestAPI.DTO;
 using Core.Application;
 using Core.Application.Implementation.CustomExceptions;
 using Core.Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -85,6 +86,7 @@ namespace BazarRestAPI.Controllers
 
         [Route("createUserAdmin")]
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<string> CreateUserAdmin([FromBody] UserDTO userDTO)
         {
             try

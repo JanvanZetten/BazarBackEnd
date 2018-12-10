@@ -41,14 +41,11 @@ namespace Core.Application.Implementation
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Username)
+                new Claim("username", user.Username)
             };
-
-            // Currently removed because IsAdmin isn't an attribute in User.
-            /*
+            
             if (user.IsAdmin)
-                claims.Add(new Claim(ClaimTypes.Role, "Administrator"));
-            */
+                claims.Add(new Claim("role", "Administrator"));
 
             var token = new JwtSecurityToken(
                 new JwtHeader(new SigningCredentials(
@@ -89,7 +86,7 @@ namespace Core.Application.Implementation
             SecurityToken validatedToken;
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
             var claimsPrincipal = handler.ValidateToken(token, tokenVal, out validatedToken);
-            var result = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            var result = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
             if (result == null)
                 throw new InvalidTokenException("The token is not valid!");
             return result;
