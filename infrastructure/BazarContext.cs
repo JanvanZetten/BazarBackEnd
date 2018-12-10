@@ -16,9 +16,9 @@ namespace infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Booth>().HasOne<User>(b => b.Booker).WithMany();
+            modelBuilder.Entity<Booth>().HasOne<User>(b => b.Booker).WithMany().OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
-            modelBuilder.Entity<WaitingListItem>().HasOne<User>(w => w.Booker).WithMany();
+            modelBuilder.Entity<WaitingListItem>().HasOne<User>(w => w.Booker).WithMany().OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<User>().HasKey(u => u.Id);
             modelBuilder.Entity<User>().Property(u => u.Id).ValueGeneratedOnAdd();
         }
