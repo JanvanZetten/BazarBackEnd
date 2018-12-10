@@ -26,12 +26,31 @@ namespace BazarRestAPI.Controllers
             _authService = AuthService;
         }
 
+        private UserDTO UserToDTO(User user)
+        {
+            UserDTO userDTO = new UserDTO()
+            {
+                Id = user.Id,
+                Username = user.Username,
+                IsAdmin = user.IsAdmin
+            };
+
+            return userDTO;
+        }
+
         // GET: api/Users
         [HttpGet]
         [Authorize(Roles = "Administrator")]
-        public ActionResult<IEnumerable<User>> Get()
+        public ActionResult<List<User>> Get()
         {
-            return Ok(_userService.GetAll());
+            List<UserDTO> users = new List<UserDTO>();
+
+            foreach (var user in _userService.GetAll())
+            {
+                users.Add(UserToDTO(user));
+            }
+
+            return Ok(users);
         }
 
         // GET: api/Users/5
@@ -41,13 +60,14 @@ namespace BazarRestAPI.Controllers
         {
             try
             {
-                return Ok(_userService.GetByID(id));
+                User user = _userService.GetByID(id);
+                return Ok(UserToDTO(user));
             }
-            catch(UserNotFoundException e)
+            catch (UserNotFoundException e)
             {
                 return BadRequest(e.Message);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return BadRequest(DefaultExceptionMessage);
             }
@@ -61,13 +81,14 @@ namespace BazarRestAPI.Controllers
             try
             {
                 value.Id = id;
-                return Ok(_userService.Update(value));
+                User user = _userService.Update(value);
+                return Ok(UserToDTO(user));
             }
-            catch(NotUniqueUsernameException e)
+            catch (NotUniqueUsernameException e)
             {
                 return BadRequest(e.Message);
             }
-            catch(UserNotFoundException e)
+            catch (UserNotFoundException e)
             {
                 return BadRequest(e.Message);
             }
@@ -90,7 +111,9 @@ namespace BazarRestAPI.Controllers
                         Id = value.Id,
                         Username = value.Username
                     };
-                    return Ok(_userService.Update(user));
+
+                    user = _userService.Update(user);
+                    return Ok(UserToDTO(user));
                 }
                 return BadRequest(DefaultExceptionMessage);
             }
@@ -119,7 +142,8 @@ namespace BazarRestAPI.Controllers
         {
             try
             {
-                return Ok(_userService.Delete(id));
+                User user = _userService.Delete(id);
+                return Ok(UserToDTO(user));
             }
             catch (UserNotFoundException e)
             {
