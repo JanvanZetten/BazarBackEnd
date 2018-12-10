@@ -8,6 +8,7 @@ namespace Core.Application
     {
         //CRUD
         Booth GetById(int id);
+        Booth GetByIdIncludeAll(int id);
         List<Booth> GetAll();
         List<Booth> GetAllIncludeAll();
         Booth Delete(int id);

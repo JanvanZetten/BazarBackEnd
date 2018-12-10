@@ -63,7 +63,7 @@ namespace BazarRestAPI.Controllers
         {
             try
             {
-                return Ok(_service.GetById(id));
+                return Ok(_service.GetByIdIncludeAll(id));
             }
 
             catch (BoothNotFoundException ex)
