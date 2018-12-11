@@ -53,5 +53,32 @@ namespace XUnitTesting.BoothTest
             Assert.Contains(booth2, _boothServ.GetUnbookedBooths());
         }
 
+        /// <summary>
+        /// Makes sure no booths are returned if there are no booths available
+        /// </summary>
+        [Fact]
+        public void AssertEmptyListReturnsCorrently()
+        {
+            #region
+            User user = new User();
+            Booth booth1 = new Booth()
+            {
+                Booker = user
+            };
+            Booth booth2 = new Booth()
+            {
+                Booker = user
+            };
+            #endregion
+            List<Booth> list = new List<Booth>()
+            {
+                booth1,
+                booth2
+            };
+            mockBoothRepository.Setup(x => x.GetAll()).Returns(() => list);
+
+            Assert.True(_boothServ.GetUnbookedBooths().Count == 0);
+        }
+
     }
 }
