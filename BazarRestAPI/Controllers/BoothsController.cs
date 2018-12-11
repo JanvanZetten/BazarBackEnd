@@ -56,6 +56,22 @@ namespace BazarRestAPI.Controllers
             }
         }
 
+        // GET: api/Booths/Available - Get All Booths with bookers
+        [Route("Available")]
+        [HttpGet]
+        [Authorize(Roles = "Administrator")]
+        public ActionResult<IEnumerable<Booth>> GetAllAvailable()
+        {
+            try
+            {
+                return Ok(_service.GetUnbookedBooths());
+            }
+            catch (Exception)
+            {
+                return BadRequest(DefaultExceptionMessage);
+            }
+        }
+
         // GET: api/Booths/5 - Get booth with id
         [HttpGet("{id}")]
         [Authorize(Roles = "Administrator")]
