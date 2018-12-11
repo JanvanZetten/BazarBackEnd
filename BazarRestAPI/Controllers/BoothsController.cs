@@ -59,6 +59,7 @@ namespace BazarRestAPI.Controllers
         // GET: api/Booths/Available - Get All Booths with bookers
         [Route("Available")]
         [HttpGet]
+        [Authorize]
         public ActionResult<List<Booth>> GetAllAvailable()
         {
             try
@@ -73,7 +74,7 @@ namespace BazarRestAPI.Controllers
 
         // GET: api/Booths/5 - Get booth with id
         [HttpGet("{id}")]
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<Booth> Get(int id)
         {
             try
