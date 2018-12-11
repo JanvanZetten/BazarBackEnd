@@ -88,6 +88,7 @@ namespace infrastructure
                 return null;
 
             oldUser.Username = user.Username;
+            oldUser.IsAdmin = user.IsAdmin;
 
             var item = _ctx.Users.Update(oldUser).Entity;
             _ctx.SaveChanges();
