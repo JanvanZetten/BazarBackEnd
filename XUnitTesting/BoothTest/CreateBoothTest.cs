@@ -33,13 +33,11 @@ namespace XUnitTesting.BoothTest
         [Fact]
         public void CreateBoothWithIdChangeTest()
         {
-            var didRun= false;
-            mockBoothRepository.Setup(m => m.Create(It.Is<List<Booth>>(k => k.Id == 0))).
-                Callback(() => didRun = true);
+            mockBoothRepository.Setup(m => m.Create(It.Is<List<Booth>>(k => k[0].Id == 0)));
 
             new BoothService(null, mockBoothRepository.Object, null, null).Create(1, new Booth() { Id = 1 });
 
-            Assert.True(didRun);
+            mockBoothRepository.VerifyAll();
         }
     }
 }
