@@ -15,8 +15,10 @@ namespace Core.Application.Implementation
         readonly IAuthenticationService _authService;
         readonly IWaitingListRepository _waitingListRepository;
 
-        public BoothService(IRepository<User> userRepository, IBoothRepository boothRepository,
-         IAuthenticationService authenticationService, IWaitingListRepository waitinglistRepository)
+        public BoothService(IRepository<User> userRepository, 
+                            IBoothRepository boothRepository,
+                            IAuthenticationService authenticationService, 
+                            IWaitingListRepository waitinglistRepository)
         {
             _userRepository = userRepository;
             _boothRepository = boothRepository;
@@ -104,14 +106,31 @@ namespace Core.Application.Implementation
         /// </summary>
         /// <returns>The created booth</returns>
         /// <param name="newBooth">New booth.</param>
-        public Booth Create(Booth newBooth)
+        public List<Booth> Create(int amount, Booth newBooth)
         {
+            List<Booth> boothList = new List<Booth>();
+
             newBooth.Id = 0;
             if (newBooth.Booker != null)
             {
-                GetById(newBooth.Booker.Id);
+                var user = _userRepository.GetById(newBooth.Booker.Id);
+                if (user == null)
+                {
+                    throw new UserNotFoundException();
+                }
             }
-            return _boothRepository.Create(newBooth);
+
+            for (int i = 0; i < amount; i++)
+            {
+                Booth booth = new Booth()
+                {
+                    Id = newBooth.Id,
+                    Booker = newBooth.Booker
+                };
+                boothList.Add(booth);
+            }
+            
+            return _boothRepository.Create(boothList);
         }
 
         /// <summary>
@@ -206,7 +225,7 @@ namespace Core.Application.Implementation
         /// </summary>
         /// <returns>The booth.</returns>
         /// <param name="id">Identifier.</param>
-        private Booth GetByIdIncludeAll(int id)
+        public Booth GetByIdIncludeAll(int id)
         {
             if (id <= 0)
                 throw new BoothNotFoundException(nameof(id) + "ID must be higher than 0");
@@ -250,5 +269,20 @@ namespace Core.Application.Implementation
             return _boothRepository.Update(updatedBooth);
         }
 
+        /// <summary>
+        /// Gets all booths including the booker.
+        /// </summary>
+        /// <returns></returns>
+        public List<Booth> GetAllIncludeAll()
+        {
+            return _boothRepository.GetAllIncludeAll().Select(b => {
+                if (b.Booker != null)
+                {
+                    b.Booker.PasswordHash = null;
+                    b.Booker.PasswordSalt = null;
+                }
+                return b;
+            }).ToList();
+        }
     }
 }

@@ -8,9 +8,11 @@ namespace Core.Application
     {
         //CRUD
         Booth GetById(int id);
+        Booth GetByIdIncludeAll(int id);
         List<Booth> GetAll();
+        List<Booth> GetAllIncludeAll();
         Booth Delete(int id);
-        Booth Create(Booth newBooth);
+        List<Booth> Create(int amount, Booth newBooth);
         Booth Update(Booth updatedBooth);
 
         //Extra

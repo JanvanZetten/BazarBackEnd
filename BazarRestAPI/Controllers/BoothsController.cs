@@ -7,6 +7,7 @@ using Core.Application;
 using Core.Application.Implementation;
 using Core.Application.Implementation.CustomExceptions;
 using Core.Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,8 @@ namespace BazarRestAPI.Controllers
     public class BoothsController : ControllerBase
     {
         private readonly IBoothService _service;
+        private string DefaultExceptionMessage = "Der er sket en fejl. Kontakt din administrator for yderligere information.";
+
         public BoothsController(IBoothService service)
         {
             _service = service;
@@ -24,6 +27,7 @@ namespace BazarRestAPI.Controllers
 
         // GET: api/Booths - Get All Booths
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<IEnumerable<Booth>> Get()
         {
             try
@@ -32,17 +36,34 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
+            }
+        }
+
+        // GET: api/Booths/IncludeAll - Get All Booths with bookers
+        [Route("IncludeAll")]
+        [HttpGet]
+        [Authorize(Roles = "Administrator")]
+        public ActionResult<IEnumerable<Booth>> GetAllIncludeAll()
+        {
+            try
+            {
+                return Ok(_service.GetAllIncludeAll());
+            }
+            catch (Exception)
+            {
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
         // GET: api/Booths/5 - Get booth with id
         [HttpGet("{id}")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<Booth> Get(int id)
         {
             try
             {
-                return Ok(_service.GetById(id));
+                return Ok(_service.GetByIdIncludeAll(id));
             }
 
             catch (BoothNotFoundException ex)
@@ -51,13 +72,14 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
-        //[Authorize]
+        // GET: api/Booths/availableCount - Get available Booths
         [Route("availableCount")] 
         [HttpGet]
+        [Authorize]
         public ActionResult<int> GetAvailableCount()
         {
             try
@@ -66,13 +88,14 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
-        // GET: api/Booths/reservation/
+        // POST: api/Booths/reservation - Get booking
         [Route("reservation")]
         [HttpPost]
+        [Authorize]
         public ActionResult<List<Booth>> GetUserReservation([FromBody] string token)
         {
             try
@@ -89,17 +112,22 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
         // POST: api/Booths - Create booth
         [HttpPost]
-        public ActionResult<Booth> Post([FromBody] Booth booth)
+        [Authorize(Roles = "Administrator")]
+        public ActionResult<Booth> Post([FromBody] PostBoothAmountDTO boothDTO)
         {
             try
             {
-                return Ok(_service.Create(booth));
+                return Ok(_service.Create(boothDTO.Amount, boothDTO.Booth));
+            }
+            catch (UserNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (BoothNotFoundException ex)
             {
@@ -107,13 +135,14 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
         // POST: api/Booths/book - Book booth
-        [HttpPost]
         [Route("book")]
+        [HttpPost]
+        [Authorize]
         public ActionResult<Booth> BookBooth([FromBody]String token)
         {
             try
@@ -134,12 +163,14 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
-        [HttpPost]
+        // POST: api/Booths/cancelReservation - Removes User from Booth
         [Route("cancelReservation")]
+        [HttpPost]
+        [Authorize]
         public ActionResult<Booth> CancelReservation([FromBody] TokenBoothDTO dto)
         {
             try
@@ -147,7 +178,7 @@ namespace BazarRestAPI.Controllers
                 return Ok(_service.CancelReservation(dto.id, dto.token));
             }
 
-            catch (BoothNotFoundException ex)
+            catch (UserNotFoundException ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -157,12 +188,14 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
-        [HttpPost]
+        // POST: api/Booths/waitinglistPosition - Gets Waiting List Pos.
         [Route("waitinglistPosition")]
+        [HttpPost]
+        [Authorize]
         public ActionResult<Booth> WaitingListPosition([FromBody] string token)
         {
             try
@@ -176,12 +209,13 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
         // PUT: api/Booths/5 - Update booth
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<Booth> Put(int id, [FromBody] Booth booth)
         {
             try
@@ -193,14 +227,19 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
+            catch(UserNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch(Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
-        // DELETE: api/ApiWithActions/5 - Delete Booth
+        // DELETE: api/Booths/5 - Delete Booth
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<Booth> Delete(int id)
         {
             try
@@ -213,19 +252,20 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
-        [HttpPost]
+        // POST: api/Booths/cancelWaitingPosition - Remove user from Waiting List
         [Route("cancelWaitingPosition")]
+        [HttpPost]
+        [Authorize]
         public ActionResult<WaitingListItem> CancelWaitingPosition([FromBody] TokenBoothDTO dto)
         {
             try
             {
                 return Ok(_service.CancelWaitingPosition(dto.token));
             }
-
             catch (WaitingListItemNotFoundException ex)
             {
                 return BadRequest(ex.Message);
@@ -236,7 +276,7 @@ namespace BazarRestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Der er sket en fejl. Kontakt din administrator for yderligere information.");
+                return BadRequest(DefaultExceptionMessage);
             }
         }
     }

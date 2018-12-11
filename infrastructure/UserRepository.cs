@@ -61,7 +61,11 @@ namespace infrastructure
         /// </summary>
         public User GetById(int id)
         {
-            User user =_ctx.Users.FirstOrDefault(u => u.Id == id);
+            User user = _ctx.Users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return null;
+            }
             _ctx.Entry(user).State = EntityState.Detached;
             return user;
         }
@@ -84,6 +88,7 @@ namespace infrastructure
                 return null;
 
             oldUser.Username = user.Username;
+            oldUser.IsAdmin = user.IsAdmin;
 
             var item = _ctx.Users.Update(oldUser).Entity;
             _ctx.SaveChanges();
