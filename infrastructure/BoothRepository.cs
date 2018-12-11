@@ -45,17 +45,8 @@ namespace infrastructure
 
         public Booth Create(Booth newBooth)
         {
-            /*List<Booth> boothList = new List<Booth>();
-
-            Booth booth = newBooth;
-            for (int i = 0; i < amount; i++)
-            {
-                booth = newBooth;
-                boothList.Add(booth);
-            }
-            
-            _ctx.AttachRange(boothList).State = EntityState.Added;
-            _ctx.SaveChanges();*/
+            _ctx.Attach(newBooth).State = EntityState.Added;
+            _ctx.SaveChanges();
             return newBooth;
         }
 

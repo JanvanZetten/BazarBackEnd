@@ -133,9 +133,9 @@ namespace BazarRestAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(DefaultExceptionMessage);
             }
         }
 
