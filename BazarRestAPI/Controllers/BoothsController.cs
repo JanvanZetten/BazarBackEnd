@@ -59,7 +59,7 @@ namespace BazarRestAPI.Controllers
         // GET: api/Booths/Available - Get All Booths with bookers
         [Route("Available")]
         [HttpGet]
-        [Authorize(Roles = "Administrator")]
+        [Authorize]
         public ActionResult<List<Booth>> GetAllAvailable()
         {
             try
