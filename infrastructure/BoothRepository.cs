@@ -30,12 +30,26 @@ namespace infrastructure
         /// </summary>
         /// <param name="entity"></param>
         /// <returns>Created booth</returns>
-        public Booth Create(Booth entity)
+        
+
+        public List<Booth> Create(List<Booth> boothList)
         {
-            _ctx.Attach(entity).State = EntityState.Added;
+            foreach (var booth in boothList)
+            {
+                _ctx.Attach(booth).State = EntityState.Added;
+            }
+            
             _ctx.SaveChanges();
-            return entity;
+            return boothList;
         }
+
+        public Booth Create(Booth newBooth)
+        {
+            _ctx.Attach(newBooth).State = EntityState.Added;
+            _ctx.SaveChanges();
+            return newBooth;
+        }
+
         /// <summary>
         /// Deletes booth
         /// </summary>

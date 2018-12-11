@@ -119,11 +119,11 @@ namespace BazarRestAPI.Controllers
         // POST: api/Booths - Create booth
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public ActionResult<Booth> Post([FromBody] Booth booth)
+        public ActionResult<Booth> Post([FromBody] PostBoothAmountDTO boothDTO)
         {
             try
             {
-                return Ok(_service.Create(booth));
+                return Ok(_service.Create(boothDTO.Amount, boothDTO.Booth));
             }
             catch (UserNotFoundException ex)
             {
