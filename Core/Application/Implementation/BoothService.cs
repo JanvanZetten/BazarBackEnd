@@ -284,5 +284,10 @@ namespace Core.Application.Implementation
                 return b;
             }).ToList();
         }
+
+        public List<Booth> GetUnbookedBooths()
+        {
+            return _boothRepository.GetAllIncludeAll().Where(b => b.Booker == null).ToList();
+        }
     }
 }
