@@ -28,7 +28,7 @@ namespace BazarRestAPI.Controllers
         // GET: api/Booths - Get All Booths
         [HttpGet]
         [Authorize(Roles = "Administrator")]
-        public ActionResult<IEnumerable<Booth>> Get()
+        public ActionResult<List<Booth>> Get()
         {
             try
             {
@@ -44,11 +44,27 @@ namespace BazarRestAPI.Controllers
         [Route("IncludeAll")]
         [HttpGet]
         [Authorize(Roles = "Administrator")]
-        public ActionResult<IEnumerable<Booth>> GetAllIncludeAll()
+        public ActionResult<List<Booth>> GetAllIncludeAll()
         {
             try
             {
                 return Ok(_service.GetAllIncludeAll());
+            }
+            catch (Exception)
+            {
+                return BadRequest(DefaultExceptionMessage);
+            }
+        }
+
+        // GET: api/Booths/Available - Get All Booths with bookers
+        [Route("Available")]
+        [HttpGet]
+        [Authorize(Roles = "Administrator")]
+        public ActionResult<List<Booth>> GetAllAvailable()
+        {
+            try
+            {
+                return Ok(_service.GetUnbookedBooths());
             }
             catch (Exception)
             {
