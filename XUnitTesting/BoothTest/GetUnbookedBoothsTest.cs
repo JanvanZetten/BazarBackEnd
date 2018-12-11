@@ -46,7 +46,7 @@ namespace XUnitTesting.BoothTest
                 booth2,
                 booth3
             };
-            mockBoothRepository.Setup(x => x.GetAll()).Returns(() => list);
+            mockBoothRepository.Setup(x => x.GetAllIncludeAll()).Returns(() => list);
 
             Assert.True(_boothServ.GetUnbookedBooths().Count == 2);
             Assert.Contains(booth3, _boothServ.GetUnbookedBooths());
@@ -75,7 +75,7 @@ namespace XUnitTesting.BoothTest
                 booth1,
                 booth2
             };
-            mockBoothRepository.Setup(x => x.GetAll()).Returns(() => list);
+            mockBoothRepository.Setup(x => x.GetAllIncludeAll()).Returns(() => list);
 
             Assert.True(_boothServ.GetUnbookedBooths().Count == 0);
         }
