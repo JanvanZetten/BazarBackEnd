@@ -187,7 +187,7 @@ namespace BazarRestAPI.Controllers
         [Route("setOnWaitinglist")]
         [HttpPost]
         [Authorize]
-        public ActionResult<WaitingListItem> CancelWaitingPosition([FromBody] string token)
+        public ActionResult<WaitingListItem> AddToWaitingList([FromBody] string token)
         {
             try
             {
