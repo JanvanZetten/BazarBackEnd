@@ -293,7 +293,7 @@ namespace Core.Application.Implementation
         public List<Booth> BookBoothsById(List<Booth> booths, string token)
         {
             if (booths == null || booths.Count == 0)
-                return new List<Booth>();
+                throw new EmptyBookingException();
 
             var username = _authService.VerifyUserFromToken(token);
             var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == username);

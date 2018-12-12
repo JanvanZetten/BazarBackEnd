@@ -213,10 +213,16 @@ namespace XUnitTesting.BoothTest
         }
 
         [Fact]
-        public void AsertEmptyOrNull()
+        public void AssertEmptyOrNull()
         {
-            Assert.True(_boothService.BookBoothsById(null, token).Count == 0);
-            Assert.True(_boothService.BookBoothsById(new List<Booth>(), token).Count == 0);
+            Assert.Throws<EmptyBookingException>(() =>
+            {
+                _boothService.BookBoothsById(null, token);
+            });
+            Assert.Throws<EmptyBookingException>(() =>
+            {
+                _boothService.BookBoothsById(new List<Booth>(), token);
+            });
         }
     }
 }
