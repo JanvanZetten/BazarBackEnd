@@ -292,7 +292,31 @@ namespace Core.Application.Implementation
 
         public List<Booth> BookBoothsById(List<Booth> booths, string token)
         {
-            throw new NotImplementedException();
+            if (booths == null || booths.Count == 0)
+                return new List<Booth>();
+
+            var username = _authService.VerifyUserFromToken(token);
+            var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == username);
+
+            if (user == null)
+                throw new UserNotFoundException();
+
+            booths.ForEach(b => {
+                var booth = _boothRepository.GetByIdIncludeAll(b.Id);
+
+                if (booth == null)
+                {
+                    throw new BoothNotFoundException();
+                }
+                else if (booth.Booker != null)
+                {
+                    throw new AlreadyBookedException();
+                }
+
+                b.Booker = user;
+            });
+
+            return _boothRepository.Update(booths);
         }
     }
 }

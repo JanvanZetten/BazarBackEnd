@@ -31,6 +31,7 @@ namespace XUnitTesting.BoothTest
         private List<Booth> boothsWithBookedBooth;
 
         private string token;
+        private string token2;
 
         private User user;
 
@@ -71,6 +72,7 @@ namespace XUnitTesting.BoothTest
             };
 
             token = "testToken";
+            token2 = "test2Token";
 
             user = new User()
             {
@@ -95,10 +97,12 @@ namespace XUnitTesting.BoothTest
             {
                 if (token == s)
                     return user.Username;
+                else if (token2 == s)
+                    return "MojnUser";
                 throw new InvalidTokenException("Invalid token");
             });
             
-            _mockBoothRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns<int>((id) =>
+            _mockBoothRepository.Setup(x => x.GetByIdIncludeAll(It.IsAny<int>())).Returns<int>((id) =>
             {
                 if (_boothDictionary.ContainsKey(id))
                 {
@@ -110,20 +114,26 @@ namespace XUnitTesting.BoothTest
                 }
             });
             
-            _mockBoothRepository.Setup(x => x.Update(It.IsAny<Booth>())).Returns<Booth>((b) =>
+            _mockBoothRepository.Setup(x => x.Update(It.IsAny<List<Booth>>())).Returns<List<Booth>>((b) =>
             {
-                if (b == null)
-                    return null;
+                List<Booth> result = new List<Booth>();
+                for (int i = 0; i < b.Count; i++)
+                {
+                    if (_boothDictionary.ContainsKey(b[i].Id))
+                    {
+                        result.Add(b[i]);
+                    }
+                    else
+                    {
+                        return b;
+                    }
+                }
+                for (int i = 0; i < b.Count; i++)
+                {
+                    _boothDictionary[b[i].Id] = b[i];
+                }
 
-                if (_boothDictionary.ContainsKey(b.Id))
-                {
-                    _boothDictionary[b.Id] = b;
-                    return _boothDictionary[b.Id];
-                }
-                else
-                {
-                    return null;
-                }
+                return result;
             });
 
             _boothService = new BoothService(_mockUserRepository.Object, _mockBoothRepository.Object, _mockAuthenticationService.Object, null);
@@ -137,7 +147,7 @@ namespace XUnitTesting.BoothTest
             boothsValid1.ForEach(b =>
             {
                 Assert.Equal(user.Id, _boothDictionary[b.Id].Booker?.Id);
-                Assert.Contains(result, r => r.Id == b.Id && r.Booker?.Id == user.Id);
+                Assert.True(result.Any(r => r.Id == b.Id && r.Booker?.Id == user.Id));
             });
 
             Assert.True(result.Count == 2);
@@ -146,7 +156,7 @@ namespace XUnitTesting.BoothTest
             result = _boothService.BookBoothsById(boothsValid2, token);
 
             Assert.Equal(user.Id, _boothDictionary[boothsValid2[0].Id].Booker?.Id);
-            Assert.Contains(result, r => r.Id == boothsValid2[0].Id && r.Booker?.Id == user.Id);
+            Assert.True(result.Any(r => r.Id == boothsValid2[0].Id && r.Booker?.Id == user.Id));
 
             Assert.True(result.Count == 1);
         }
@@ -188,6 +198,25 @@ namespace XUnitTesting.BoothTest
             });
 
             Assert.Null(result);
+        }
+
+        [Fact]
+        public void AssertInvalidUser()
+        {
+            List<Booth> result = null;
+            Assert.Throws<UserNotFoundException>(() =>
+            {
+                result = _boothService.BookBoothsById(boothsValid1, token2);
+            });
+
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void AsertEmptyOrNull()
+        {
+            Assert.True(_boothService.BookBoothsById(null, token).Count == 0);
+            Assert.True(_boothService.BookBoothsById(new List<Booth>(), token).Count == 0);
         }
     }
 }
