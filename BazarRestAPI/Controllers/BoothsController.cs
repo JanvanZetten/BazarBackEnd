@@ -183,6 +183,38 @@ namespace BazarRestAPI.Controllers
             }
         }
 
+        // POST: api/Booths/bookBooths - Book booths
+        [Route("bookBooths")]
+        [HttpPost]
+        [Authorize]
+        public ActionResult<Booth> BookBooths([FromBody]MultipleBookingDTO mbdto)
+        {
+            try
+            {
+                return Ok(_service.BookBoothsById(mbdto.Booths, mbdto.Token));
+            }
+            catch (InvalidTokenException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (UserNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (BoothNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (AlreadyBookedException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest(DefaultExceptionMessage);
+            }
+        }
+
         // POST: api/Booths/cancelReservation - Removes User from Booth
         [Route("cancelReservation")]
         [HttpPost]
