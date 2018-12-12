@@ -289,5 +289,10 @@ namespace Core.Application.Implementation
         {
             return _boothRepository.GetAllIncludeAll().Where(b => b.Booker == null).ToList();
         }
+
+        public List<Booth> BookBoothsById(List<Booth> booths, string token)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
