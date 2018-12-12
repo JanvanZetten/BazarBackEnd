@@ -305,7 +305,11 @@ namespace Core.Application.Implementation
                 Date = DateTime.Now
             };
 
-            return _waitingListRepository.Create(waitingListItem);
+            var userWithoutPassword = _waitingListRepository.Create(waitingListItem);
+            userWithoutPassword.Booker.PasswordHash = null;
+            userWithoutPassword.Booker.PasswordSalt = null;
+
+            return userWithoutPassword;
         }
         
         public List<Booth> BookBoothsById(List<Booth> booths, string token)

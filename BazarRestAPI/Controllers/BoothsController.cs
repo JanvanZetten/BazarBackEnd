@@ -191,6 +191,7 @@ namespace BazarRestAPI.Controllers
         {
             try
             {
+
                 return Ok(_service.AddToWaitingList(token));
             }
             catch (InvalidTokenException ex)
