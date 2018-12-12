@@ -20,11 +20,17 @@ namespace Core.Application.Implementation
 
         public ImageURL Create(ImageURL imgurl)
         {
+            
             if (imgurl == null || imgurl.URL == null)
+            { 
                 throw new InputNotValidException("URL kan ikke være tom.");
+            }
+            imgurl.Id = 0;
             string ext = Path.GetExtension(imgurl.URL).ToLower();
             if (ext == null || (ext != ".png" && ext != ".jpg" && ext != ".jpeg" && ext != ".gif"))
+            { 
                 throw new IncompatibleFileTypeException();
+            }
 
             return _urlRepo.Create(imgurl);
         }

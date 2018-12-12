@@ -86,5 +86,19 @@ namespace XUnitTesting.ImageURLTest
                 var result = _urlService.Create(null);
             });
         }
+
+        [Fact]
+        public void CreateImageUrlWithIdSetToZero()
+        {
+            mockURLRepository.Setup(x => x.Create(It.IsAny<ImageURL>())).Returns<ImageURL>((u) =>
+            {
+                urlDictionary.Add(u.Id, u);
+                return urlDictionary[u.Id];
+            });
+
+            var result = _urlService.Create(new ImageURL() { Id = 200, URL="dsakdksakdo.gif" });
+
+            Assert.True(result.Id == 0);
+        }
     }
 }
