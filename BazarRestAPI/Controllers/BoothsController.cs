@@ -183,6 +183,30 @@ namespace BazarRestAPI.Controllers
             }
         }
 
+        // POST: api/Booths/setOnWaitinglist - Book Waiting List position
+        [Route("setOnWaitinglist")]
+        [HttpPost]
+        [Authorize]
+        public ActionResult<WaitingListItem> CancelWaitingPosition([FromBody] string token)
+        {
+            try
+            {
+                return Ok(_service.AddToWaitingList(token));
+            }
+            catch (InvalidTokenException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (UserNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest(DefaultExceptionMessage);
+            }
+        }
+
         // POST: api/Booths/cancelReservation - Removes User from Booth
         [Route("cancelReservation")]
         [HttpPost]
