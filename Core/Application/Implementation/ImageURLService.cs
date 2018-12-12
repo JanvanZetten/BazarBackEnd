@@ -20,6 +20,7 @@ namespace Core.Application.Implementation
 
         public ImageURL Create(ImageURL imgurl)
         {
+            imgurl.Id = 0;
             if (imgurl == null || imgurl.URL == null)
                 throw new InputNotValidException("URL kan ikke være tom.");
             string ext = Path.GetExtension(imgurl.URL).ToLower();
