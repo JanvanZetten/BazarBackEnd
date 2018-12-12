@@ -76,12 +76,12 @@ namespace XUnitTesting.ImageURLTest
                 URL = null
             };
 
-            Assert.Throws<ImageURLNotFoundException>(() =>
+            Assert.Throws<InputNotValidException>(() =>
             {
                 var result = _urlService.Create(urltmp);
             });
 
-            Assert.Throws<ImageURLNotFoundException>(() =>
+            Assert.Throws<InputNotValidException>(() =>
             {
                 var result = _urlService.Create(null);
             });

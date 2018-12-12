@@ -21,7 +21,7 @@ namespace Core.Application.Implementation
         public ImageURL Create(ImageURL imgurl)
         {
             if (imgurl == null || imgurl.URL == null)
-                throw new ImageURLNotFoundException();
+                throw new InputNotValidException("URL kan ikke være tom.");
             string ext = Path.GetExtension(imgurl.URL).ToLower();
             if (ext == null || (ext != ".png" && ext != ".jpg" && ext != ".jpeg" && ext != ".gif"))
                 throw new IncompatibleFileTypeException();
@@ -31,7 +31,10 @@ namespace Core.Application.Implementation
 
         public ImageURL Delete(int id)
         {
-            throw new NotImplementedException();
+            var url = _urlRepo.Delete(id);
+            if (url == null)
+                throw new ImageURLNotFoundException();
+            return url;
         }
 
         public List<ImageURL> GetAll()
@@ -51,7 +54,17 @@ namespace Core.Application.Implementation
 
         public ImageURL Update(ImageURL imgurl)
         {
-            throw new NotImplementedException();
+            if (imgurl == null || imgurl.URL == null)
+                throw new InputNotValidException("URL kan ikke være tom.");
+            string ext = Path.GetExtension(imgurl.URL).ToLower();
+            if (ext == null || (ext != ".png" && ext != ".jpg" && ext != ".jpeg" && ext != ".gif"))
+                throw new IncompatibleFileTypeException();
+
+            ImageURL url = _urlRepo.GetById(imgurl.Id);
+            if (url == null)
+                throw new ImageURLNotFoundException();
+
+            return _urlRepo.Update(imgurl);
         }
     }
 }
