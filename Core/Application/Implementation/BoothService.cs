@@ -290,33 +290,49 @@ namespace Core.Application.Implementation
             return _boothRepository.GetAllIncludeAll().Where(b => b.Booker == null).ToList();
         }
 
-        public List<Booth> BookBoothsById(List<Booth> booths, string token)
+        public WaitingListItem AddToWaitingList(string token)
         {
-            if (booths == null || booths.Count == 0)
-                throw new EmptyBookingException();
-
             var username = _authService.VerifyUserFromToken(token);
             var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == username);
 
             if (user == null)
                 throw new UserNotFoundException();
 
-            booths.ForEach(b => {
-                var booth = _boothRepository.GetByIdIncludeAll(b.Id);
+            var waitingListItem = new WaitingListItem()
+            {
+                Id = 0,
+                Booker = user,
+                Date = DateTime.Now
+            };
 
-                if (booth == null)
-                {
-                    throw new BoothNotFoundException();
-                }
-                else if (booth.Booker != null)
-                {
-                    throw new AlreadyBookedException();
-                }
-
-                b.Booker = user;
-            });
-
-            return _boothRepository.Update(booths);
+            return _waitingListRepository.Create(waitingListItem);
+        }
+        
+        public List<Booth> BookBoothsById(List<Booth> booths, string token)
+        {
+             if (booths == null || booths.Count == 0)
+                 throw new EmptyBookingException();
+                
+             var username = _authService.VerifyUserFromToken(token);
+             var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == username);
+             
+             if (user == null)
+                 throw new UserNotFoundException();
+                 
+             booths.ForEach(b => {
+                 var booth = _boothRepository.GetByIdIncludeAll(b.Id);
+                 if (booth == null)
+                 {
+                     throw new BoothNotFoundException();
+                 }
+                 else if (booth.Booker != null)
+                 {
+                     throw new AlreadyBookedException();
+                 }
+                 b.Booker = user;
+             });
+             
+             return _boothRepository.Update(booths);
         }
     }
 }

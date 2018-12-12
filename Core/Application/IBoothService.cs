@@ -24,5 +24,6 @@ namespace Core.Application
         int GetWaitingListItemPosition(string token);
         List<Booth> GetUnbookedBooths();
         List<Booth> BookBoothsById(List<Booth> booths, string token);
+        WaitingListItem AddToWaitingList(string token);
     }
 }
