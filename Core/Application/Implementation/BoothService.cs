@@ -289,5 +289,23 @@ namespace Core.Application.Implementation
         {
             return _boothRepository.GetAllIncludeAll().Where(b => b.Booker == null).ToList();
         }
+
+        public WaitingListItem AddToWaitingList(string token)
+        {
+            var username = _authService.VerifyUserFromToken(token);
+            var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == username);
+
+            if (user == null)
+                throw new UserNotFoundException();
+
+            var waitingListItem = new WaitingListItem()
+            {
+                Id = 0,
+                Booker = user,
+                Date = DateTime.Now
+            };
+
+            return _waitingListRepository.Create(waitingListItem);
+        }
     }
 }

@@ -23,6 +23,7 @@ namespace Core.Application
         WaitingListItem CancelWaitingPosition(string token);
         int GetWaitingListItemPosition(string token);
         List<Booth> GetUnbookedBooths();
+        WaitingListItem AddToWaitingList(string token);
 
     }
 }
