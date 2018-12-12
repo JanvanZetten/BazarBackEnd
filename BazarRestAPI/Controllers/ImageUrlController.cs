@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Core.Application;
 using Core.Application.Implementation.CustomExceptions;
 using Core.Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -56,6 +57,7 @@ namespace BazarRestAPI.Controllers
 
         // POST: api/ImageUrl
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<ImageURL> Post([FromBody] ImageURL imageUrl)
         {
             try
@@ -78,6 +80,7 @@ namespace BazarRestAPI.Controllers
 
         // PUT: api/ImageUrl/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<ImageURL> Put(int id, [FromBody] ImageURL imageURL)
         {
             try
@@ -105,6 +108,7 @@ namespace BazarRestAPI.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<ImageURL> Delete(int id)
         {
             try
