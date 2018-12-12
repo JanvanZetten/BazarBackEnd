@@ -9,5 +9,6 @@ namespace Core.Domain
         IEnumerable<Booth> GetAllIncludeAll();
         Booth GetByIdIncludeAll(int id);
         List<Booth> Create(List<Booth> boothList);
+        List<Booth> Update(List<Booth> boothList);
     }
 }
