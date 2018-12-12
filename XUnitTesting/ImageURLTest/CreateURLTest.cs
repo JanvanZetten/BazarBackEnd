@@ -98,7 +98,6 @@ namespace XUnitTesting.ImageURLTest
 
             var result = _urlService.Create(new ImageURL() { Id = 200, URL="dsakdksakdo.gif" });
 
-            Assert.True(result.Id != 200);
             Assert.True(result.Id == 0);
         }
     }
