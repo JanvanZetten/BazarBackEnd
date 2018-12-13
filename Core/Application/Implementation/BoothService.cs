@@ -175,7 +175,13 @@ namespace Core.Application.Implementation
                 };
                 boothList.Add(booth);
             }
-            
+
+            //LOG
+            _logService.Create(new Log()
+            {
+                Message = $"Der er blevet lavet {amount} nye stande."
+            });
+
             return _boothRepository.Create(boothList);
         }
 
@@ -187,6 +193,13 @@ namespace Core.Application.Implementation
         public Booth Delete(int id)
         {
             GetById(id);
+
+            //LOG
+            _logService.Create(new Log()
+            {
+                Message = $"Stand nr. {id} er blevet slettet."
+            });
+
             return _boothRepository.Delete(id);
         }
         /// <summary>
