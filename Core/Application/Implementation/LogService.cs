@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Core.Application.Implementation.CustomExceptions;
 using Core.Domain;
 using Core.Entity;
 
@@ -19,7 +20,25 @@ namespace Core.Application.Implementation
 
         public Log Create(Log log)
         {
-            throw new NotImplementedException();
+            if(log == null)
+            {
+                throw new NullReferenceException("Log må ikke være tom");
+            }
+            if(log.Message == null)
+            {
+                throw new InputNotValidException("Message og dato må ikke være tom");
+            }
+            if(log.User != null)
+            {
+                var user = _userRepository.GetById(log.User.Id);
+                if(user == null)
+                {
+                    throw new UserNotFoundException();
+                }
+            }
+            log.Id = 0;
+            log.Date = DateTime.Now;
+            return _logRepository.Create(log);
         }
 
         public Log Delete(Log log)
@@ -27,7 +46,7 @@ namespace Core.Application.Implementation
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Log> GetAll()
+        public List<Log> GetAll()
         {
             throw new NotImplementedException();
         }

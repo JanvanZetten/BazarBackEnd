@@ -48,21 +48,20 @@ namespace XUnitTesting.LogTest
 
             var result = _service.Create(log);
 
-            Assert.True(result.Id != log.Id && result.Id == 1);
+            Assert.True(result.Id != 50 && result.Id == 1);
             Assert.Equal(log.Message, result.Message);
             Assert.Equal(log.Date, result.Date);
             Assert.Null(result.User);
         }
 
         [Fact]
-        public void InvalidDateLog()
+        public void LogWithDateSet()
         {
             Log log = new Log() { Id = 50, Message = "Asbjørn elsker bjørne" };
 
-            Assert.Throws<InputNotValidException>(() => 
-            {
-                _service.Create(log);
-            });
+            var result = _service.Create(log);
+            Assert.True(result.Date < DateTime.Now.AddDays(1)
+                && result.Date > DateTime.Now.AddDays(-1));
         }
 
         [Fact]
@@ -85,6 +84,18 @@ namespace XUnitTesting.LogTest
             {
                 _service.Create(log);
             });
+        }
+
+        [Fact]
+        public void ValidUserLog()
+        {
+            Log log = new Log() { Id = 50, Date = DateTime.Today, Message = "Asbjørn elsker bjørne", User = new User() { Id = 1 } };
+            var result = _service.Create(log);
+
+            Assert.True(result.Id != 50 && result.Id == 1);
+            Assert.Equal(log.Message, result.Message);
+            Assert.Equal(log.Date, result.Date);
+            Assert.Equal(log.User.Id, result.User.Id);
         }
 
         [Fact]

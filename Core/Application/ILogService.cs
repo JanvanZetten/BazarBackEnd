@@ -10,6 +10,6 @@ namespace Core.Application
         Log Create(Log log);
         Log Delete(Log log);
         Log GetById(int Id);
-        IEnumerable<Log> GetAll();
+        List<Log> GetAll();
     }
 }
