@@ -7,7 +7,7 @@ namespace Core.Application
 {
     public interface ILogService
     {
-        Log Create(Log log);
+        Log Create(String message, User user = null);
         Log Delete(int id);
         Log GetById(int id);
         List<Log> GetAll();
