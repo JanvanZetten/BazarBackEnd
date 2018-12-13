@@ -57,8 +57,8 @@ namespace infrastructure.Development
 
             List<Log> logs = new List<Log>()
             {
-                new Log() { Message = "Testing this msg", User = users[0] },
-                new Log() { Message = "Testing this msg2nd", User = users[1] }
+                new Log() { Message = "Testing this msg", User = users[0], Date = DateTime.Today},
+                new Log() { Message = "Testing this msg2nd", User = users[1], Date = DateTime.Today.AddYears(2)}
             };
 
             context.Log.AddRange(logs);
