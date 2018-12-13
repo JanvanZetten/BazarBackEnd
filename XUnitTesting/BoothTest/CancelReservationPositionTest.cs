@@ -95,5 +95,13 @@ namespace XUnitTesting.BoothTest
             Assert.True(wli1.Id == wli.Id);
             Assert.False(waitinigListDictionary.ContainsValue(wli1));
         }
+
+        [Fact]
+        public void LogOnCancel()
+        {
+            _boothService.CancelWaitingPosition(token1);
+
+            mockLogService.Verify(x => x.Create(It.IsAny<Log>()), Times.Once);
+        }
     }
 }

@@ -18,6 +18,7 @@ namespace XUnitTesting.BoothTest
         private readonly Mock<IBoothRepository> _mockBoothRepository = new Mock<IBoothRepository>();
         private readonly Mock<IAuthenticationService> _mockAuthenticationService = new Mock<IAuthenticationService>();
         private readonly Mock<IUserRepository> _mockUserRepository = new Mock<IUserRepository>();
+        private readonly Mock<ILogService> _mockLogService = new Mock<ILogService>();
         private readonly IBoothService _boothService;
 
         private Booth booth1;
@@ -136,7 +137,12 @@ namespace XUnitTesting.BoothTest
                 return result;
             });
 
-            _boothService = new BoothService(_mockUserRepository.Object, _mockBoothRepository.Object, _mockAuthenticationService.Object, null);
+            _boothService = new BoothService(
+                _mockUserRepository.Object, 
+                _mockBoothRepository.Object, 
+                _mockAuthenticationService.Object, 
+                null, 
+                _mockLogService.Object);
         }
         
         [Fact]
@@ -223,6 +229,14 @@ namespace XUnitTesting.BoothTest
             {
                 _boothService.BookBoothsById(new List<Booth>(), token);
             });
+        }
+
+        [Fact]
+        public void LogOnBook()
+        {
+            var result = _boothService.BookBoothsById(boothsValid1, token);
+
+            _mockLogService.Verify(x => x.Create(It.IsAny<Log>()), Times.Once);
         }
     }
 }

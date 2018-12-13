@@ -12,6 +12,7 @@ namespace XUnitTesting.BoothTest
     public class UpdateBoothTest
     {
         private Mock<IBoothRepository> mockBoothRepository = new Mock<IBoothRepository>();
+        private Mock<ILogService> mockLogService = new Mock<ILogService>();
 
         [Fact]
         public void UpdateBoothValidTest()
@@ -19,7 +20,16 @@ namespace XUnitTesting.BoothTest
             mockBoothRepository.Setup(m => m.Update(It.IsAny<Booth>())).Returns(() => new Booth());
             mockBoothRepository.Setup(m => m.GetById(It.IsAny<int>())).Returns(() => new Booth());
 
-            var result = new BoothService(null, mockBoothRepository.Object, null, null).Update(new Booth(){Id = 1});
+            var result = new BoothService(null, mockBoothRepository.Object, null, null, mockLogService.Object)
+                .Update(new Booth()
+                {
+                    Id = 1,
+                    Booker = new User()
+                    {
+                        Id = 1,
+                        Username = "Bent"
+                    }
+                });
 
             Assert.NotNull(result);
         }
@@ -30,7 +40,57 @@ namespace XUnitTesting.BoothTest
             mockBoothRepository.Setup(m => m.Update(It.IsAny<Booth>())).Returns(() => new Booth());
             mockBoothRepository.Setup(m => m.GetById(It.IsAny<int>())).Returns(() => null);
 
-            Assert.Throws<BoothNotFoundException>(() => new BoothService(null, mockBoothRepository.Object, null, null).Update(new Booth()));
+            Assert.Throws<BoothNotFoundException>(() => 
+                new BoothService(null, mockBoothRepository.Object, null, null, mockLogService.Object)
+                .Update(new Booth())
+            );
+        }
+
+        [Fact]
+        public void LogOnUpdateWithBoothBookerSetAsNull()
+        {
+            mockBoothRepository.Setup(m => m.Update(It.IsAny<Booth>())).Returns(() => new Booth());
+            mockBoothRepository.Setup(m => m.GetById(It.IsAny<int>())).Returns(() => new Booth());
+
+            var result = new BoothService(null, mockBoothRepository.Object, null, null, mockLogService.Object)
+                .Update(new Booth()
+                {
+                    Id = 1,
+                    Booker = new User()
+                    {
+                        Id = 1,
+                        Username = "Bent"
+                    }
+                });
+
+            mockLogService.Verify(x => x.Create(It.IsAny<Log>()), Times.Once);
+        }
+
+        [Fact]
+        public void LogOnUpdateWithBoothBookerNotNull()
+        {
+            mockBoothRepository.Setup(m => m.Update(It.IsAny<Booth>())).Returns(() => new Booth());
+            mockBoothRepository.Setup(m => m.GetById(It.IsAny<int>())).Returns(() => new Booth()
+            {
+                Booker = new User()
+                {
+                    Id = 2,
+                    Username = "Jørgen"
+                }
+            });
+
+            var result = new BoothService(null, mockBoothRepository.Object, null, null, mockLogService.Object)
+                .Update(new Booth()
+                {
+                    Id = 1,
+                    Booker = new User()
+                    {
+                        Id = 1,
+                        Username = "Bent"
+                    }
+                });
+
+            mockLogService.Verify(x => x.Create(It.IsAny<Log>()), Times.Once);
         }
     }
 }

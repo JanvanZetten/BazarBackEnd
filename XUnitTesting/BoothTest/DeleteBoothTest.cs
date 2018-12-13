@@ -29,7 +29,8 @@ namespace XUnitTesting.BoothTest
                 mockBoothRepository.Object, 
                 mockAuthenticationService.Object, 
                 mockWaitingListRepository.Object,
-                mockLogService.Object).Delete(booth.Id);
+                mockLogService.Object)
+                .Delete(booth.Id);
 
             Assert.Equal(booth.Id, result.Id);
         }
@@ -45,8 +46,8 @@ namespace XUnitTesting.BoothTest
                 mockBoothRepository.Object,
                 mockAuthenticationService.Object,
                 mockWaitingListRepository.Object,
-                mockLogService.Object).
-            Delete(booth.Id));
+                mockLogService.Object)
+                .Delete(booth.Id));
         }
 
         [Fact]
@@ -61,8 +62,26 @@ namespace XUnitTesting.BoothTest
                 mockBoothRepository.Object,
                 mockAuthenticationService.Object,
                 mockWaitingListRepository.Object,
-                mockLogService.Object).
-            Delete(booth.Id));
+                mockLogService.Object)
+                .Delete(booth.Id));
+        }
+
+        [Fact]
+        public void LogOnDelete()
+        {
+            var booth = new Booth() { Id = 1 };
+            mockBoothRepository.Setup(m => m.Delete(It.IsAny<int>())).Returns(() => booth);
+            mockBoothRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns(() => booth);
+
+            new BoothService(
+                mockUserRepository.Object,
+                mockBoothRepository.Object,
+                mockAuthenticationService.Object,
+                mockWaitingListRepository.Object,
+                mockLogService.Object)
+                .Delete(booth.Id);
+
+            mockLogService.Verify(x => x.Create(It.IsAny<Log>()), Times.Once);
         }
     }
 }

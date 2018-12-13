@@ -73,7 +73,7 @@ namespace Core.Application.Implementation
                     //LOG
                     _logService.Create(new Log()
                     {
-                        Message = $"{user.Username} har fået en plads på ventelisten.",
+                        Message = $"{user?.Username} (Id: {user?.Id}) har fået en plads på ventelisten.",
                         User = user
                     });
 
@@ -86,11 +86,11 @@ namespace Core.Application.Implementation
             //LOG
             _logService.Create(new Log()
             {
-                Message = $"{user.Username} har reserveret stand {booth.Id} med tilfældig standreservering.",
+                Message = $"{user?.Username} (Id: {user?.Id}) har reserveret stand {booth?.Id} med tilfældig standreservering.",
                 User = user
             });
 
-            return Update(booth);
+            return _boothRepository.Update(booth);
         }
 
         public Booth CancelReservation(int boothId, string token)
@@ -114,7 +114,7 @@ namespace Core.Application.Implementation
             //LOG
             _logService.Create(new Log()
             {
-                Message = $"{username} har annuleret deres stand nr. {booth.Id}.",
+                Message = $"{booth?.Booker.Username} (Id: {booth?.Booker.Id}) har annuleret deres stand nr. {booth?.Id}.",
                 User = booth.Booker
             });
 
@@ -129,7 +129,7 @@ namespace Core.Application.Implementation
                 //LOG
                 _logService.Create(new Log()
                 {
-                    Message = $"{wli.Booker.Username} har fået stand nr. {booth.Id} efter at have været på ventelisten.",
+                    Message = $"{wli?.Booker.Username} (Id: {wli?.Booker.Id}) har fået stand nr. {booth?.Id} efter at have været på ventelisten.",
                     User = wli.Booker
                 });
             }
@@ -216,8 +216,15 @@ namespace Core.Application.Implementation
             }
             if (waitingListItem.Booker == null)
             {
-                throw new NotAllowedException(" Det var ikke muligt at annullere din position i ventelisten");
+                throw new NotAllowedException("Det var ikke muligt at annullere din position i ventelisten");
             }
+
+            //LOG
+            _logService.Create(new Log()
+            {
+                Message = $"{waitingListItem?.Booker.Username} (Id: {waitingListItem?.Booker.Id}) har afmeldt sig fra ventelisten.",
+                User = waitingListItem.Booker
+            });
 
             return _waitingListRepository.Delete(waitingListItem.Id);
 
@@ -324,7 +331,27 @@ namespace Core.Application.Implementation
         /// <param name="updatedBooth">Updated booth.</param>
         public Booth Update(Booth updatedBooth)
         {
-            GetById(updatedBooth.Id);
+            var booth = GetById(updatedBooth.Id);
+
+            if (booth.Booker == null)
+            {
+                //LOG
+                _logService.Create(new Log()
+                {
+                    Message = $"Stand nr. {updatedBooth?.Id} er blevet opdateret til at have standholder {updatedBooth?.Booker.Username} (Id: {updatedBooth?.Booker.Id}).",
+                    User = updatedBooth.Booker
+                });
+            }
+            else
+            {
+                //LOG
+                _logService.Create(new Log()
+                {
+                    Message = $"Stand nr. {updatedBooth?.Id} er blevet opdateret til at have standholder {updatedBooth?.Booker.Username} (Id: {updatedBooth?.Booker.Id}). Gamle standholder: {booth.Booker?.Username} (Id: {booth?.Booker.Id})",
+                    User = updatedBooth.Booker
+                });
+            }
+
             return _boothRepository.Update(updatedBooth);
         }
 
@@ -368,6 +395,13 @@ namespace Core.Application.Implementation
             userWithoutPassword.Booker.PasswordHash = null;
             userWithoutPassword.Booker.PasswordSalt = null;
 
+            //LOG
+            _logService.Create(new Log()
+            {
+                Message = $"{user?.Username} (Id: {user?.Id}) er blevet tilføjet på ventleisten. Ventelist id er {waitingListItem?.Id}",
+                User = user
+            });
+
             return userWithoutPassword;
         }
         
@@ -394,8 +428,24 @@ namespace Core.Application.Implementation
                  }
                  b.Booker = user;
              });
-             
-             return _boothRepository.Update(booths);
+
+            //LOG
+            string boothIds = "";
+
+            foreach (var boothId in booths)
+            {
+                boothIds = boothIds + boothId.Id + ", ";
+            }
+
+            boothIds.Substring(boothIds.Length - 2);
+
+            _logService.Create(new Log()
+            {
+                Message = $"{user?.Username} (Id: {user?.Id}) har reserveret {booths?.Count} stande på id {boothIds}.",
+                User = user
+            });
+
+            return _boothRepository.Update(booths);
         }
     }
 }
