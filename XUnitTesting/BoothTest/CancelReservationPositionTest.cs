@@ -22,6 +22,7 @@ namespace XUnitTesting.BoothTest
         private Mock<IBoothRepository> mockBoothRepository = new Mock<IBoothRepository>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
         private Mock<IWaitingListRepository> mockWaitingListRepository = new Mock<IWaitingListRepository>();
+        private Mock<ILogService> mockLogService = new Mock<ILogService>();
         readonly IBoothService _boothService;
 
         private Dictionary<int, WaitingListItem> waitinigListDictionary = new Dictionary<int, WaitingListItem>();
@@ -70,8 +71,14 @@ namespace XUnitTesting.BoothTest
                 return list;
             });
 
-            _boothService = new BoothService(mockUserRepository.Object, mockBoothRepository.Object,
-                mockAuthenticationService.Object, mockWaitingListRepository.Object);
+            _boothService = new BoothService(
+                mockUserRepository.Object, 
+                mockBoothRepository.Object,
+                mockAuthenticationService.Object,
+                mockWaitingListRepository.Object,
+                mockLogService.Object
+                );
+
             mockWaitingListRepository.Setup(x => x.Delete(It.IsAny<int>())).Returns<int>((id) =>
             {
                 var value = waitinigListDictionary[id];
