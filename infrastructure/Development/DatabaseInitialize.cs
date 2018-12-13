@@ -1,4 +1,5 @@
 ﻿using Core.Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,7 +26,7 @@ namespace infrastructure.Development
             };
 
             context.Users.AddRange(users);
-
+            
             var booths = new List<Booth>
             {
                 new Booth { Booker = users[0] },
@@ -54,7 +55,15 @@ namespace infrastructure.Development
             context.ImageURL.Add(hal1);
             context.ImageURL.Add(hal2);
 
-            context.SaveChanges();
+            List<Log> logs = new List<Log>()
+            {
+                new Log() { Message = "Testing this msg", User = users[0] },
+                new Log() { Message = "Testing this msg2nd", User = users[1] }
+            };
+
+            context.Log.AddRange(logs);
+
+        context.SaveChanges();
         }
         
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
