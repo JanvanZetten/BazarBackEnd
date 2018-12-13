@@ -284,5 +284,59 @@ namespace Core.Application.Implementation
                 return b;
             }).ToList();
         }
+
+        public List<Booth> GetUnbookedBooths()
+        {
+            return _boothRepository.GetAllIncludeAll().Where(b => b.Booker == null).ToList();
+        }
+
+        public WaitingListItem AddToWaitingList(string token)
+        {
+            var username = _authService.VerifyUserFromToken(token);
+            var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == username);
+
+            if (user == null)
+                throw new UserNotFoundException();
+
+            var waitingListItem = new WaitingListItem()
+            {
+                Id = 0,
+                Booker = user,
+                Date = DateTime.Now
+            };
+
+            var userWithoutPassword = _waitingListRepository.Create(waitingListItem);
+            userWithoutPassword.Booker.PasswordHash = null;
+            userWithoutPassword.Booker.PasswordSalt = null;
+
+            return userWithoutPassword;
+        }
+        
+        public List<Booth> BookBoothsById(List<Booth> booths, string token)
+        {
+             if (booths == null || booths.Count == 0)
+                 throw new EmptyBookingException();
+                
+             var username = _authService.VerifyUserFromToken(token);
+             var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == username);
+             
+             if (user == null)
+                 throw new UserNotFoundException();
+                 
+             booths.ForEach(b => {
+                 var booth = _boothRepository.GetByIdIncludeAll(b.Id);
+                 if (booth == null)
+                 {
+                     throw new BoothNotFoundException();
+                 }
+                 else if (booth.Booker != null)
+                 {
+                     throw new AlreadyBookedException();
+                 }
+                 b.Booker = user;
+             });
+             
+             return _boothRepository.Update(booths);
+        }
     }
 }

@@ -28,7 +28,7 @@ namespace BazarRestAPI.Controllers
         // GET: api/Booths - Get All Booths
         [HttpGet]
         [Authorize(Roles = "Administrator")]
-        public ActionResult<IEnumerable<Booth>> Get()
+        public ActionResult<List<Booth>> Get()
         {
             try
             {
@@ -44,11 +44,27 @@ namespace BazarRestAPI.Controllers
         [Route("IncludeAll")]
         [HttpGet]
         [Authorize(Roles = "Administrator")]
-        public ActionResult<IEnumerable<Booth>> GetAllIncludeAll()
+        public ActionResult<List<Booth>> GetAllIncludeAll()
         {
             try
             {
                 return Ok(_service.GetAllIncludeAll());
+            }
+            catch (Exception)
+            {
+                return BadRequest(DefaultExceptionMessage);
+            }
+        }
+
+        // GET: api/Booths/Available - Get All Booths with bookers
+        [Route("Available")]
+        [HttpGet]
+        [Authorize]
+        public ActionResult<List<Booth>> GetAllAvailable()
+        {
+            try
+            {
+                return Ok(_service.GetUnbookedBooths());
             }
             catch (Exception)
             {
@@ -158,6 +174,62 @@ namespace BazarRestAPI.Controllers
                 return BadRequest(ex.Message);
             }         
             catch (OnWaitingListException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest(DefaultExceptionMessage);
+            }
+        }
+
+        // POST: api/Booths/setOnWaitinglist - Book Waiting List position
+        [Route("setOnWaitinglist")]
+        [HttpPost]
+        [Authorize]
+        public ActionResult<WaitingListItem> AddToWaitingList([FromBody] string token)
+        {
+            try
+            {
+                return Ok(_service.AddToWaitingList(token));
+            }
+            catch (InvalidTokenException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (UserNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest(DefaultExceptionMessage);
+            }
+        }
+        
+        // POST: api/Booths/bookBooths - Book booths
+        [Route("bookBooths")]
+        [HttpPost]
+        [Authorize]
+        public ActionResult<Booth> BookBooths([FromBody]MultipleBookingDTO mbdto)
+        {
+            try
+            {
+                return Ok(_service.BookBoothsById(mbdto.Booths, mbdto.Token));
+            }
+            catch (InvalidTokenException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (UserNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (BoothNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (AlreadyBookedException ex)
             {
                 return BadRequest(ex.Message);
             }

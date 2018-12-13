@@ -42,6 +42,18 @@ namespace infrastructure.Development
 
             context.WaitingListItem.AddRange(waitingList);
 
+            ImageURL hal1 = new ImageURL()
+            {
+                URL = "https://i.imgur.com/ilIGLPC.png?1"
+            };
+            ImageURL hal2 = new ImageURL()
+            {
+                URL = "https://i.imgur.com/dOnrxpM.png"
+            };
+
+            context.ImageURL.Add(hal1);
+            context.ImageURL.Add(hal2);
+
             context.SaveChanges();
         }
         

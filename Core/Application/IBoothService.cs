@@ -22,7 +22,8 @@ namespace Core.Application
         Booth CancelReservation(int boothId, string token);
         WaitingListItem CancelWaitingPosition(string token);
         int GetWaitingListItemPosition(string token);
-
-
+        List<Booth> GetUnbookedBooths();
+        List<Booth> BookBoothsById(List<Booth> booths, string token);
+        WaitingListItem AddToWaitingList(string token);
     }
 }

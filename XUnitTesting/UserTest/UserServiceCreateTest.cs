@@ -30,7 +30,7 @@ namespace XUnitTesting.UserTest
         /// </summary>
         public UserServiceCreateTest()
         {
-            mockUserRepository.Setup(x => x.Create(It.IsAny<Core.Entity.User>())).Returns<Core.Entity.User>((u) => 
+            mockUserRepository.Setup(x => x.Create(It.IsAny<User>())).Returns<User>((u) => 
             {
                 u.Id = nextId++;
                 userDictionary.Add(u.Id, u);

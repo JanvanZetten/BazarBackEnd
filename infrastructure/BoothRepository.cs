@@ -108,5 +108,17 @@ namespace infrastructure
             _ctx.SaveChanges();
             return entity;
         }
+
+        public List<Booth> Update(List<Booth> boothList)
+        {
+            foreach (var booth in boothList)
+            {
+                _ctx.Attach(booth).State = EntityState.Modified;
+                _ctx.Entry(booth).Reference(b => b.Booker).IsModified = true;
+            }
+
+            _ctx.SaveChanges();
+            return boothList;
+        }
     }
 }

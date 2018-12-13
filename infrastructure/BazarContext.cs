@@ -13,6 +13,7 @@ namespace infrastructure
         public DbSet<Booth> Booth {get; set;}
         public DbSet<WaitingListItem> WaitingListItem { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<ImageURL> ImageURL { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
