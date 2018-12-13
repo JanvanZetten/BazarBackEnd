@@ -14,6 +14,7 @@ namespace XUnitTesting.BoothTest
     public class CreateBoothTest
     {
         private Mock<IBoothRepository> mockBoothRepository = new Mock<IBoothRepository>();
+        private Mock<ILogService> mockLogService = new Mock<ILogService>();
 
         [Fact]
         public void CreateValidBoothTest()
@@ -25,7 +26,7 @@ namespace XUnitTesting.BoothTest
                     new Booth { Id = id }
                 });
 
-            var result = new BoothService(null, mockBoothRepository.Object, null, null).Create(1, new Booth());
+            var result = new BoothService(null, mockBoothRepository.Object, null, null, mockLogService.Object).Create(1, new Booth());
             
             Assert.Equal(id, result.FirstOrDefault(b => b.Id == id).Id);
         }
@@ -35,9 +36,17 @@ namespace XUnitTesting.BoothTest
         {
             mockBoothRepository.Setup(m => m.Create(It.Is<List<Booth>>(k => k[0].Id == 0)));
 
-            new BoothService(null, mockBoothRepository.Object, null, null).Create(1, new Booth() { Id = 1 });
+            new BoothService(null, mockBoothRepository.Object, null, null, mockLogService.Object).Create(1, new Booth() { Id = 1 });
 
             mockBoothRepository.VerifyAll();
+        }
+
+        [Fact] 
+        public void LogOnCreate()
+        {
+            new BoothService(null, mockBoothRepository.Object, null, null, mockLogService.Object).Create(1, new Booth());
+
+            mockLogService.Verify(x => x.Create(It.IsAny<Log>()), Times.Once);
         }
     }
 }
