@@ -8,8 +8,8 @@ namespace Core.Application
     public interface ILogService
     {
         Log Create(Log log);
-        Log Delete(Log log);
-        Log GetById(int Id);
+        Log Delete(int id);
+        Log GetById(int id);
         List<Log> GetAll();
     }
 }

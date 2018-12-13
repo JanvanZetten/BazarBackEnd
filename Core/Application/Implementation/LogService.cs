@@ -26,7 +26,7 @@ namespace Core.Application.Implementation
             }
             if(log.Message == null)
             {
-                throw new InputNotValidException("Message og dato må ikke være tom");
+                throw new InputNotValidException("Beskeden må ikke være tom");
             }
             if(log.User != null)
             {
@@ -41,9 +41,10 @@ namespace Core.Application.Implementation
             return _logRepository.Create(log);
         }
 
-        public Log Delete(Log log)
+        public Log Delete(int id)
         {
-            throw new NotImplementedException();
+            var log = GetById(id);
+            return _logRepository.Delete(id);
         }
 
         public List<Log> GetAll()
@@ -51,9 +52,14 @@ namespace Core.Application.Implementation
             throw new NotImplementedException();
         }
 
-        public Log GetById(int Id)
+        public Log GetById(int id)
         {
-            throw new NotImplementedException();
+            var log = _logRepository.GetByIdIncludeAll(id);
+            if(log == null)
+            {
+                throw new LogNotFoundException();
+            }
+            return log;
         }
     }
 }

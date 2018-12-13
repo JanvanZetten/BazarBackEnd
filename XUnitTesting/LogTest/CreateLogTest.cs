@@ -44,13 +44,12 @@ namespace XUnitTesting.LogTest
         [Fact]
         public void ValidLog()
         {
-            Log log = new Log() { Id = 50, Date = DateTime.Today, Message = "Asbjørn elsker bjørne" };
+            Log log = new Log() { Id = 50, Message = "Asbjørn elsker bjørne" };
 
-            var result = _service.Create(log);
+            var result = _service.Create(new Log() { Id = log.Id, Message = log.Message });
 
             Assert.True(result.Id != 50 && result.Id == 1);
             Assert.Equal(log.Message, result.Message);
-            Assert.Equal(log.Date, result.Date);
             Assert.Null(result.User);
         }
 
@@ -59,7 +58,7 @@ namespace XUnitTesting.LogTest
         {
             Log log = new Log() { Id = 50, Message = "Asbjørn elsker bjørne" };
 
-            var result = _service.Create(log);
+            var result = _service.Create(new Log() { Id = log.Id, Message = log.Message });
             Assert.True(result.Date < DateTime.Now.AddDays(1)
                 && result.Date > DateTime.Now.AddDays(-1));
         }
@@ -67,7 +66,7 @@ namespace XUnitTesting.LogTest
         [Fact]
         public void InvalidMessageLog()
         {
-            Log log = new Log() { Id = 50, Date = DateTime.Today };
+            Log log = new Log() { Id = 50 };
 
             Assert.Throws<InputNotValidException>(() =>
             {
@@ -78,7 +77,7 @@ namespace XUnitTesting.LogTest
         [Fact]
         public void InvalidUserLog()
         {
-            Log log = new Log() { Id = 50, Date = DateTime.Today, Message = "Asbjørn elsker bjørne", User = new User() { Id=50 } };
+            Log log = new Log() { Id = 50, Message = "Asbjørn elsker bjørne", User = new User() { Id=50 } };
 
             Assert.Throws<UserNotFoundException>(() =>
             {
@@ -89,12 +88,11 @@ namespace XUnitTesting.LogTest
         [Fact]
         public void ValidUserLog()
         {
-            Log log = new Log() { Id = 50, Date = DateTime.Today, Message = "Asbjørn elsker bjørne", User = new User() { Id = 1 } };
-            var result = _service.Create(log);
+            Log log = new Log() { Id = 50, Message = "Asbjørn elsker bjørne", User = new User() { Id = 1 } };
+            var result = _service.Create(new Log() { Id = log.Id, Message = log.Message, User = log.User });
 
             Assert.True(result.Id != 50 && result.Id == 1);
             Assert.Equal(log.Message, result.Message);
-            Assert.Equal(log.Date, result.Date);
             Assert.Equal(log.User.Id, result.User.Id);
         }
 
@@ -110,7 +108,7 @@ namespace XUnitTesting.LogTest
         [Fact]
         public void LogWithIdSet()
         {
-            Log log = new Log() { Id = 50, Date = DateTime.Today, Message = "Asbjørn elsker bjørne" };
+            Log log = new Log() { Id = 50, Message = "Asbjørn elsker bjørne" };
 
             mockLogRepository.Setup(x => x.Create(It.IsAny<Log>())).Returns<Log>((l) =>
             {
@@ -118,7 +116,7 @@ namespace XUnitTesting.LogTest
                 return dictionary[l.Id];
             });
 
-            var result = _service.Create(log);
+            var result = _service.Create(new Log() { Id = log.Id, Message = log.Message });
 
             Assert.True(result.Id == 0);
         }
