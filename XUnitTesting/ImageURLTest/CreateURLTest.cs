@@ -15,6 +15,7 @@ namespace XUnitTesting.ImageURLTest
     public class CreateURLTest
     {
         private Mock<IImageURLRepository> mockURLRepository = new Mock<IImageURLRepository>();
+        private Mock<ILogService> mockLogService = new Mock<ILogService>();
         private readonly IImageURLService _urlService;
         private Dictionary<int, ImageURL> urlDictionary = new Dictionary<int, ImageURL>();
         private int nextId = 1;
@@ -28,7 +29,7 @@ namespace XUnitTesting.ImageURLTest
                 return urlDictionary[u.Id];
             });
             
-            _urlService = new ImageURLService(mockURLRepository.Object);
+            _urlService = new ImageURLService(mockURLRepository.Object, mockLogService.Object);
         }
 
         [InlineData("picture.png")]
