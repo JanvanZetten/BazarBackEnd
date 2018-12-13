@@ -11,6 +11,7 @@ namespace infrastructure
         }
 
         public DbSet<Booth> Booth {get; set;}
+        public DbSet<Log> Log { get; set; }
         public DbSet<WaitingListItem> WaitingListItem { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<ImageURL> ImageURL { get; set; }
@@ -18,6 +19,7 @@ namespace infrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Booth>().HasOne<User>(b => b.Booker).WithMany().OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<Log>().HasOne<User>(l => l.User).WithMany().OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
             modelBuilder.Entity<WaitingListItem>().HasOne<User>(w => w.Booker).WithMany().OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<User>().HasKey(u => u.Id);
