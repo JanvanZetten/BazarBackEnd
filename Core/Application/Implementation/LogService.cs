@@ -47,7 +47,14 @@ namespace Core.Application.Implementation
 
         public List<Log> GetAll()
         {
-            return _logRepository.GetAllIncludeAll().ToList();
+            return _logRepository.GetAllIncludeAll().Select(l => {
+                if(l.User != null)
+                {
+                    l.User.PasswordHash = null;
+                    l.User.PasswordSalt = null;
+                }
+                return l;
+            }).ToList();
         }
 
         public Log GetById(int id)
