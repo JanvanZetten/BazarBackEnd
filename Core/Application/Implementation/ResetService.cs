@@ -20,7 +20,7 @@ namespace Core.Application.Implementation
             _userRepo = userRepo;
         }
 
-        public string ResetAll(string token)
+        public int ResetAll(string token)
         {
             var verifyToken = _auth.VerifyUserFromToken(token);
             var user = _userRepo.GetAll().FirstOrDefault(u => u.Username == verifyToken);
