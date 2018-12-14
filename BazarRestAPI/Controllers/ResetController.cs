@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Core.Application;
 using Core.Application.Implementation.CustomExceptions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BazarRestAPI.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class ResetController : Controller
     {
         private readonly IResetService _service;
@@ -28,7 +30,8 @@ namespace BazarRestAPI.Controllers
         {
             try
             {
-                return Ok(_service.ResetAll(token));
+                _service.ResetAll(token);
+                return Ok();
             }
             catch (UserNotFoundException ex)
             {
