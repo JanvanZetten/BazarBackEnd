@@ -3,6 +3,6 @@ namespace Core.Application
 {
     public interface IResetService
     {
-        void ResetAll(string token);
+        string ResetAll(string token);
     }
 }
