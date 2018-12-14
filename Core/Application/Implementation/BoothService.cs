@@ -71,11 +71,7 @@ namespace Core.Application.Implementation
                     });
 
                     //LOG
-                    _logService.Create(new Log()
-                    {
-                        Message = $"{user?.Username} (Id: {user?.Id}) har fået en plads på ventelisten.",
-                        User = user
-                    });
+                    _logService.Create($"{user?.Username} (Id: {user?.Id}) har fået en plads på ventelisten.", user);
 
                     throw new OnWaitingListException("Der var ikke flere tilgængelige stande men du er sat på venteliste");
                 }
@@ -84,11 +80,7 @@ namespace Core.Application.Implementation
             booth.Booker = user;
 
             //LOG
-            _logService.Create(new Log()
-            {
-                Message = $"{user?.Username} (Id: {user?.Id}) har reserveret stand {booth?.Id} med tilfældig standreservering.",
-                User = user
-            });
+            _logService.Create($"{user?.Username} (Id: {user?.Id}) har reserveret stand {booth?.Id} med tilfældig standreservering.", user);
 
             return _boothRepository.Update(booth);
         }
@@ -112,11 +104,7 @@ namespace Core.Application.Implementation
             }
 
             //LOG
-            _logService.Create(new Log()
-            {
-                Message = $"{booth?.Booker.Username} (Id: {booth?.Booker.Id}) har annuleret deres stand nr. {booth?.Id}.",
-                User = booth.Booker
-            });
+            _logService.Create($"{booth?.Booker.Username} (Id: {booth?.Booker.Id}) har annuleret deres stand nr. {booth?.Id}.", booth.Booker);
 
             booth.Booker = null;
 
@@ -127,15 +115,10 @@ namespace Core.Application.Implementation
                 _waitingListRepository.Delete(wli.Id);
 
                 //LOG
-                _logService.Create(new Log()
-                {
-                    Message = $"{wli?.Booker.Username} (Id: {wli?.Booker.Id}) har fået stand nr. {booth?.Id} efter at have været på ventelisten.",
-                    User = wli.Booker
-                });
+                _logService.Create($"{wli?.Booker.Username} (Id: {wli?.Booker.Id}) har fået stand nr. {booth?.Id} efter at have været på ventelisten.", wli.Booker);
             }
 
             return _boothRepository.Update(booth);
-
         }
 
         /// <summary>
@@ -177,10 +160,7 @@ namespace Core.Application.Implementation
             }
 
             //LOG
-            _logService.Create(new Log()
-            {
-                Message = $"Der er blevet lavet {amount} nye stande."
-            });
+            _logService.Create($"Der er blevet lavet {amount} nye stande.");
 
             return _boothRepository.Create(boothList);
         }
@@ -195,10 +175,7 @@ namespace Core.Application.Implementation
             GetById(id);
 
             //LOG
-            _logService.Create(new Log()
-            {
-                Message = $"Stand nr. {id} er blevet slettet."
-            });
+            _logService.Create($"Stand nr. {id} er blevet slettet.");
 
             return _boothRepository.Delete(id);
         }
@@ -220,11 +197,7 @@ namespace Core.Application.Implementation
             }
 
             //LOG
-            _logService.Create(new Log()
-            {
-                Message = $"{waitingListItem?.Booker.Username} (Id: {waitingListItem?.Booker.Id}) har afmeldt sig fra ventelisten.",
-                User = waitingListItem.Booker
-            });
+            _logService.Create($"{waitingListItem?.Booker.Username} (Id: {waitingListItem?.Booker.Id}) har afmeldt sig fra ventelisten.", waitingListItem.Booker);
 
             return _waitingListRepository.Delete(waitingListItem.Id);
 
@@ -336,20 +309,12 @@ namespace Core.Application.Implementation
             if (booth.Booker == null)
             {
                 //LOG
-                _logService.Create(new Log()
-                {
-                    Message = $"Stand nr. {updatedBooth?.Id} er blevet opdateret til at have standholder {updatedBooth?.Booker.Username} (Id: {updatedBooth?.Booker.Id}).",
-                    User = updatedBooth.Booker
-                });
+                _logService.Create($"Stand nr. {updatedBooth?.Id} er blevet opdateret til at have standholder {updatedBooth?.Booker.Username} (Id: {updatedBooth?.Booker.Id}).", updatedBooth.Booker);
             }
             else
             {
                 //LOG
-                _logService.Create(new Log()
-                {
-                    Message = $"Stand nr. {updatedBooth?.Id} er blevet opdateret til at have standholder {updatedBooth?.Booker.Username} (Id: {updatedBooth?.Booker.Id}). Gamle standholder: {booth.Booker?.Username} (Id: {booth?.Booker.Id})",
-                    User = updatedBooth.Booker
-                });
+                _logService.Create($"Stand nr. {updatedBooth?.Id} er blevet opdateret til at have standholder {updatedBooth?.Booker.Username} (Id: {updatedBooth?.Booker.Id}). Gamle standholder: {booth.Booker?.Username} (Id: {booth?.Booker.Id})", updatedBooth.Booker);
             }
 
             return _boothRepository.Update(updatedBooth);
@@ -396,11 +361,7 @@ namespace Core.Application.Implementation
             userWithoutPassword.Booker.PasswordSalt = null;
 
             //LOG
-            _logService.Create(new Log()
-            {
-                Message = $"{user?.Username} (Id: {user?.Id}) er blevet tilføjet på ventleisten. Ventelist id er {waitingListItem?.Id}",
-                User = user
-            });
+            _logService.Create($"{user?.Username} (Id: {user?.Id}) er blevet tilføjet på ventleisten. Ventelist id er {waitingListItem?.Id}", user);
 
             return userWithoutPassword;
         }
@@ -439,11 +400,7 @@ namespace Core.Application.Implementation
 
             boothIds.Substring(boothIds.Length - 2);
 
-            _logService.Create(new Log()
-            {
-                Message = $"{user?.Username} (Id: {user?.Id}) har reserveret {booths?.Count} stande på id {boothIds}.",
-                User = user
-            });
+            _logService.Create($"{user?.Username} (Id: {user?.Id}) har reserveret {booths?.Count} stande på id {boothIds}.", user);
 
             return _boothRepository.Update(booths);
         }

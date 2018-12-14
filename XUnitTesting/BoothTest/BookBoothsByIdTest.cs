@@ -236,7 +236,7 @@ namespace XUnitTesting.BoothTest
         {
             var result = _boothService.BookBoothsById(boothsValid1, token);
 
-            _mockLogService.Verify(x => x.Create(It.IsAny<Log>()), Times.Once);
+            _mockLogService.Verify(x => x.Create(It.IsAny<string>(), It.IsAny<User>()), Times.Once);
         }
     }
 }

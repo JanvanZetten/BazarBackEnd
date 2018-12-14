@@ -183,8 +183,8 @@ namespace XUnitTesting.BoothTest
                 _boothService.Book(token1);
             });
 
-            //Kaldes 5 
-            mockLogService.Verify(x => x.Create(It.IsAny<Log>()), Times.Exactly(3));
+            //Kaldes 3 gange
+            mockLogService.Verify(x => x.Create(It.IsAny<string>(), It.IsAny<User>()), Times.Exactly(3));
         }
     }
 }

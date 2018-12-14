@@ -101,7 +101,7 @@ namespace XUnitTesting.BoothTest
         {
             _boothService.CancelWaitingPosition(token1);
 
-            mockLogService.Verify(x => x.Create(It.IsAny<Log>()), Times.Once);
+            mockLogService.Verify(x => x.Create(It.IsAny<string>(), It.IsAny<User>()), Times.Once);
         }
     }
 }

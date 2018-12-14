@@ -89,7 +89,7 @@ namespace XUnitTesting.UserTest
 
             User deletedUser = _userService.Delete(user1.Id);
 
-            mockLogService.Verify(x => x.Create(It.IsAny<Log>()), Times.Once);
+            mockLogService.Verify(x => x.Create(It.IsAny<string>(), It.IsAny<User>()), Times.Once);
         }
     }
 }

@@ -178,7 +178,7 @@ namespace XUnitTesting.BoothTest
         {
             Booth booth = _boothService.CancelReservation(booth1.Id, token1);
 
-            mockLogService.Verify(x => x.Create(It.IsAny<Log>()), Times.Once);
+            mockLogService.Verify(x => x.Create(It.IsAny<string>(), It.IsAny<User>()), Times.Once);
         }
     }
 }

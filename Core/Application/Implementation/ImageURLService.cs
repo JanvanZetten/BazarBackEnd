@@ -89,10 +89,7 @@ namespace Core.Application.Implementation
             var returnedURL = _urlRepo.Update(imgurl);
 
             //LOG
-            _logService.Create(new Log()
-            {
-                Message = $"Billedet med id: {url.Id} blev skiftet fra {url.URL} til {imgurl.URL}"
-            });
+            _logService.Create($"Billedet med id: {url.Id} blev skiftet fra {url.URL} til {imgurl.URL}");
 
 
             return returnedURL;

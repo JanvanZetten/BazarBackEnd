@@ -63,7 +63,7 @@ namespace XUnitTesting.BoothTest
                     }
                 });
 
-            mockLogService.Verify(x => x.Create(It.IsAny<Log>()), Times.Once);
+            mockLogService.Verify(x => x.Create(It.IsAny<string>(), It.IsAny<User>()), Times.Once);
         }
 
         [Fact]
@@ -90,7 +90,7 @@ namespace XUnitTesting.BoothTest
                     }
                 });
 
-            mockLogService.Verify(x => x.Create(It.IsAny<Log>()), Times.Once);
+            mockLogService.Verify(x => x.Create(It.IsAny<string>(), It.IsAny<User>()), Times.Once);
         }
     }
 }

@@ -144,7 +144,7 @@ namespace XUnitTesting.ImageURLTest
 
             _urlService.Update(new ImageURL() {Id = id , URL = newImageURL});
 
-            mockLogService.Verify(mls => mls.Create(It.Is<Log>(l => l.Message.Equals($"Billedet med id: {id} blev skiftet fra {oldImageURL} til {newImageURL}"))));
+            mockLogService.Verify(mls => mls.Create(It.IsAny<string>(), It.IsAny<User>()), Times.Once);
 
         }
     }
