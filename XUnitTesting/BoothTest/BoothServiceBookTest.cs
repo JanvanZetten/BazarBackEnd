@@ -183,7 +183,7 @@ namespace XUnitTesting.BoothTest
                 _boothService.Book(token1);
             });
 
-            //Kaldes 3 gange
+            //Called 3 times
             mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"{user2.Username} har reserveret stand {booth1.Id} med tilfældig standreservering.")),
                 It.Is<User>(u => u.Equals(user2))), Times.Once);
 
