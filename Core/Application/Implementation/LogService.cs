@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Core.Application.Implementation.CustomExceptions;
 using Core.Domain;
@@ -18,26 +19,23 @@ namespace Core.Application.Implementation
             this._userRepository = userRepository;
         }
 
-        public Log Create(Log log)
+        public Log Create(String message, User user = null)
         {
-            if(log == null)
-            {
-                throw new NullReferenceException("Log må ikke være tom");
-            }
-            if(log.Message == null)
+           
+            if(message == null)
             {
                 throw new InputNotValidException("Beskeden må ikke være tom");
             }
-            if(log.User != null)
+            if(user != null)
             {
-                var user = _userRepository.GetById(log.User.Id);
-                if(user == null)
+                var userFromLog = _userRepository.GetById(user.Id);
+                if(userFromLog == null)
                 {
                     throw new UserNotFoundException();
                 }
             }
-            log.Id = 0;
-            log.Date = DateTime.Now;
+            Log log = new Log() { Id = 0, Message = message, User = user, Date = DateTime.Now };
+
             return _logRepository.Create(log);
         }
 
@@ -49,7 +47,14 @@ namespace Core.Application.Implementation
 
         public List<Log> GetAll()
         {
-            throw new NotImplementedException();
+            return _logRepository.GetAllIncludeAll().Select(l => {
+                if(l.User != null)
+                {
+                    l.User.PasswordHash = null;
+                    l.User.PasswordSalt = null;
+                }
+                return l;
+            }).ToList();
         }
 
         public Log GetById(int id)

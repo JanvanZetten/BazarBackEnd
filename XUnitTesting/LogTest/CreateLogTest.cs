@@ -46,7 +46,7 @@ namespace XUnitTesting.LogTest
         {
             Log log = new Log() { Id = 50, Message = "Asbjørn elsker bjørne" };
 
-            var result = _service.Create(new Log() { Id = log.Id, Message = log.Message });
+            var result = _service.Create(log.Message);
 
             Assert.True(result.Id != 50 && result.Id == 1);
             Assert.Equal(log.Message, result.Message);
@@ -58,7 +58,7 @@ namespace XUnitTesting.LogTest
         {
             Log log = new Log() { Id = 50, Message = "Asbjørn elsker bjørne" };
 
-            var result = _service.Create(new Log() { Id = log.Id, Message = log.Message });
+            var result = _service.Create(log.Message);
             Assert.True(result.Date < DateTime.Now.AddDays(1)
                 && result.Date > DateTime.Now.AddDays(-1));
         }
@@ -66,11 +66,9 @@ namespace XUnitTesting.LogTest
         [Fact]
         public void InvalidMessageLog()
         {
-            Log log = new Log() { Id = 50 };
-
             Assert.Throws<InputNotValidException>(() =>
             {
-                _service.Create(log);
+                _service.Create(null);
             });
         }
 
@@ -81,7 +79,7 @@ namespace XUnitTesting.LogTest
 
             Assert.Throws<UserNotFoundException>(() =>
             {
-                _service.Create(log);
+                _service.Create(log.Message, log.User);
             });
         }
 
@@ -89,34 +87,26 @@ namespace XUnitTesting.LogTest
         public void ValidUserLog()
         {
             Log log = new Log() { Id = 50, Message = "Asbjørn elsker bjørne", User = new User() { Id = 1 } };
-            var result = _service.Create(new Log() { Id = log.Id, Message = log.Message, User = log.User });
+            var result = _service.Create(log.Message, log.User);
 
             Assert.True(result.Id != 50 && result.Id == 1);
             Assert.Equal(log.Message, result.Message);
             Assert.Equal(log.User.Id, result.User.Id);
         }
 
-        [Fact]
-        public void NullLog()
-        {
-            Assert.Throws<NullReferenceException>(() =>
-            {
-                _service.Create(null);
-            });
-        }
 
         [Fact]
         public void LogWithIdSet()
-        {
-            Log log = new Log() { Id = 50, Message = "Asbjørn elsker bjørne" };
+        {;
 
+           var message = "Asbjørn elsker bjørne";
             mockLogRepository.Setup(x => x.Create(It.IsAny<Log>())).Returns<Log>((l) =>
             {
                 dictionary.Add(l.Id, l);
                 return dictionary[l.Id];
             });
 
-            var result = _service.Create(new Log() { Id = log.Id, Message = log.Message });
+            var result = _service.Create(message);
 
             Assert.True(result.Id == 0);
         }

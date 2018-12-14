@@ -16,14 +16,14 @@ namespace infrastructure
 
         public LogRepository(BazarContext ctx)
         {
-                _ctx = ctx;
+            _ctx = ctx;
         }
 
         public int Count()
         {
-                return _ctx.Log.Count();
+            return _ctx.Log.Count();
         }
-    
+
         public Log Create(Log entity)
         {
             _ctx.Attach(entity).State = EntityState.Added;
@@ -33,15 +33,15 @@ namespace infrastructure
 
         public Log Delete(int id)
         {
-                var log = GetById(id);
-                _ctx.Log.Remove(log);
-                _ctx.SaveChanges();
-                return log;
+            var log = GetById(id);
+            _ctx.Log.Remove(log);
+            _ctx.SaveChanges();
+            return log;
         }
 
         public IEnumerable<Log> GetAll()
         {
-                return _ctx.Log;
+            return _ctx.Log;
         }
 
         public IEnumerable<Log> GetAllIncludeAll()
@@ -51,29 +51,30 @@ namespace infrastructure
 
         public Log GetById(int id)
         {
-                Log log = _ctx.Log.FirstOrDefault(l => l.Id == id);
-                _ctx.Entry(log).State = EntityState.Detached;
-                return log;
+            Log log = _ctx.Log.FirstOrDefault(l => l.Id == id);
+            _ctx.Entry(log).State = EntityState.Detached;
+            return log;
         }
 
         public Log GetByIdIncludeAll(int id)
         {
-            var log =_ctx.Log.Include(l => l.Id).FirstOrDefault(l => l.Id == id);
+            var log = _ctx.Log.Include(l => l.Id).FirstOrDefault(l => l.Id == id);
             _ctx.Entry(log).State = EntityState.Detached;
             return log;
         }
 
         public Log Update(Log entity)
         {
-                var oldLog = GetById(entity.Id);
-                if (oldLog == null)
-                { 
-                    return null;
-                }
-                _ctx.Attach(entity).State = EntityState.Modified;
-                _ctx.Entry(entity).Reference(l => l.User).IsModified = true;
-                _ctx.SaveChanges();
-                return entity;
+            var oldLog = GetById(entity.Id);
+            if (oldLog == null)
+            {
+                return null;
             }
+            _ctx.Attach(entity).State = EntityState.Modified;
+            _ctx.Entry(entity).Reference(l => l.User).IsModified = true;
+            _ctx.SaveChanges();
+            return entity;
+        }
     }
 }
+
