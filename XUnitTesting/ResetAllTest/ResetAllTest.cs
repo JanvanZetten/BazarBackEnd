@@ -53,7 +53,7 @@ namespace XUnitTesting.ResetAllTest
             mockResetRepository.Setup(x => x.Reset()).Returns(() =>
             {
                 booths.ForEach(b => b.Booker = null);
-                return $"All {booths.Count} stande er blevet slettet";
+                return booths.Count;
             });
 
             mockAuthentication.Setup(x => x.VerifyUserFromToken(It.IsAny<string>())).Returns<string>((token) =>
