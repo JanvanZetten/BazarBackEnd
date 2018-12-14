@@ -28,8 +28,7 @@ namespace BazarRestAPI.Controllers
         {
             try
             {
-                _service.ResetAll(token);
-                return Ok("Alle stande og ventelisten er blevet nulstillet.");
+                return Ok($"{_service.ResetAll(token)} stande er blevet nulstillet.");
             }
             catch (UserNotFoundException ex)
             {
