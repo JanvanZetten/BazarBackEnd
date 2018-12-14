@@ -7,7 +7,7 @@ namespace Core.Domain
 {
     public interface IResetRepository
     {
-        string Reset();
+        int Reset();
 
     }
 }

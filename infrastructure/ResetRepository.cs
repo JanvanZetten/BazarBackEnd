@@ -15,12 +15,12 @@ namespace infrastructure
             _ctx = ctx;
         }
 
-        public string Reset()
+        public int Reset()
         {
             var booths = _ctx.Booth.ToList();
             booths.ForEach(b => b.Booker = null);
             _ctx.SaveChanges();
-            return $"Alle {booths.Count} stande er blevet nulstillet.";
+            return booths.Count;
         }
         
 
