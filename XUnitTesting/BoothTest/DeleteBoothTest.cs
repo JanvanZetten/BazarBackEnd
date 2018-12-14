@@ -81,7 +81,8 @@ namespace XUnitTesting.BoothTest
                 mockLogService.Object)
                 .Delete(booth.Id);
 
-            mockLogService.Verify(x => x.Create(It.IsAny<string>(), It.IsAny<User>()), Times.Once);
+            mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"Stand nr. 1 er blevet slettet.")),
+                It.IsAny<User>()), Times.Once);
         }
     }
 }

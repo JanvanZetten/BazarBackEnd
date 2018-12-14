@@ -101,5 +101,14 @@ namespace XUnitTesting.BoothTest
                 _service.AddToWaitingList(token3);
             });
         }
+
+        [Fact]
+        public void LogOnWaitingListAdd()
+        {
+            var user1added = _service.AddToWaitingList("Hello");
+
+            mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"{user1.Username} er blevet tilføjet på ventleisten. Ventelist id er {user1added.Id}")),
+                It.Is<User>(u => u.Equals(user1))), Times.Once);
+        }
     }
 }

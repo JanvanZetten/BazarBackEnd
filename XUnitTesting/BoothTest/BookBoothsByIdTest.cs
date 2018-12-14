@@ -236,7 +236,17 @@ namespace XUnitTesting.BoothTest
         {
             var result = _boothService.BookBoothsById(boothsValid1, token);
 
-            _mockLogService.Verify(x => x.Create(It.IsAny<string>(), It.IsAny<User>()), Times.Once);
+            string boothIds = "";
+
+            foreach (var boothId in boothsValid1)
+            {
+                boothIds += boothId.Id + ", ";
+            }
+
+            boothIds.Substring(boothIds.Length - 2);
+
+            _mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"{user.Username} (Id: {user.Id}) har reserveret {boothsValid1.Count} stande på id {boothIds}.")),
+                It.Is<User>(u => u.Equals(user))), Times.Once);
         }
     }
 }

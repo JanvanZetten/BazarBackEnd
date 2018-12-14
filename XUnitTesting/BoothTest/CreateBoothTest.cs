@@ -46,7 +46,8 @@ namespace XUnitTesting.BoothTest
         {
             new BoothService(null, mockBoothRepository.Object, null, null, mockLogService.Object).Create(1, new Booth());
 
-            mockLogService.Verify(x => x.Create(It.IsAny<string>(), It.IsAny<User>()), Times.Once);
+            mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"Der er blevet lavet 1 nye stande.")),
+                It.IsAny<User>()), Times.Once);
         }
     }
 }

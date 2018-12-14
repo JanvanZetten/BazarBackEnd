@@ -21,7 +21,6 @@ namespace Core.Application.Implementation
 
         public Log Create(String message, User user = null)
         {
-           
             if(message == null)
             {
                 throw new InputNotValidException("Beskeden må ikke være tom");

@@ -60,7 +60,7 @@ namespace Core.Application.Implementation
                 throw new UserNotFoundException();
 
             //LOG
-            _logService.Create($"Brugeren {user?.Username} (Id: {user?.Id}) er blevet slettet fra databasen", user);
+            _logService.Create($"Brugeren {user?.Username} (Id: {user?.Id}) er blevet slettet fra databasen");
 
             return user;
         }

@@ -178,7 +178,10 @@ namespace XUnitTesting.BoothTest
         {
             Booth booth = _boothService.CancelReservation(booth1.Id, token1);
 
-            mockLogService.Verify(x => x.Create(It.IsAny<string>(), It.IsAny<User>()), Times.Once);
+            booth.Booker = user1;
+
+            mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"{booth1.Booker.Username} har annuleret deres stand nr. {booth1.Id}.")),
+                It.Is<User>(u => u.Equals(booth1.Booker))), Times.Once);
         }
     }
 }

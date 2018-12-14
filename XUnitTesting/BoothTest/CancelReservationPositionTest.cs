@@ -99,9 +99,10 @@ namespace XUnitTesting.BoothTest
         [Fact]
         public void LogOnCancel()
         {
-            _boothService.CancelWaitingPosition(token1);
+            var wli = _boothService.CancelWaitingPosition(token1);
 
-            mockLogService.Verify(x => x.Create(It.IsAny<string>(), It.IsAny<User>()), Times.Once);
+            mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"{wli.Booker.Username} har afmeldt sig fra ventelisten.")),
+                It.Is<User>(u => u.Equals(user1))), Times.Once);
         }
     }
 }

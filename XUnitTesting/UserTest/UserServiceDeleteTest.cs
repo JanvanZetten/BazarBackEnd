@@ -89,7 +89,8 @@ namespace XUnitTesting.UserTest
 
             User deletedUser = _userService.Delete(user1.Id);
 
-            mockLogService.Verify(x => x.Create(It.IsAny<string>(), It.IsAny<User>()), Times.Once);
+            mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"Brugeren {deletedUser.Username} (Id: {deletedUser.Id}) er blevet slettet fra databasen")),
+                It.IsAny<User>()), Times.Once);
         }
     }
 }

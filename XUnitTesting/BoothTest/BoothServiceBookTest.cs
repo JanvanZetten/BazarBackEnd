@@ -184,7 +184,15 @@ namespace XUnitTesting.BoothTest
             });
 
             //Kaldes 3 gange
-            mockLogService.Verify(x => x.Create(It.IsAny<string>(), It.IsAny<User>()), Times.Exactly(3));
+            mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"{user2.Username} har reserveret stand {booth1.Id} med tilfældig standreservering.")),
+                It.Is<User>(u => u.Equals(user2))), Times.Once);
+
+            mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"{user2.Username} har reserveret stand {booth2.Id} med tilfældig standreservering.")),
+               It.Is<User>(u => u.Equals(user2))), Times.Once);
+
+            mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"{user2.Username} har fået en plads på ventelisten.")),
+               It.Is<User>(u => u.Equals(user2))), Times.Once);
+
         }
     }
 }
