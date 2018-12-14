@@ -15,8 +15,10 @@ namespace XUnitTesting.UserTest
     public class UserServiceDeleteTest
     {
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
-        private Dictionary<int, User> userDictionary = new Dictionary<int, User>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+        private Mock<ILogService> mockLogService = new Mock<ILogService>();
+
+        private Dictionary<int, User> userDictionary = new Dictionary<int, User>();
 
         readonly IUserService _userService;
 
@@ -42,7 +44,7 @@ namespace XUnitTesting.UserTest
                 return user;
             });
 
-            _userService = new UserService(mockUserRepository.Object, mockAuthenticationService.Object);
+            _userService = new UserService(mockUserRepository.Object, mockAuthenticationService.Object, mockLogService.Object);
         }
 
         /// <summary>
@@ -77,6 +79,18 @@ namespace XUnitTesting.UserTest
                 _userService.Delete(3);
             });
             Assert.Equal(2, userDictionary.Count);
+        }
+
+        [Fact]
+        public void LogOnDelete()
+        {
+            userDictionary.Clear();
+            userDictionary.Add(user1.Id, user1);
+
+            User deletedUser = _userService.Delete(user1.Id);
+
+            mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"Brugeren {deletedUser.Username} (Id: {deletedUser.Id}) er blevet slettet fra databasen")),
+                It.IsAny<User>()), Times.Once);
         }
     }
 }

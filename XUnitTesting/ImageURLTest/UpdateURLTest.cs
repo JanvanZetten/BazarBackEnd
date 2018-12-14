@@ -14,6 +14,7 @@ namespace XUnitTesting.ImageURLTest
     public class UpdateURLTest
     {
         private Mock<IImageURLRepository> mockURLRepository = new Mock<IImageURLRepository>();
+        private Mock<ILogService> mockLogService = new Mock<ILogService>();
         private readonly IImageURLService _urlService;
         private Dictionary<int, ImageURL> urlDictionary = new Dictionary<int, ImageURL>();
 
@@ -57,7 +58,7 @@ namespace XUnitTesting.ImageURLTest
                 }
             });
 
-            _urlService = new ImageURLService(mockURLRepository.Object);
+            _urlService = new ImageURLService(mockURLRepository.Object, mockLogService.Object);
         }
 
         [Fact]
@@ -130,6 +131,22 @@ namespace XUnitTesting.ImageURLTest
             {
                 var result = _urlService.Update(urltmp);
             });
+        }
+
+        [Fact]
+        public void LogImageURLUpdate()
+        {
+            String newImageURL = "RandomNewImageURL.png";
+            String oldImageURL = "RandomOldImageURL.png";
+            int id = 1;
+
+            mockURLRepository.Setup(mur => mur.GetById(It.IsAny<int>())).Returns(() => new ImageURL() { Id = id, URL = oldImageURL });
+
+            _urlService.Update(new ImageURL() {Id = id , URL = newImageURL});
+
+            mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"Billedet med id: {id} blev skiftet fra {oldImageURL} til {newImageURL}")),
+                It.IsAny<User>()), Times.Once);
+
         }
     }
 }

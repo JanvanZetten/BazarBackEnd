@@ -16,15 +16,13 @@ namespace XUnitTesting.BoothTest
         private readonly Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
         private readonly Mock<IWaitingListRepository> mockWaitingListItemRepository = new Mock<IWaitingListRepository>();
         private readonly Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+        private readonly Mock<ILogService> mockLogService = new Mock<ILogService>();
         private readonly IBoothService _service;
 
         private List<WaitingListItem> waitingList = new List<WaitingListItem>();
 
         private User user1;
         private User user2;
-
-        private Booth booth1;
-        private Booth booth2;
 
         private string token1 = "Hello";
         private string token2 = "Adieu";
@@ -69,7 +67,12 @@ namespace XUnitTesting.BoothTest
                 throw new InvalidTokenException();
             });
 
-            _service = new BoothService(mockUserRepository.Object, null, mockAuthenticationService.Object, mockWaitingListItemRepository.Object);
+            _service = new BoothService(
+                mockUserRepository.Object, 
+                null, 
+                mockAuthenticationService.Object, 
+                mockWaitingListItemRepository.Object, 
+                mockLogService.Object);
         }
 
         [Fact]
@@ -97,6 +100,15 @@ namespace XUnitTesting.BoothTest
             {
                 _service.AddToWaitingList(token3);
             });
+        }
+
+        [Fact]
+        public void LogOnWaitingListAdd()
+        {
+            var user1added = _service.AddToWaitingList("Hello");
+
+            mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"{user1.Username} er blevet tilføjet på ventleisten. Ventelist id er {user1added.Id}")),
+                It.Is<User>(u => u.Equals(user1))), Times.Once);
         }
     }
 }

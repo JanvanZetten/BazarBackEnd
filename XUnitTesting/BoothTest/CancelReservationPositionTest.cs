@@ -22,6 +22,7 @@ namespace XUnitTesting.BoothTest
         private Mock<IBoothRepository> mockBoothRepository = new Mock<IBoothRepository>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
         private Mock<IWaitingListRepository> mockWaitingListRepository = new Mock<IWaitingListRepository>();
+        private Mock<ILogService> mockLogService = new Mock<ILogService>();
         readonly IBoothService _boothService;
 
         private Dictionary<int, WaitingListItem> waitinigListDictionary = new Dictionary<int, WaitingListItem>();
@@ -70,8 +71,14 @@ namespace XUnitTesting.BoothTest
                 return list;
             });
 
-            _boothService = new BoothService(mockUserRepository.Object, mockBoothRepository.Object,
-                mockAuthenticationService.Object, mockWaitingListRepository.Object);
+            _boothService = new BoothService(
+                mockUserRepository.Object, 
+                mockBoothRepository.Object,
+                mockAuthenticationService.Object,
+                mockWaitingListRepository.Object,
+                mockLogService.Object
+                );
+
             mockWaitingListRepository.Setup(x => x.Delete(It.IsAny<int>())).Returns<int>((id) =>
             {
                 var value = waitinigListDictionary[id];
@@ -87,6 +94,15 @@ namespace XUnitTesting.BoothTest
 
             Assert.True(wli1.Id == wli.Id);
             Assert.False(waitinigListDictionary.ContainsValue(wli1));
+        }
+
+        [Fact]
+        public void LogOnCancel()
+        {
+            var wli = _boothService.CancelWaitingPosition(token1);
+
+            mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"{wli.Booker.Username} har afmeldt sig fra ventelisten.")),
+                It.Is<User>(u => u.Equals(user1))), Times.Once);
         }
     }
 }

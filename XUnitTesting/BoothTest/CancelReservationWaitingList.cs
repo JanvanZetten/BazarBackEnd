@@ -19,6 +19,7 @@ namespace XUnitTesting.BoothTest
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
         private Mock<IBoothRepository> mockBoothRepository = new Mock<IBoothRepository>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+        private Mock<ILogService> mockLogService = new Mock<ILogService>();
 
         private Dictionary<int, User> userDictionary = new Dictionary<int, User>();
         private Dictionary<int, Booth> boothDictionary = new Dictionary<int, Booth>();
@@ -159,8 +160,13 @@ namespace XUnitTesting.BoothTest
                 throw new InvalidTokenException("Invalid token");
             });
 
-            _boothService = new BoothService(mockUserRepository.Object, mockBoothRepository.Object,
-                mockAuthenticationService.Object, mockWaitingListItemRepository.Object);
+            _boothService = new BoothService(
+                mockUserRepository.Object, 
+                mockBoothRepository.Object,
+                mockAuthenticationService.Object, 
+                mockWaitingListItemRepository.Object, 
+                mockLogService.Object
+                );
         }
         
         /// <summary>

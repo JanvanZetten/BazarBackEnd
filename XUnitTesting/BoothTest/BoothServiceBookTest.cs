@@ -19,6 +19,7 @@ namespace XUnitTesting.BoothTest
         private Mock<IBoothRepository> mockBoothRepository = new Mock<IBoothRepository>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
         private static Mock<IWaitingListRepository> mockWaitingListRepository = new Mock<IWaitingListRepository>();
+        private Mock<ILogService> mockLogService = new Mock<ILogService>();
 
         private Dictionary<int, User> userDictionary = new Dictionary<int, User>();
         private Dictionary<int, Booth> boothDictionary = new Dictionary<int, Booth>();
@@ -119,7 +120,7 @@ namespace XUnitTesting.BoothTest
                 throw new InvalidTokenException("Invalid token");
             });
 
-            _boothService = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object);
+            _boothService = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object, mockLogService.Object);
         }
 
         /// <summary>
@@ -169,6 +170,29 @@ namespace XUnitTesting.BoothTest
             {
                 _boothService.Book(token1);
             });
+        }
+
+        [Fact]
+        public void LogOnBook()
+        {
+            Booth booth1 = _boothService.Book(token1);
+            Booth booth2 = _boothService.Book(token1);
+
+            Assert.Throws<OnWaitingListException>(() =>
+            {
+                _boothService.Book(token1);
+            });
+
+            //Called 3 times
+            mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"{user2.Username} har reserveret stand {booth1.Id} med tilfældig standreservering.")),
+                It.Is<User>(u => u.Equals(user2))), Times.Once);
+
+            mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"{user2.Username} har reserveret stand {booth2.Id} med tilfældig standreservering.")),
+               It.Is<User>(u => u.Equals(user2))), Times.Once);
+
+            mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"{user2.Username} har fået en plads på ventelisten.")),
+               It.Is<User>(u => u.Equals(user2))), Times.Once);
+
         }
     }
 }
