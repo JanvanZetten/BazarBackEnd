@@ -273,6 +273,9 @@ namespace Core.Application.Implementation
             if (booth == null)
                 throw new BoothNotFoundException(id);
 
+            booth.Booker.PasswordHash = null;
+            booth.Booker.PasswordSalt = null;
+
             return booth;
         }
 
