@@ -304,7 +304,7 @@ namespace Core.Application.Implementation
         /// <param name="updatedBooth">Updated booth.</param>
         public Booth Update(Booth updatedBooth)
         {
-            var booth = GetById(updatedBooth.Id);
+            var booth = GetByIdIncludeAll(updatedBooth.Id);
              
             if (updatedBooth.Booker.Id == 0)
             {
@@ -313,7 +313,12 @@ namespace Core.Application.Implementation
                 updatedBooth.Booker = null;
                 return _boothRepository.Update(updatedBooth);
             }
-            else if (booth.Booker == null)
+
+            updatedBooth.Booker = _userRepository.GetById(updatedBooth.Booker.Id);
+            if (updatedBooth.Booker == null)
+                throw new UserNotFoundException();
+
+            if (booth.Booker == null)
             {
                 //LOG
                 _logService.Create($"Stand nr. {updatedBooth?.Id} er blevet opdateret til at have standholder {updatedBooth?.Booker.Username}.", updatedBooth.Booker);
@@ -323,6 +328,7 @@ namespace Core.Application.Implementation
                 //LOG
                 _logService.Create($"Stand nr. {updatedBooth?.Id} er blevet opdateret til at have standholder {updatedBooth?.Booker.Username}. Gamle standholder: {booth.Booker?.Username} (Id: {booth?.Booker.Id})", updatedBooth.Booker);
             }
+            
 
             return _boothRepository.Update(updatedBooth);
         }
