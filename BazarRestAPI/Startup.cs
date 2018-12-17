@@ -116,12 +116,6 @@ namespace BazarRestAPI
             }
             else
             {
-                app.UseDeveloperExceptionPage();
-                using (var scope = app.ApplicationServices.CreateScope())
-                {
-                    var ctx = scope.ServiceProvider.GetService<BazarContext>();
-                    ctx.Database.EnsureCreated();
-                }
                 app.UseHsts();
             }
 
