@@ -16,6 +16,7 @@ namespace XUnitTesting.BoothTest
         private Mock<IBoothRepository> mockBoothRepository = new Mock<IBoothRepository>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
         private static Mock<IWaitingListRepository> mockWaitingListRepository = new Mock<IWaitingListRepository>();
+        private Mock<ILogService> mockLogService = new Mock<ILogService>();
 
         [Fact]
         public void DeleteBooth()
@@ -23,7 +24,13 @@ namespace XUnitTesting.BoothTest
             var booth = new Booth() { Id = 1 };
             mockBoothRepository.Setup(m => m.Delete(It.IsAny<int>())).Returns(() => booth);
             mockBoothRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns(() => booth);
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).Delete(booth.Id);
+            var result = new BoothService(
+                mockUserRepository.Object, 
+                mockBoothRepository.Object, 
+                mockAuthenticationService.Object, 
+                mockWaitingListRepository.Object,
+                mockLogService.Object)
+                .Delete(booth.Id);
 
             Assert.Equal(booth.Id, result.Id);
         }
@@ -34,8 +41,13 @@ namespace XUnitTesting.BoothTest
             var booth = new Booth() { Id = 0 };
 
             Assert.Throws<BoothNotFoundException>(() =>
-            new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).
-            Delete(booth.Id));
+            new BoothService(
+                mockUserRepository.Object,
+                mockBoothRepository.Object,
+                mockAuthenticationService.Object,
+                mockWaitingListRepository.Object,
+                mockLogService.Object)
+                .Delete(booth.Id));
         }
 
         [Fact]
@@ -45,8 +57,32 @@ namespace XUnitTesting.BoothTest
             mockBoothRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns(() => null);
 
             Assert.Throws<BoothNotFoundException>(() =>
-            new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).
-            Delete(booth.Id));
+            new BoothService(
+                mockUserRepository.Object,
+                mockBoothRepository.Object,
+                mockAuthenticationService.Object,
+                mockWaitingListRepository.Object,
+                mockLogService.Object)
+                .Delete(booth.Id));
+        }
+
+        [Fact]
+        public void LogOnDelete()
+        {
+            var booth = new Booth() { Id = 1 };
+            mockBoothRepository.Setup(m => m.Delete(It.IsAny<int>())).Returns(() => booth);
+            mockBoothRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns(() => booth);
+
+            new BoothService(
+                mockUserRepository.Object,
+                mockBoothRepository.Object,
+                mockAuthenticationService.Object,
+                mockWaitingListRepository.Object,
+                mockLogService.Object)
+                .Delete(booth.Id);
+
+            mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"Stand nr. 1 er blevet slettet.")),
+                It.IsAny<User>()), Times.Once);
         }
     }
 }

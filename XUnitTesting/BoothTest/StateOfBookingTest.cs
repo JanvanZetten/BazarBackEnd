@@ -17,6 +17,7 @@ namespace XUnitTesting.BoothTest
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
         private Mock<IBoothRepository> mockBoothRepository = new Mock<IBoothRepository>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+        private Mock<ILogService> mockLogService = new Mock<ILogService>();
 
         IBoothService _boothServ;
 
@@ -50,7 +51,12 @@ namespace XUnitTesting.BoothTest
 
             mockWaitingListRepository.Setup(x => x.Create(It.IsAny<WaitingListItem>())).Returns(() => new WaitingListItem());
 
-            _boothServ = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object);
+            _boothServ = new BoothService(
+                mockUserRepository.Object, 
+                mockBoothRepository.Object, 
+                mockAuthenticationService.Object,
+                mockWaitingListRepository.Object,
+                mockLogService.Object);
         }
 
         [Fact]

@@ -11,13 +11,29 @@ namespace Core.Application.Implementation
     {
         readonly IUserRepository _userRepository;
         readonly IAuthenticationService _authService;
+        readonly ILogService _logService;
 
-        public UserService(IUserRepository UserRepository, IAuthenticationService authService) 
+        public UserService(
+            IUserRepository UserRepository,
+            IAuthenticationService authService,
+            ILogService logService)
+        {
+            _userRepository = UserRepository;
+            _authService = authService;
+            _logService = logService;
+        }
+
+        #region Obsolete constructors
+        [Obsolete("Constructor is used for tests, but should not be used elsewhere.")]
+        public UserService(
+            IUserRepository UserRepository,
+            IAuthenticationService authService) 
         {
             _userRepository = UserRepository;
             _authService = authService;
         }
-            
+        #endregion
+
         public User Create(User user, string password)
         {
             if (user == null)
@@ -42,6 +58,10 @@ namespace Core.Application.Implementation
             User user = _userRepository.Delete(id);
             if (user == null)
                 throw new UserNotFoundException();
+
+            //LOG
+            _logService.Create($"Brugeren {user?.Username} (Id: {user?.Id}) er blevet slettet fra databasen");
+
             return user;
         }
 

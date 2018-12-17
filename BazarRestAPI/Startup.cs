@@ -20,6 +20,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
+
 namespace BazarRestAPI
 {
     public class Startup
@@ -55,6 +56,10 @@ namespace BazarRestAPI
             services.AddScoped<IWaitingListRepository, WaitingListItemRepository>();
             services.AddScoped<IImageURLRepository, ImageURLRepository>();
             services.AddScoped<IImageURLService, ImageURLService>();
+            services.AddScoped<ILogRepository, LogRepository>();
+            services.AddScoped<ILogService, LogService>();
+            services.AddScoped<IResetRepository, ResetRepository>();
+            services.AddScoped<IResetService, ResetService>();
 
 
             // Creates a random array of bytes for use of passwords.
@@ -111,6 +116,12 @@ namespace BazarRestAPI
             }
             else
             {
+                app.UseDeveloperExceptionPage();
+                using (var scope = app.ApplicationServices.CreateScope())
+                {
+                    var ctx = scope.ServiceProvider.GetService<BazarContext>();
+                    ctx.Database.EnsureCreated();
+                }
                 app.UseHsts();
             }
 

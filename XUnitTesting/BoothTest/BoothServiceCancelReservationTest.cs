@@ -19,6 +19,7 @@ namespace XUnitTesting.BoothTest
         private Mock<IBoothRepository> mockBoothRepository = new Mock<IBoothRepository>();
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
         private Mock<IWaitingListRepository> mockWaitingListRepository = new Mock<IWaitingListRepository>();
+        private Mock<ILogService> mockLogService = new Mock<ILogService>();
 
         private Dictionary<int, User> userDictionary = new Dictionary<int, User>();
         private Dictionary<int, Booth> boothDictionary = new Dictionary<int, Booth>();
@@ -116,7 +117,12 @@ namespace XUnitTesting.BoothTest
                 throw new InvalidTokenException("Invalid token");
             });
 
-            _boothService = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object);
+            _boothService = new BoothService(
+                mockUserRepository.Object,
+                mockBoothRepository.Object,
+                mockAuthenticationService.Object,
+                mockWaitingListRepository.Object,
+                mockLogService.Object);
         }
 
         /// <summary>
@@ -165,6 +171,17 @@ namespace XUnitTesting.BoothTest
             {
                 _boothService.CancelReservation(43, token1);
             });
+        }
+
+        [Fact]
+        public void LogOnCancel()
+        {
+            Booth booth = _boothService.CancelReservation(booth1.Id, token1);
+
+            booth.Booker = user1;
+
+            mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"{booth1.Booker.Username} har annuleret deres stand nr. {booth1.Id}.")),
+                It.Is<User>(u => u.Equals(booth1.Booker))), Times.Once);
         }
     }
 }

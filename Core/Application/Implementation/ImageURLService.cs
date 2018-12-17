@@ -11,28 +11,43 @@ namespace Core.Application.Implementation
 {
     public class ImageURLService : IImageURLService
     {
-        private IImageURLRepository _urlRepo;
+        private readonly IImageURLRepository _urlRepo;
+        private readonly ILogService _logService;
 
+        public ImageURLService(IImageURLRepository urlRepo, ILogService logService)
+        {
+            _urlRepo = urlRepo;
+            _logService = logService;
+        }
+
+        #region Obsolete Consructors
+
+        [Obsolete("Use the constructor with the ILogService.")]
         public ImageURLService(IImageURLRepository urlRepo)
         {
             _urlRepo = urlRepo;
         }
 
+        #endregion
+
+
         public ImageURL Create(ImageURL imgurl)
         {
-            
+
             if (imgurl == null || imgurl.URL == null)
-            { 
+            {
                 throw new InputNotValidException("URL kan ikke være tom.");
             }
             imgurl.Id = 0;
             string ext = Path.GetExtension(imgurl.URL).ToLower();
             if (ext == null || (ext != ".png" && ext != ".jpg" && ext != ".jpeg" && ext != ".gif"))
-            { 
+            {
                 throw new IncompatibleFileTypeException();
             }
 
-            return _urlRepo.Create(imgurl);
+            var imageURLReturned = _urlRepo.Create(imgurl);
+
+            return imageURLReturned;
         }
 
         public ImageURL Delete(int id)
@@ -70,7 +85,14 @@ namespace Core.Application.Implementation
             if (url == null)
                 throw new ImageURLNotFoundException();
 
-            return _urlRepo.Update(imgurl);
+
+            var returnedURL = _urlRepo.Update(imgurl);
+
+            //LOG
+            _logService.Create($"Billedet med id: {url.Id} blev skiftet fra {url.URL} til {imgurl.URL}");
+
+
+            return returnedURL;
         }
     }
 }
