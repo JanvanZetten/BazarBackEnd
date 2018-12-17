@@ -305,8 +305,15 @@ namespace Core.Application.Implementation
         public Booth Update(Booth updatedBooth)
         {
             var booth = GetById(updatedBooth.Id);
-
-            if (booth.Booker == null)
+             
+            if (updatedBooth.Booker.Id == 0)
+            {
+                //LOG
+                _logService.Create($"Stand nr. {updatedBooth?.Id} er blevet opdateret til ikke at have en standholder.");
+                updatedBooth.Booker = null;
+                return _boothRepository.Update(updatedBooth);
+            }
+            else if (booth.Booker == null)
             {
                 //LOG
                 _logService.Create($"Stand nr. {updatedBooth?.Id} er blevet opdateret til at have standholder {updatedBooth?.Booker.Username}.", updatedBooth.Booker);

@@ -101,5 +101,37 @@ namespace XUnitTesting.BoothTest
             mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"Stand nr. 1 er blevet opdateret til at have standholder {user.Username}. Gamle standholder: {initUser.Username} (Id: {initUser.Id})")),
                 It.Is<User>(u => u.Equals(user))), Times.Once);
         }
+
+        [Fact]
+        public void LogOnUpdateWithBookerIdBeingSetAsZero()
+        {
+            var initUser = new User()
+            {
+                Id = 2,
+                Username = "Jørgen"
+            };
+
+            mockBoothRepository.Setup(m => m.Update(It.IsAny<Booth>())).Returns(() => new Booth());
+            mockBoothRepository.Setup(m => m.GetById(It.IsAny<int>())).Returns(() => new Booth()
+            {
+                Id = 1,
+                Booker = initUser
+            });
+
+            var user = new User()
+            {
+                Id = 0
+            };
+
+            var result = new BoothService(null, mockBoothRepository.Object, null, null, mockLogService.Object)
+                .Update(new Booth()
+                {
+                    Id = 1,
+                    Booker = user
+                });
+
+            mockLogService.Verify(x => x.Create(It.Is<String>(m => m.Equals($"Stand nr. 1 er blevet opdateret til ikke at have en standholder.")),
+                It.IsAny<User>()), Times.Once);
+        } 
     }
 }
