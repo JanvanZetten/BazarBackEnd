@@ -57,7 +57,7 @@ namespace Core.Application.Implementation
             if (user == null)
                 throw new UserNotFoundException();
             
-            var booth = _boothRepository.GetAllIncludeAll().FirstOrDefault(b => b.Booker == null);
+            var booth = GetAllIncludeAll().FirstOrDefault(b => b.Booker == null);
             if (booth == null)
             {
                 if (_waitingListRepository.GetAllIncludeAll().Any(w => w.Booker.Id == user.Id))
@@ -127,7 +127,7 @@ namespace Core.Application.Implementation
         /// <returns>The avalible booths.</returns>
         public int CountAvailableBooths()
         {
-            return _boothRepository.GetAllIncludeAll().Where(x => x.Booker == null).Count();
+            return GetAllIncludeAll().Where(x => x.Booker == null).Count();
         }
 
         /// <summary>
@@ -273,6 +273,9 @@ namespace Core.Application.Implementation
             if (booth == null)
                 throw new BoothNotFoundException(id);
 
+            booth.Booker.PasswordHash = null;
+            booth.Booker.PasswordSalt = null;
+
             return booth;
         }
 
@@ -289,7 +292,7 @@ namespace Core.Application.Implementation
             if (user == null)
                 throw new UserNotFoundException();
                 
-            var list = _boothRepository.GetAllIncludeAll().Where(b => b.Booker?.Id == user.Id).ToList();
+            var list = GetAllIncludeAll().Where(b => b.Booker?.Id == user.Id).ToList();
 
             if (list.Count() == 0)
                 throw new NoBookingsFoundException();
@@ -338,7 +341,7 @@ namespace Core.Application.Implementation
 
         public List<Booth> GetUnbookedBooths()
         {
-            return _boothRepository.GetAllIncludeAll().Where(b => b.Booker == null).ToList();
+            return GetAllIncludeAll().Where(b => b.Booker == null).ToList();
         }
 
         public WaitingListItem AddToWaitingList(string token)
@@ -378,7 +381,7 @@ namespace Core.Application.Implementation
                  throw new UserNotFoundException();
                  
              booths.ForEach(b => {
-                 var booth = _boothRepository.GetByIdIncludeAll(b.Id);
+                 var booth = GetByIdIncludeAll(b.Id);
                  if (booth == null)
                  {
                      throw new BoothNotFoundException();
