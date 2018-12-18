@@ -124,7 +124,7 @@ namespace BazarRestAPI
                     ctx.Database.EnsureCreated();
                 }
                 app.UseHsts();
-                app.UseCors(builder => builder.WithOrigins("https://hoejerbazar.firebaseapp.com").AllowAnyMethod().AllowAnyHeader());
+                app.UseCors(builder => builder.WithOrigins("https://hoejerbazar.firebaseapp.com", "http://hoejerbazar.firebaseapp.com").AllowAnyMethod().AllowAnyHeader());
             }
 
             app.UseHttpsRedirection();
