@@ -113,6 +113,7 @@ namespace BazarRestAPI
                     var ctx = scope.ServiceProvider.GetService<BazarContext>();
                     DatabaseInitialize.Initialize(ctx);
                 }
+                app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             }
             else
             {
@@ -123,14 +124,13 @@ namespace BazarRestAPI
                     ctx.Database.EnsureCreated();
                 }
                 app.UseHsts();
+                app.UseCors(builder => builder.WithOrigins("https://hoejerbazar.firebaseapp.com").AllowAnyMethod().AllowAnyHeader());
             }
 
             app.UseHttpsRedirection();
 
             // Use authentication
             app.UseAuthentication();
-
-            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseMvc();
         }
