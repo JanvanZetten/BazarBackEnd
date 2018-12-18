@@ -37,9 +37,9 @@ namespace Core.Application.Implementation
         public User Create(User user, string password)
         {
             if (user == null)
-                throw new UserNotFoundException("The user is null.");
-            if (InputCheck.ValidLength("username", user.Username, 3, 40)
-                && InputCheck.ValidLength("password", password, 8, 40)
+                throw new UserNotFoundException("Brugeren kan ikke være tomt.");
+            if (InputCheck.ValidLength("brugernavn", user.Username, 3, 40)
+                && InputCheck.ValidLength("kodeord", password, 8, 40)
                 && InputCheck.ValidPassword(password)){}
             if (!_userRepository.UniqueUsername(user.Username))
                 throw new NotUniqueUsernameException();
