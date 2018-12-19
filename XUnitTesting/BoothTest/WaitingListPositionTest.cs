@@ -30,6 +30,9 @@ namespace XUnitTesting.BoothTest
         private string token2;
         private string token3;
 
+        /// <summary>
+        /// Setup needed mock enviroment.
+        /// </summary>
         public WaitingListPositionTest()
         {
             #region

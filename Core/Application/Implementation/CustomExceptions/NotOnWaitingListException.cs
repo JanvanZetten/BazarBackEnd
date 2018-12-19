@@ -7,17 +7,11 @@ namespace Core.Application.Implementation.CustomExceptions
 {
     public class NotOnWaitingListException : Exception
     {
-        public NotOnWaitingListException() : base("Du er ikke på ventelisten.")
-        {
-        }
+        public NotOnWaitingListException() : base("Du er ikke på ventelisten.") { }
 
-        public NotOnWaitingListException(string message) : base(message)
-        {
-        }
+        public NotOnWaitingListException(string message) : base(message) { }
 
-        public NotOnWaitingListException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
+        public NotOnWaitingListException(string message, Exception innerException) : base(message, innerException) { }
 
     }
 }

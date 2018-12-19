@@ -18,6 +18,9 @@ namespace XUnitTesting.LogTest
         
         private Log log = new Log() { Id = 1, Date = DateTime.Today, Message = "Asbjørn elsker bjørne" };
 
+        /// <summary>
+        /// Setup needed mock enviroment.
+        /// </summary>
         public DeleteLogTest()
         {
             mockLogRepository.Setup(x => x.Delete(It.IsAny<int>())).Returns<int>((i) =>
@@ -41,6 +44,9 @@ namespace XUnitTesting.LogTest
             _service = new LogService(mockLogRepository.Object, null);
         }
 
+        /// <summary>
+        /// Test to delete log successfully
+        /// </summary>
         [Fact]
         public void ValidDeleteLog()
         {
@@ -52,6 +58,9 @@ namespace XUnitTesting.LogTest
             Assert.Equal(log.User, result.User);
         }
 
+        /// <summary>
+        /// Test to throw exception when log doesn't exist
+        /// </summary>
         [Fact]
         public void InvalidDeleteLog()
         {

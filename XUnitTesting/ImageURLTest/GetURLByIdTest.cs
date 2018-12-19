@@ -28,6 +28,9 @@ namespace XUnitTesting.ImageURLTest
             URL = "mojn"
         };
 
+        /// <summary>
+        /// Setup needed mock enviroment.
+        /// </summary>
         public GetURLByIdTest()
         {
             mockURLRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns<int>((id) =>
@@ -42,6 +45,9 @@ namespace XUnitTesting.ImageURLTest
             _urlService = new ImageURLService(mockURLRepository.Object);
         }
 
+        /// <summary>
+        /// Test to return all the correct URLs
+        /// </summary>
         [Fact]
         public void AssertGetReturnsCorrectURL()
         {
@@ -52,6 +58,9 @@ namespace XUnitTesting.ImageURLTest
 
         [InlineData(0)]
         [InlineData(3)]
+        /// <summary>
+        /// Test to throw exceptions when URLs don't exist
+        /// </summary>
         [Theory]
         public void AssertThrowsExceptionWhenInvalidURLId(int id)
         {

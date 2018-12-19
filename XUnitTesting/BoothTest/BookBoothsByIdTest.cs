@@ -36,6 +36,9 @@ namespace XUnitTesting.BoothTest
 
         private User user;
 
+        /// <summary>
+        /// Setup needed mock enviroment.
+        /// </summary>
         public BookBoothsByIdTest()
         {
             booth1 = new Booth()
@@ -145,6 +148,9 @@ namespace XUnitTesting.BoothTest
                 _mockLogService.Object);
         }
         
+        /// <summary>
+        /// Test to book booths correctly
+        /// </summary>
         [Fact]
         public void AssertValidListOfBooths()
         {
@@ -167,6 +173,9 @@ namespace XUnitTesting.BoothTest
             Assert.True(result.Count == 1);
         }
 
+        /// <summary>
+        /// Test to throw exception when list of booths contains no booths and make sure it hasn't booked any booths
+        /// </summary>
         [Fact]
         public void AssertInvalidBooths()
         {
@@ -180,6 +189,10 @@ namespace XUnitTesting.BoothTest
             Assert.Null(_boothDictionary[1].Booker);
         }
 
+        /// <summary>
+        /// Test to throw exception when a booth is attempted to be booked that already has booker.
+        /// Make sure no booths were booked if this happens.
+        /// </summary>
         [Fact]
         public void AssertBookedBooth()
         {
@@ -194,6 +207,9 @@ namespace XUnitTesting.BoothTest
             Assert.True(_boothDictionary[4].Booker?.Id != user.Id);
         }
 
+        /// <summary>
+        /// Test to throw exception when given token is invalid and make sure it hasn't booked any booths
+        /// </summary>
         [Fact]
         public void AssertInvalidToken()
         {
@@ -206,6 +222,9 @@ namespace XUnitTesting.BoothTest
             Assert.Null(result);
         }
 
+        /// <summary>
+        /// Test to throw exception when user doesn't exist and make sure it hasn't booked any booths
+        /// </summary>
         [Fact]
         public void AssertInvalidUser()
         {
@@ -218,6 +237,9 @@ namespace XUnitTesting.BoothTest
             Assert.Null(result);
         }
 
+        /// <summary>
+        /// Test to throw exception when the given list of booths is empty or null
+        /// </summary>
         [Fact]
         public void AssertEmptyOrNull()
         {
@@ -231,6 +253,9 @@ namespace XUnitTesting.BoothTest
             });
         }
 
+        /// <summary>
+        /// Test to create correct log entry
+        /// </summary>
         [Fact]
         public void LogOnBook()
         {

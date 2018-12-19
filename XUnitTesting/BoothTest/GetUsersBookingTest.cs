@@ -17,6 +17,9 @@ namespace XUnitTesting.BoothTest
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
         private static Mock<IWaitingListRepository> mockWaitingListRepository = new Mock<IWaitingListRepository>();
 
+        /// <summary>
+        /// Test to return corred booths that are booked for the user
+        /// </summary>
         [Fact]
         public void GetUsersBookingSingleBookingTest()
         {
@@ -44,13 +47,16 @@ namespace XUnitTesting.BoothTest
                 return user.Username;
             });
 
-            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).
-                GetUsersBooking("");
+            var result = new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object)
+                .GetUsersBooking("");
 
             Assert.Contains(booth1, result);
             Assert.Contains(booth2, result);
         }
 
+        /// <summary>
+        /// Test to throw exception when a booth doesn't exist
+        /// </summary>
         [Fact]
         public void GetUsersBookingNoBookingTest()
         {
@@ -79,8 +85,8 @@ namespace XUnitTesting.BoothTest
             });
             
             Assert.Throws<NoBookingsFoundException>(() =>
-                new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object).
-                GetUsersBooking("")
+                new BoothService(mockUserRepository.Object, mockBoothRepository.Object, mockAuthenticationService.Object, mockWaitingListRepository.Object)
+                .GetUsersBooking("")
             );
         }
     }

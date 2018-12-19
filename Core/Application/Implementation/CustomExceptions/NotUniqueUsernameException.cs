@@ -7,18 +7,11 @@ namespace Core.Application.Implementation.CustomExceptions
 {
     public class NotUniqueUsernameException : Exception
     {
-        public NotUniqueUsernameException()  : base("Username is already taken")
-        {
+        public NotUniqueUsernameException()  : base("Username is already taken") { }
 
-        }
+        public NotUniqueUsernameException(string message) : base(message) { }
 
-        public NotUniqueUsernameException(string message) : base(message)
-        {
-        }
-
-        public NotUniqueUsernameException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
+        public NotUniqueUsernameException(string message, Exception innerException) : base(message, innerException) { }
 
     }
 }

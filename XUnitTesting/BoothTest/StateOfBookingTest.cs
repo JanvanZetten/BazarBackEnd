@@ -29,9 +29,11 @@ namespace XUnitTesting.BoothTest
 
         Booth booth;
 
+        /// <summary>
+        /// Setup needed mock enviroment.
+        /// </summary>
         public StateOfBookingTest()
         {
-
             mockBoothRepository.Setup(x => x.GetById(It.IsAny<int>())).Returns(() => booth);
 
             mockBoothRepository.Setup(x => x.GetAllIncludeAll()).Returns(() => new List<Booth>
@@ -59,6 +61,9 @@ namespace XUnitTesting.BoothTest
                 mockLogService.Object);
         }
 
+        /// <summary>
+        /// Test to book booth successfully
+        /// </summary>
         [Fact]
         public void ReturnBoothWhenAvailable()
         {
@@ -74,6 +79,9 @@ namespace XUnitTesting.BoothTest
             Assert.Equal(booth.Booker.Username, user.Username);
         }
 
+        /// <summary>
+        /// Test to throw exception when all booths are booked and booth is attempted to be booked, puts user on waiting list
+        /// </summary>
         [Fact]
         public void GiveInformalExceptionWhenNoBoothAvailableAndAddToWaitingList()
         {
@@ -95,6 +103,9 @@ namespace XUnitTesting.BoothTest
             mockWaitingListRepository.Verify(x => x.Create(It.IsAny<WaitingListItem>()), Times.Once());
         }
 
+        /// <summary>
+        /// Test to throw exception when user already has waiting list item
+        /// </summary>
         [Fact]
         public void TheUserIsOnWaitingListExpectException()
         {
@@ -113,7 +124,6 @@ namespace XUnitTesting.BoothTest
             };
 
             Assert.Throws<OnWaitingListException>(() => _boothServ.Book("test"));
-
         }
     }
 }

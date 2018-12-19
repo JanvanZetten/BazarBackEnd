@@ -18,6 +18,9 @@ namespace XUnitTesting.LogTest
 
         private List<Log> list;
 
+        /// <summary>
+        /// Setup needed mock enviroment.
+        /// </summary>
         public GetAllLogsTest()
         {
             list = new List<Log>
@@ -33,6 +36,10 @@ namespace XUnitTesting.LogTest
             });
             _service = new LogService(mockLogRepository.Object, mockUserRepository.Object);
         }
+
+        /// <summary>
+        /// Test to return all logs
+        /// </summary>
         [Fact]
         public void GetAllLogs()
         {
@@ -42,6 +49,9 @@ namespace XUnitTesting.LogTest
             Assert.Equal(list, result);
         }
 
+        /// <summary>
+        /// Test to get the correct log entry list
+        /// </summary>
         [Fact]
         public void GetLogPosition()
         {

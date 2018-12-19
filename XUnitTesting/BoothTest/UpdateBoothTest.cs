@@ -15,6 +15,9 @@ namespace XUnitTesting.BoothTest
         private Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
         private Mock<ILogService> mockLogService = new Mock<ILogService>();
 
+        /// <summary>
+        /// Test to correctly update booth
+        /// </summary>
         [Fact]
         public void UpdateBoothValidTest()
         {
@@ -38,6 +41,9 @@ namespace XUnitTesting.BoothTest
             Assert.NotNull(result);
         }
 
+        /// <summary>
+        /// Test to throw exception when booth doesn't exist
+        /// </summary>
         [Fact]
         public void NonExistingIdUpdateBoothTestExpectException()
         {
@@ -50,6 +56,9 @@ namespace XUnitTesting.BoothTest
             );
         }
 
+        /// <summary>
+        /// Test to create correct log entry when booker is set to null
+        /// </summary>
         [Fact]
         public void LogOnUpdateWithBoothBookerSetAsNull()
         {
@@ -74,6 +83,9 @@ namespace XUnitTesting.BoothTest
                 It.Is<User>(u => u.Equals(user))), Times.Once);
         }
 
+        /// <summary>
+        /// Test to create correct log entry when booth that is being updated had a booker and new booker is added
+        /// </summary>
         [Fact]
         public void LogOnUpdateWithBoothBookerNotNull()
         {
@@ -107,6 +119,9 @@ namespace XUnitTesting.BoothTest
                 It.Is<User>(u => u.Equals(user))), Times.Once);
         }
 
+        /// <summary>
+        /// Test to create correct log entry when booth that is being updated didn't have booker and new booker is added
+        /// </summary>
         [Fact]
         public void LogOnUpdateWithBookerIdBeingSetAsZero()
         {

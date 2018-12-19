@@ -6,16 +6,10 @@ namespace Core.Application.Implementation.CustomExceptions
 {
     public class NoBookingsFoundException : Exception
     {
-        public NoBookingsFoundException() : base("Du har ingen reservation.")
-        {
-        }
+        public NoBookingsFoundException() : base("Du har ingen reservation.") { }
 
-        public NoBookingsFoundException(string message) : base(message)
-        {
-        }
+        public NoBookingsFoundException(string message) : base(message) { }
 
-        public NoBookingsFoundException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
+        public NoBookingsFoundException(string message, Exception innerException) : base(message, innerException) { }
     }
 }

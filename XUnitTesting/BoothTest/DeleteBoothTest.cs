@@ -18,6 +18,9 @@ namespace XUnitTesting.BoothTest
         private static Mock<IWaitingListRepository> mockWaitingListRepository = new Mock<IWaitingListRepository>();
         private Mock<ILogService> mockLogService = new Mock<ILogService>();
 
+        /// <summary>
+        /// Test to make sure booth is deleted correctly
+        /// </summary>
         [Fact]
         public void DeleteBooth()
         {
@@ -35,6 +38,9 @@ namespace XUnitTesting.BoothTest
             Assert.Equal(booth.Id, result.Id);
         }
 
+        /// <summary>
+        /// Test to throw exception when ID to delete is zero
+        /// </summary>
         [Fact]
         public void DeleteBoothWithIdZero()
         {
@@ -50,6 +56,9 @@ namespace XUnitTesting.BoothTest
                 .Delete(booth.Id));
         }
 
+        /// <summary>
+        /// Test to throw exception when ID to delete doesn't exist
+        /// </summary>
         [Fact]
         public void DeleteBoothWithIdNotFound()
         {
@@ -66,6 +75,9 @@ namespace XUnitTesting.BoothTest
                 .Delete(booth.Id));
         }
 
+        /// <summary>
+        /// Test to create correct log entry
+        /// </summary>
         [Fact]
         public void LogOnDelete()
         {

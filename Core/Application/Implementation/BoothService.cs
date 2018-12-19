@@ -54,14 +54,19 @@ namespace Core.Application.Implementation
             var username = _authService.VerifyUserFromToken(token);
             var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == username);
 
+            // Check if the user exists
             if (user == null)
                 throw new UserNotFoundException();
-            
+
+            // Checks if an empty booth exists
             var booth = _boothRepository.GetAllIncludeAll().FirstOrDefault(b => b.Booker == null);
             if (booth == null)
             {
+                // Checks whether the user is already on a waiting list
                 if (_waitingListRepository.GetAllIncludeAll().Any(w => w.Booker.Id == user.Id))
                     throw new AlreadyOnWaitingListException();
+                
+                // Puts the user on the waiting list
                 else
                 {
                     _waitingListRepository.Create(new WaitingListItem()
@@ -77,6 +82,7 @@ namespace Core.Application.Implementation
                 }
             }
 
+            // Sets the user as booker on the waiting list
             booth.Booker = user;
 
             //LOG
@@ -85,19 +91,28 @@ namespace Core.Application.Implementation
             return _boothRepository.Update(booth);
         }
 
+        /// <summary>
+        /// Cancels a specific booth by removing the booker from it.
+        /// </summary>
+        /// <param name="boothId">The booth ID to be cancelled</param>
+        /// <param name="token">The username of the user</param>
         public Booth CancelReservation(int boothId, string token)
         {
             var username = _authService.VerifyUserFromToken(token);
 
             var booth = GetByIdIncludeAll(boothId);
-            if(booth == null)
+
+            // Checks if the booth exists
+            if (booth == null)
             {
                 throw new BoothNotFoundException();
             }
+            // Checks that the booth has a booker
             if(booth.Booker == null)
             {
                 throw new NotAllowedException("Cannot cancel a reservation, where a booth has no booker");
             }
+            // Checks if the user is the one who has the booth booked
             if(booth.Booker.Username != username)
             {
                 throw new NotAllowedException();
@@ -106,8 +121,10 @@ namespace Core.Application.Implementation
             //LOG
             _logService.Create($"{booth?.Booker.Username} har annuleret deres stand nr. {booth?.Id}.", booth?.Booker);
 
+            // Deletes the booker from the booth
             booth.Booker = null;
 
+            // Finds the next user in the waiting list (sorted by date) and puts the on the newly cancelled booth
             var wli = _waitingListRepository.GetAllIncludeAll().FirstOrDefault(w => w.Date == _waitingListRepository.GetAll().Min(d => d.Date));
             if(wli != null)
             {
@@ -138,17 +155,22 @@ namespace Core.Application.Implementation
         public List<Booth> Create(int amount, Booth newBooth)
         {
             List<Booth> boothList = new List<Booth>();
-
             newBooth.Id = 0;
+
+            // Checks if the new booths have a user set
             if (newBooth.Booker != null)
             {
+                // Finds the user
                 var user = _userRepository.GetById(newBooth.Booker.Id);
+
+                // Checks if the user exists
                 if (user == null)
                 {
                     throw new UserNotFoundException();
                 }
             }
 
+            // Loops through all the booths that are to be made and creates the booth objects
             for (int i = 0; i < amount; i++)
             {
                 Booth booth = new Booth()
@@ -172,6 +194,7 @@ namespace Core.Application.Implementation
         /// <param name="id">Identifier.</param>
         public Booth Delete(int id)
         {
+            // Checks if the booth exists, throws BoothNotFoundException if it doesn't
             GetById(id);
 
             //LOG
@@ -179,6 +202,7 @@ namespace Core.Application.Implementation
 
             return _boothRepository.Delete(id);
         }
+
         /// <summary>
         /// Cancels the position the waitinglist user is in
         /// </summary>
@@ -187,12 +211,16 @@ namespace Core.Application.Implementation
         public WaitingListItem CancelWaitingPosition(string token)
         {
             WaitingListItem waitingListItem = _waitingListRepository.GetAllIncludeAll().FirstOrDefault(w => w.Booker.Username == _authService.VerifyUserFromToken(token));
+
+            // Checks if the waiting list item exists
             if (waitingListItem == null)
             {
                 throw new WaitingListItemNotFoundException();
             }
+            // Checks if the item has a booker
             if (waitingListItem.Booker == null)
             {
+                // Could be smart deleting the item since the item would be buggy if it doesn't have a booker
                 throw new NotAllowedException("Det var ikke muligt at annullere din position i ventelisten");
             }
 
@@ -202,6 +230,7 @@ namespace Core.Application.Implementation
             return _waitingListRepository.Delete(waitingListItem.Id);
 
         }
+
         /// <summary>
         /// Gets all waiting list items
         /// </summary>
@@ -220,12 +249,14 @@ namespace Core.Application.Implementation
         {
             string username = _authService.VerifyUserFromToken(token);
 
+            // Gets a int value that is equal to the user's position in the waiting list, sorted by date
             int? waitingListItemPosition = GetAllWaitingListItemsOrdered()
                 .Select((s, i) => new { s, i })
                 .Where(w => w.s.Booker?.Username == username)
                 .Select(w => w.i + 1)
                 .FirstOrDefault();
 
+            // Checks if the user is on the waiting list
             if (waitingListItemPosition == null || waitingListItemPosition.Value == 0)
             {
                 throw new NotOnWaitingListException();
@@ -249,10 +280,13 @@ namespace Core.Application.Implementation
         /// <param name="id">Identifier.</param>
         public Booth GetById(int id)
         {
+            // Checks if the ID is valid
             if (id <= 0)
                 throw new BoothNotFoundException(nameof(id) +  " ID must be higher than 0");
             
             var booth = _boothRepository.GetById(id);
+
+            // Checks if the booth exists
             if (booth == null)
                 throw new BoothNotFoundException(id);
                 
@@ -266,10 +300,13 @@ namespace Core.Application.Implementation
         /// <param name="id">Identifier.</param>
         public Booth GetByIdIncludeAll(int id)
         {
+            // Checks if the ID is valid
             if (id <= 0)
                 throw new BoothNotFoundException(nameof(id) + "ID must be higher than 0");
 
             var booth = _boothRepository.GetByIdIncludeAll(id);
+
+            // Checks if the booth exists
             if (booth == null)
                 throw new BoothNotFoundException(id);
 
@@ -286,11 +323,13 @@ namespace Core.Application.Implementation
             var username = _authService.VerifyUserFromToken(token);
             var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == username);
 
+            // Checks if the user exists
             if (user == null)
                 throw new UserNotFoundException();
                 
             var list = _boothRepository.GetAllIncludeAll().Where(b => b.Booker?.Id == user.Id).ToList();
 
+            // Checks if the user has any bookings
             if (list.Count() == 0)
                 throw new NoBookingsFoundException();
 
@@ -306,6 +345,7 @@ namespace Core.Application.Implementation
         {
             var booth = GetByIdIncludeAll(updatedBooth.Id);
              
+            // Checks if the booth is supposed to be set as having no booth
             if (updatedBooth.Booker.Id == 0)
             {
                 //LOG
@@ -315,20 +355,24 @@ namespace Core.Application.Implementation
             }
 
             updatedBooth.Booker = _userRepository.GetById(updatedBooth.Booker.Id);
+
+            // Checks if the user that is attempted to be set on the booth exists
             if (updatedBooth.Booker == null)
                 throw new UserNotFoundException();
 
+            // Runs if a booth is updated with a new user and there wasn't a user on the booth prior
             if (booth.Booker == null)
             {
                 //LOG
                 _logService.Create($"Stand nr. {updatedBooth?.Id} er blevet opdateret til at have standholder {updatedBooth?.Booker.Username}.", updatedBooth.Booker);
             }
+
+            // Runs if a booth is updated with a ew user and there was a user on the booth prior
             else
             {
                 //LOG
                 _logService.Create($"Stand nr. {updatedBooth?.Id} er blevet opdateret til at have standholder {updatedBooth?.Booker.Username}. Gamle standholder: {booth.Booker?.Username} (Id: {booth?.Booker.Id})", updatedBooth.Booker);
             }
-            
 
             return _boothRepository.Update(updatedBooth);
         }
@@ -336,10 +380,10 @@ namespace Core.Application.Implementation
         /// <summary>
         /// Gets all booths including the booker.
         /// </summary>
-        /// <returns></returns>
         public List<Booth> GetAllIncludeAll()
         {
             return _boothRepository.GetAllIncludeAll().Select(b => {
+                // Removes Hash and Salt from the booker when displayed for frontend
                 if (b.Booker != null)
                 {
                     b.Booker.PasswordHash = null;
@@ -349,19 +393,28 @@ namespace Core.Application.Implementation
             }).ToList();
         }
 
+        /// <summary>
+        /// Gets all booths that do not have a booker.
+        /// </summary>
         public List<Booth> GetUnbookedBooths()
         {
             return _boothRepository.GetAllIncludeAll().Where(b => b.Booker == null).ToList();
         }
 
+        /// <summary>
+        /// Creates a new waiting list item with a user attached.
+        /// </summary>
+        /// <param name="token">The username of the user</param>
         public WaitingListItem AddToWaitingList(string token)
         {
             var username = _authService.VerifyUserFromToken(token);
             var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == username);
 
+            // CHecks if the user exists
             if (user == null)
                 throw new UserNotFoundException();
 
+            // Date is set to the current time
             var waitingListItem = new WaitingListItem()
             {
                 Id = 0,
@@ -369,6 +422,7 @@ namespace Core.Application.Implementation
                 Date = DateTime.Now
             };
 
+            // Removes Hash and Salt from the user for frontend
             var userWithoutPassword = _waitingListRepository.Create(waitingListItem);
             userWithoutPassword.Booker.PasswordHash = null;
             userWithoutPassword.Booker.PasswordSalt = null;
@@ -378,24 +432,35 @@ namespace Core.Application.Implementation
 
             return userWithoutPassword;
         }
-        
+
+        /// <summary>
+        /// Books a custom amount of booths with selected IDs for the user
+        /// </summary>
+        /// <param name="booths">The amount of booths to be booked</param>
+        /// <param name="token">The username of the user</param>
+        /// <returns></returns>
         public List<Booth> BookBoothsById(List<Booth> booths, string token)
         {
+            // Checks if there are any booths being booked
              if (booths == null || booths.Count == 0)
                  throw new EmptyBookingException();
                 
              var username = _authService.VerifyUserFromToken(token);
              var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == username);
              
+            // Checks if the user exists
              if (user == null)
                  throw new UserNotFoundException();
                  
+             // Adds the user as booker on all the selected booths
              booths.ForEach(b => {
                  var booth = _boothRepository.GetByIdIncludeAll(b.Id);
+                 // Checks if the booth exists
                  if (booth == null)
                  {
                      throw new BoothNotFoundException();
                  }
+                 // Checks that the booth doesn't already have a booker
                  else if (booth.Booker != null)
                  {
                      throw new AlreadyBookedException();
@@ -403,16 +468,16 @@ namespace Core.Application.Implementation
                  b.Booker = user;
              });
 
-            //LOG
+            //Required for LOG to log all booths being booked
             string boothIds = "";
 
             foreach (var boothId in booths)
             {
                 boothIds += boothId.Id + ", ";
             }
-
             boothIds.Substring(boothIds.Length - 2);
 
+            //LOG
             _logService.Create($"{user?.Username} (Id: {user?.Id}) har reserveret {booths?.Count} stande på id {boothIds}.", user);
 
             return _boothRepository.Update(booths);
