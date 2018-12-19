@@ -220,7 +220,7 @@ namespace Core.Application.Implementation
             // Checks if the item has a booker
             if (waitingListItem.Booker == null)
             {
-                // Could be smart deleting the item since the item would be buggy if it doesn't have a booker
+                // TODO: Delete item if it doesn't have a booker. WLIs should not be able to have no booker.
                 throw new NotAllowedException("Det var ikke muligt at annullere din position i ventelisten");
             }
 
