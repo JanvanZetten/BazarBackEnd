@@ -104,7 +104,7 @@ namespace BazarRestAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            // Runs when the build is in development (IIS Express)
+            // Runs when the build is in development
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -116,7 +116,7 @@ namespace BazarRestAPI
                 }
                 app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             }
-            // Runs when the build is in production (Azure)
+            // Runs when the build is in production
             else
             {
                 app.UseDeveloperExceptionPage();
