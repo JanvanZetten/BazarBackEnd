@@ -82,7 +82,7 @@ namespace Core.Application.Implementation
                 }
             }
 
-            // Sets the user as booker on the waiting list
+            // Sets the user as booker on booth
             booth.Booker = user;
 
             //LOG
@@ -95,7 +95,7 @@ namespace Core.Application.Implementation
         /// Cancels a specific booth by removing the booker from it.
         /// </summary>
         /// <param name="boothId">The booth ID to be cancelled</param>
-        /// <param name="token">The username of the user</param>
+        /// <param name="token">Token of the user to be converted into username</param>
         public Booth CancelReservation(int boothId, string token)
         {
             var username = _authService.VerifyUserFromToken(token);
@@ -367,7 +367,7 @@ namespace Core.Application.Implementation
                 _logService.Create($"Stand nr. {updatedBooth?.Id} er blevet opdateret til at have standholder {updatedBooth?.Booker.Username}.", updatedBooth.Booker);
             }
 
-            // Runs if a booth is updated with a ew user and there was a user on the booth prior
+            // Runs if a booth is updated with a new user and there was a user on the booth prior
             else
             {
                 //LOG
@@ -410,7 +410,7 @@ namespace Core.Application.Implementation
             var username = _authService.VerifyUserFromToken(token);
             var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == username);
 
-            // CHecks if the user exists
+            // Checks if the user exists
             if (user == null)
                 throw new UserNotFoundException();
 
@@ -436,8 +436,8 @@ namespace Core.Application.Implementation
         /// <summary>
         /// Books a custom amount of booths with selected IDs for the user
         /// </summary>
-        /// <param name="booths">The amount of booths to be booked</param>
-        /// <param name="token">The username of the user</param>
+        /// <param name="booths">The specific booths wanted booked</param>
+        /// <param name="token">Token of the user to be converted into username</param>
         /// <returns></returns>
         public List<Booth> BookBoothsById(List<Booth> booths, string token)
         {

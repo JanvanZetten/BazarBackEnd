@@ -27,7 +27,7 @@ namespace XUnitTesting.BoothTest
         };
 
         /// <summary>
-        /// Test to make sure returns all booths, currect amount of booths with bookers, and booths with Hash and Salt removed
+        /// Test to make sure returns all booths, correct amount of booths with bookers, and booths with Hash and Salt removed
         /// </summary>
         [Fact]
         public void GetAllBoothsIncludeAll()

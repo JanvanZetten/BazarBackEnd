@@ -18,7 +18,7 @@ namespace XUnitTesting.BoothTest
         private static Mock<IWaitingListRepository> mockWaitingListRepository = new Mock<IWaitingListRepository>();
 
         /// <summary>
-        /// Test to return corred booths that are booked for the user
+        /// Test to return correct booths that are booked for the user
         /// </summary>
         [Fact]
         public void GetUsersBookingSingleBookingTest()
