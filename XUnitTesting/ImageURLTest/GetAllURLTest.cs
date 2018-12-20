@@ -29,6 +29,9 @@ namespace XUnitTesting.ImageURLTest
             URL = "mojn"
         };
 
+        /// <summary>
+        /// Setup needed mock enviroment.
+        /// </summary>
         public GetAllURLTest()
         {
             urlDictionary.Add(url1.Id, url1);
@@ -42,6 +45,9 @@ namespace XUnitTesting.ImageURLTest
             _urlService = new ImageURLService(mockURLRepository.Object);
         }
 
+        /// <summary>
+        /// Test to return all correct URLs 
+        /// </summary>
         [Fact]
         public void AssertGetAllCorrectURL()
         {

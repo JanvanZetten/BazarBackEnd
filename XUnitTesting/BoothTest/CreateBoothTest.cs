@@ -16,6 +16,9 @@ namespace XUnitTesting.BoothTest
         private Mock<IBoothRepository> mockBoothRepository = new Mock<IBoothRepository>();
         private Mock<ILogService> mockLogService = new Mock<ILogService>();
 
+        /// <summary>
+        /// Test to create a valid booth
+        /// </summary>
         [Fact]
         public void CreateValidBoothTest()
         {
@@ -31,6 +34,9 @@ namespace XUnitTesting.BoothTest
             Assert.Equal(id, result.FirstOrDefault(b => b.Id == id).Id);
         }
 
+        /// <summary>
+        /// Test to make sure ID is automatically set correctly
+        /// </summary>
         [Fact]
         public void CreateBoothWithIdChangeTest()
         {
@@ -41,6 +47,9 @@ namespace XUnitTesting.BoothTest
             mockBoothRepository.VerifyAll();
         }
 
+        /// <summary>
+        /// Test to create correct log entry
+        /// </summary>
         [Fact] 
         public void LogOnCreate()
         {

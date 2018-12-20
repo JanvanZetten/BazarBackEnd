@@ -6,16 +6,10 @@ namespace Core.Application.Implementation.CustomExceptions
 {
     public class EmptyBookingException : Exception
     {
-        public EmptyBookingException() : base("Der blev ikke fundet nogle stande i reservationen.")
-        {
-        }
+        public EmptyBookingException() : base("Der blev ikke fundet nogle stande i reservationen.") { }
 
-        public EmptyBookingException(string message) : base(message)
-        {
-        }
+        public EmptyBookingException(string message) : base(message) { }
 
-        public EmptyBookingException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
+        public EmptyBookingException(string message, Exception innerException) : base(message, innerException) { }
     }
 }

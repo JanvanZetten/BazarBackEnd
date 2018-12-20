@@ -7,17 +7,11 @@ namespace Core.Application.Implementation.CustomExceptions
 {
     public class NotAllowedException : Exception
     {
-        public NotAllowedException() : base("Du har ikke tilladelse til dette.")
-        {
-        }
+        public NotAllowedException() : base("Du har ikke tilladelse til dette.") { }
 
-        public NotAllowedException(string message) : base(message)
-        {
-        }
+        public NotAllowedException(string message) : base(message) { }
 
-        public NotAllowedException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
+        public NotAllowedException(string message, Exception innerException) : base(message, innerException) { }
 
     }
 }

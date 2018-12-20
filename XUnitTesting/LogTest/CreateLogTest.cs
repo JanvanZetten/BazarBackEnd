@@ -17,7 +17,11 @@ namespace XUnitTesting.LogTest
         private readonly ILogService _service;
         private readonly Mock<ILogRepository> mockLogRepository = new Mock<ILogRepository>();
         private int id = 1;
-        private Dictionary<int, Log> dictionary = new Dictionary<int, Log>(); 
+        private Dictionary<int, Log> dictionary = new Dictionary<int, Log>();
+
+        /// <summary>
+        /// Setup needed mock enviroment.
+        /// </summary>
         public CreateLogTest()
         {
             mockLogRepository.Setup(x => x.Create(It.IsAny<Log>())).Returns<Log>((l) =>
@@ -41,6 +45,9 @@ namespace XUnitTesting.LogTest
             _service = new LogService(mockLogRepository.Object, mockUserRepository.Object);
         }
 
+        /// <summary>
+        /// Test to create a valid log entry without user
+        /// </summary>
         [Fact]
         public void ValidLog()
         {
@@ -53,6 +60,9 @@ namespace XUnitTesting.LogTest
             Assert.Null(result.User);
         }
 
+        /// <summary>
+        /// Test to make sure date is correct
+        /// </summary>
         [Fact]
         public void LogWithDateSet()
         {
@@ -63,6 +73,9 @@ namespace XUnitTesting.LogTest
                 && result.Date > DateTime.Now.AddDays(-1));
         }
 
+        /// <summary>
+        /// Test to throw exception when log entry is empty
+        /// </summary>
         [Fact]
         public void InvalidMessageLog()
         {
@@ -72,6 +85,9 @@ namespace XUnitTesting.LogTest
             });
         }
 
+        /// <summary>
+        /// Test to throw exception when user doesn't exist
+        /// </summary>
         [Fact]
         public void InvalidUserLog()
         {
@@ -83,6 +99,9 @@ namespace XUnitTesting.LogTest
             });
         }
 
+        /// <summary>
+        /// Test to create valid log entry with user
+        /// </summary>
         [Fact]
         public void ValidUserLog()
         {
@@ -94,7 +113,9 @@ namespace XUnitTesting.LogTest
             Assert.Equal(log.User.Id, result.User.Id);
         }
 
-
+        /// <summary>
+        /// Test to make sure ID is set automatically
+        /// </summary>
         [Fact]
         public void LogWithIdSet()
         {;

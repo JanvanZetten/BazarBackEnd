@@ -38,6 +38,9 @@ namespace XUnitTesting.BoothTest
         private string token1 = "Hello";
         private string token2 = "Adieu";
 
+        /// <summary>
+        /// Setup needed mock enviroment.
+        /// </summary>
         public CancelReservationWaitingList()
         {
             user1 = new User()

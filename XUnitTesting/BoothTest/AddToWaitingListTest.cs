@@ -28,6 +28,9 @@ namespace XUnitTesting.BoothTest
         private string token2 = "Adieu";
         private string token3 = "Bobby";
 
+        /// <summary>
+        /// Setup needed mock enviroment.
+        /// </summary>
         public AddToWaitingListTest()
         {
             user1 = new User()
@@ -75,6 +78,9 @@ namespace XUnitTesting.BoothTest
                 mockLogService.Object);
         }
 
+        /// <summary>
+        /// Test to make sure waiting list items are created
+        /// </summary>
         [Fact]
         public void AssertWaitingListItemCreated()
         {
@@ -84,6 +90,9 @@ namespace XUnitTesting.BoothTest
             Assert.True(waitingList.Count == 2);
         }
 
+        /// <summary>
+        /// Test to throw exception when using bad token
+        /// </summary>
         [Fact]
         public void AssertThrowsWhenInvalidToken()
         {
@@ -93,6 +102,9 @@ namespace XUnitTesting.BoothTest
             });
         }
 
+        /// <summary>
+        /// Test to throw exception when user doesn't exist
+        /// </summary>
         [Fact]
         public void AssertThrowsWhenUserNotFound()
         {
@@ -102,6 +114,9 @@ namespace XUnitTesting.BoothTest
             });
         }
 
+        /// <summary>
+        /// Test to create correct log entry
+        /// </summary>
         [Fact]
         public void LogOnWaitingListAdd()
         {
