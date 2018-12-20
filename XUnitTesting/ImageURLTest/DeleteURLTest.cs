@@ -29,9 +29,11 @@ namespace XUnitTesting.ImageURLTest
             URL = "mojn.gif"
         };
 
+        /// <summary>
+        /// Setup needed mock enviroment.
+        /// </summary>
         public DeleteURLTest()
         {
-
             mockURLRepository.Setup(x => x.Delete(It.IsAny<int>())).Returns<int>((id) =>
             {
                 if (!urlDictionary.ContainsKey(id))
@@ -44,6 +46,9 @@ namespace XUnitTesting.ImageURLTest
             _urlService = new ImageURLService(mockURLRepository.Object);
         }
 
+        /// <summary>
+        /// Test to make sure URL is deleted when valid ID
+        /// </summary>
         [Fact]
         public void DeleteValidInput()
         {
@@ -58,6 +63,9 @@ namespace XUnitTesting.ImageURLTest
             Assert.Equal(url1.Id, deletedURL.Id);
         }
 
+        /// <summary>
+        /// Test to throw exception when URL doesn't exist
+        /// </summary>
         [Fact]
         public void DeleteInvalidInput()
         {

@@ -27,7 +27,10 @@ namespace XUnitTesting.BoothTest
 
         private Dictionary<int, WaitingListItem> waitinigListDictionary = new Dictionary<int, WaitingListItem>();
         string token1 = "test1";
-           
+
+        /// <summary>
+        /// Setup needed mock enviroment.
+        /// </summary>
         public CancelReservationPositionTest()
         {
             user1 = new User()
@@ -87,6 +90,9 @@ namespace XUnitTesting.BoothTest
             });
         }
 
+        /// <summary>
+        /// Test To make sure a waiting list booking was cancelled correctly
+        /// </summary>
         [Fact]
         public void CancelReservationTest()
         {
@@ -96,6 +102,9 @@ namespace XUnitTesting.BoothTest
             Assert.False(waitinigListDictionary.ContainsValue(wli1));
         }
 
+        /// <summary>
+        /// Test to create correct log entry
+        /// </summary>
         [Fact]
         public void LogOnCancel()
         {

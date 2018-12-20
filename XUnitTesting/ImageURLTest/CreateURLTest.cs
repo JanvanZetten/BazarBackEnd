@@ -20,6 +20,9 @@ namespace XUnitTesting.ImageURLTest
         private Dictionary<int, ImageURL> urlDictionary = new Dictionary<int, ImageURL>();
         private int nextId = 1;
 
+        /// <summary>
+        /// Setup needed mock enviroment.
+        /// </summary>
         public CreateURLTest()
         {
             mockURLRepository.Setup(x => x.Create(It.IsAny<ImageURL>())).Returns<ImageURL>((u) =>
@@ -38,6 +41,9 @@ namespace XUnitTesting.ImageURLTest
         [InlineData("picture.gif")]
         [InlineData("picture.PNG")]
         [InlineData("picture.JPeG")]
+        /// <summary>
+        /// Test creating valid new URLs
+        /// </summary>
         [Theory] 
         public void AssertCreateWithValidURL(string url)
         {
@@ -55,6 +61,9 @@ namespace XUnitTesting.ImageURLTest
         [InlineData("picture.exe")]
         [InlineData("picture.bmp")]
         [InlineData("picture.mp3")]
+        /// <summary>
+        /// Test creating invalid new URLs and throw exception
+        /// </summary>
         [Theory]
         public void AssertCreateWithInvalidURLThrowsException(string url)
         {
@@ -69,8 +78,11 @@ namespace XUnitTesting.ImageURLTest
             });
         }
 
+        /// <summary>
+        /// Test to throw exception when URL is empty
+        /// </summary>
         [Fact]
-        public void AssertThrowsNullreferenceException()
+        public void AssertThrowsExceptionWhenURLIsNull()
         {
             ImageURL urltmp = new ImageURL()
             {
@@ -88,6 +100,9 @@ namespace XUnitTesting.ImageURLTest
             });
         }
 
+        /// <summary>
+        /// Test to make sure ID is automatically set
+        /// </summary>
         [Fact]
         public void CreateImageUrlWithIdSetToZero()
         {

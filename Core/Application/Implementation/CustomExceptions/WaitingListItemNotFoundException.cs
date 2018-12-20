@@ -6,18 +6,10 @@ namespace Core.Application.Implementation.CustomExceptions
 {
     public class WaitingListItemNotFoundException : Exception
     {
-        public WaitingListItemNotFoundException() : base("Reservationen på ventelisten blev ikke fundet.")
-        {
+        public WaitingListItemNotFoundException() : base("Reservationen på ventelisten blev ikke fundet.") { }
 
-        }
+        public WaitingListItemNotFoundException(string message) : base(message) { }
 
-        public WaitingListItemNotFoundException(string message) : base(message)
-        {
-
-        }
-
-        public WaitingListItemNotFoundException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
+        public WaitingListItemNotFoundException(string message, Exception innerException) : base(message, innerException) { }
     }
 }

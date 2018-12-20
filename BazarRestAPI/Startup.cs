@@ -44,6 +44,7 @@ namespace BazarRestAPI
         {
             services.AddCors();
 
+            // Scopes all Services and Repositories
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRepository<User>, UserRepository>();
@@ -90,14 +91,12 @@ namespace BazarRestAPI
             if (_env.IsDevelopment())
             {
                 // In-memory database:
-                //services.AddDbContext<PetConsolContext>(opt => opt.UseInMemoryDatabase("PetsList"));
                 services.AddDbContext<BazarContext>(opt => opt.UseSqlite("Data Source = BazarLocalDB.db").EnableSensitiveDataLogging());
             }
             else
             {
                 // SQL Server on Azure:
-                services.AddDbContext<BazarContext>(opt =>
-                         opt.UseSqlServer(_conf.GetConnectionString("defaultConnection")));
+                services.AddDbContext<BazarContext>(opt => opt.UseSqlServer(_conf.GetConnectionString("defaultConnection")));
             }
 
         }
@@ -105,16 +104,19 @@ namespace BazarRestAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            // Runs when the build is in development
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 using (var scope = app.ApplicationServices.CreateScope())
                 {
                     var ctx = scope.ServiceProvider.GetService<BazarContext>();
+                    // Deletes and creates a new database with mock data.
                     DatabaseInitialize.Initialize(ctx);
                 }
                 app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             }
+            // Runs when the build is in production
             else
             {
                 app.UseDeveloperExceptionPage();
@@ -128,10 +130,7 @@ namespace BazarRestAPI
             }
 
             app.UseHttpsRedirection();
-
-            // Use authentication
             app.UseAuthentication();
-
             app.UseMvc();
         }
     }

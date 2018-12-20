@@ -81,6 +81,9 @@ namespace XUnitTesting.UserTest
             Assert.Equal(2, userDictionary.Count);
         }
 
+        /// <summary>
+        /// Test to create correct log entry
+        /// </summary>
         [Fact]
         public void LogOnDelete()
         {

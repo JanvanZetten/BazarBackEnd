@@ -33,6 +33,9 @@ namespace XUnitTesting.BoothTest
         private string token1 = "Hello";
         private string token2 = "Adieu";
 
+        /// <summary>
+        /// Setup needed mock enviroment.
+        /// </summary>
         public BoothServiceBookTest()
         {
             user1 = new User()
@@ -134,14 +137,9 @@ namespace XUnitTesting.BoothTest
             Assert.True(boothDictionary.Values.Any(b => b.Booker.Username == user2.Username));
         }
 
-        [Fact]
-        public void BookInvalidUser()
-        {
-            Booth booth = _boothService.Book(token1);
-
-            Assert.False(boothDictionary.Values.Any(b => b.Booker?.Username == user1.Username));
-        }
-
+        /// <summary>
+        /// Test to throw exception when token is invalid
+        /// </summary>
         [Fact]
         public void BookInvalidToken()
         {
@@ -151,6 +149,9 @@ namespace XUnitTesting.BoothTest
             });
         }
 
+        /// <summary>
+        /// Test to throw exception when user doesn't exist
+        /// </summary>
         [Fact]
         public void BookWithUserNotFound()
         {
@@ -160,6 +161,9 @@ namespace XUnitTesting.BoothTest
             });
         }
 
+        /// <summary>
+        /// Test to throw exception when no booths remain unbooked and a booth is attempted to be booked
+        /// </summary>
         [Fact]
         public void BookWithNoBoothsAvailable()
         {
@@ -172,6 +176,9 @@ namespace XUnitTesting.BoothTest
             });
         }
 
+        /// <summary>
+        /// Test to create correct log entry
+        /// </summary>
         [Fact]
         public void LogOnBook()
         {

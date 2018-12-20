@@ -8,13 +8,9 @@ namespace Core.Application.Implementation.CustomExceptions
     public class InputNotValidException : Exception
     {
 
-        public InputNotValidException(string message) : base(message)
-        {
-        }
+        public InputNotValidException(string message) : base(message) { }
 
-        public InputNotValidException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
+        public InputNotValidException(string message, Exception innerException) : base(message, innerException) { }
 
     }
 }

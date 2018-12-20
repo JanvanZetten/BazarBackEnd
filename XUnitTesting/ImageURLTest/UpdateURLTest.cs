@@ -29,6 +29,9 @@ namespace XUnitTesting.ImageURLTest
             URL = "mojn.gif"
         };
 
+        /// <summary>
+        /// Setup needed mock enviroment.
+        /// </summary>
         public UpdateURLTest()
         {
             urlDictionary.Add(url1.Id, url1);
@@ -61,6 +64,9 @@ namespace XUnitTesting.ImageURLTest
             _urlService = new ImageURLService(mockURLRepository.Object, mockLogService.Object);
         }
 
+        /// <summary>
+        /// Test updating valid URL
+        /// </summary>
         [Fact]
         public void AssertUpdateURLValid()
         {
@@ -76,6 +82,9 @@ namespace XUnitTesting.ImageURLTest
             Assert.True(urlDictionary.Count == 2);
         }
 
+        /// <summary>
+        /// Test to throw exception when URL is empty
+        /// </summary>
         [Fact]
         public void AssertThrowsWhenURLIsNull()
         {
@@ -99,6 +108,9 @@ namespace XUnitTesting.ImageURLTest
 
         [InlineData(3)]
         [InlineData(0)]
+        /// <summary>
+        /// Test to throw exception when URLs don't exist
+        /// </summary>
         [Theory]
         public void AssertThrowsWhenInvalidId(int id)
         {
@@ -118,6 +130,9 @@ namespace XUnitTesting.ImageURLTest
         [InlineData("picture.exe")]
         [InlineData("picture.bmp")]
         [InlineData("picture.mp3")]
+        /// <summary>
+        /// Test to throw exception when filetype isn't supported or invalid
+        /// </summary>
         [Theory]
         public void AssertThrowsWhenInvalidFiletype(string url)
         {
@@ -133,6 +148,9 @@ namespace XUnitTesting.ImageURLTest
             });
         }
 
+        /// <summary>
+        /// Test to create correct log entry
+        /// </summary>
         [Fact]
         public void LogImageURLUpdate()
         {

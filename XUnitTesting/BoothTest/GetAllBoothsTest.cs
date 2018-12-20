@@ -16,6 +16,9 @@ namespace XUnitTesting.BoothTest
         private Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
         private static Mock<IWaitingListRepository> mockWaitingListRepository = new Mock<IWaitingListRepository>();
 
+        /// <summary>
+        /// Test to make sure returns all correct booths
+        /// </summary>
         [Fact]
         public void GetAllBooths()
         {
@@ -23,11 +26,11 @@ namespace XUnitTesting.BoothTest
             {
                 new Booth(){
                     Id = 1,
-                    Booker = new Core.Entity.User()
+                    Booker = new User()
                 },
                 new Booth(){
                     Id = 2,
-                    Booker = new Core.Entity.User()
+                    Booker = new User()
                 },
                 new Booth(){
                     Id = 3,
@@ -39,7 +42,7 @@ namespace XUnitTesting.BoothTest
                 },
                 new Booth(){
                     Id = 5,
-                    Booker = new Core.Entity.User()
+                    Booker = new User()
                 }
             };
 

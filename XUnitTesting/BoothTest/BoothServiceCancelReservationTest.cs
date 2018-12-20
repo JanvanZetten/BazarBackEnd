@@ -33,6 +33,9 @@ namespace XUnitTesting.BoothTest
         private string token1 = "Hello";
         private string token2 = "Adieu";
 
+        /// <summary>
+        /// Setup needed mock enviroment.
+        /// </summary>
         public BoothServiceCancelReservationTest()
         {
             user1 = new User()
@@ -129,7 +132,7 @@ namespace XUnitTesting.BoothTest
         /// Make valid Cancel.
         /// </summary>
         [Fact]
-        public void CancelReservationValidInput()
+        public void CancelBookingValidInput()
         {
             Booth booth = _boothService.CancelReservation(booth1.Id, token1);
 
@@ -137,8 +140,11 @@ namespace XUnitTesting.BoothTest
             Assert.True(boothDictionary.Values.Any(b => b.Id == booth1.Id && b.Booker == null));
         }
 
+        /// <summary>
+        /// Test to throw exception when user attempts cancelling booking when it is not the booker on the booth
+        /// </summary>
         [Fact]
-        public void CancelReservationInvalidUser()
+        public void CancelBookingInvalidUser()
         {
             Assert.Throws<NotAllowedException>(() =>
             {
@@ -146,8 +152,11 @@ namespace XUnitTesting.BoothTest
             });
         }
 
+        /// <summary>
+        /// Test to throw exception when token is invalid
+        /// </summary>
         [Fact]
-        public void CancelReservationInvalidToken()
+        public void CancelBookingInvalidToken()
         {
             Assert.Throws<InvalidTokenException>(() =>
             {
@@ -155,8 +164,11 @@ namespace XUnitTesting.BoothTest
             });
         }
 
+        /// <summary>
+        /// Test to throw exception when user doesn't exist
+        /// </summary>
         [Fact]
-        public void CancelReservationWithUserNotFound()
+        public void CancelBookingWithUserNotFound()
         {
             Assert.Throws<NotAllowedException>(() =>
             {
@@ -164,8 +176,11 @@ namespace XUnitTesting.BoothTest
             });
         }
 
+        /// <summary>
+        /// Test to throw exception when booth doesn't exist
+        /// </summary>
         [Fact]
-        public void CancelReservationBoothDoesNotExist()
+        public void CancelBookingBoothDoesNotExist()
         {
             Assert.Throws<BoothNotFoundException>(() =>
             {
@@ -173,6 +188,9 @@ namespace XUnitTesting.BoothTest
             });
         }
 
+        /// <summary>
+        /// Test to create correct log entry
+        /// </summary>
         [Fact]
         public void LogOnCancel()
         {
